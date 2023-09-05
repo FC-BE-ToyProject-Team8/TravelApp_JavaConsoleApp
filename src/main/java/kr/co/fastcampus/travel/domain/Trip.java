@@ -13,6 +13,7 @@ public class Trip {
         this.id = id;
         this.startAt = startAt;
         this.endAt = endAt;
+        this.itineraries = itineraries;
     }
 
     public Long getId() {

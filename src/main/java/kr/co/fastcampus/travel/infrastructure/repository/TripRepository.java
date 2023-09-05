@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface TripRepository {
     List<Trip> findAll();
     Optional<Trip> findById(Long id);
-    Trip save(Trip trip);
+    Optional<Trip> save(Trip trip);
 }

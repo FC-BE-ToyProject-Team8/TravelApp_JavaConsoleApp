@@ -1,5 +1,6 @@
 package kr.co.fastcampus.travel.infrastructure.repository;
 
+import java.util.Optional;
 import kr.co.fastcampus.travel.domain.Itinerary;
 
 import java.util.List;
@@ -11,12 +12,12 @@ public class ItineraryCsvRepository implements ItineraryRepository {
     }
 
     @Override
-    public Itinerary save(Long tripId, Itinerary itinerary) {
+    public Optional<Itinerary> save(Long tripId, Itinerary itinerary) {
         return null;
     }
 
     @Override
-    public Itinerary findById(Long itineraryId) {
+    public Optional<Itinerary> findById(Long itineraryId) {
         return null;
     }
 }

@@ -2,13 +2,13 @@ package kr.co.fastcampus.travel.domain;
 
 import java.time.LocalDateTime;
 
-public class RouteInfo {
+public class Route {
     private String departure;
     private String destination;
     private LocalDateTime departureAt;
     private LocalDateTime arriveAt;
 
-    public RouteInfo(String departure, String destination, LocalDateTime departureAt, LocalDateTime arriveAt) {
+    public Route(String departure, String destination, LocalDateTime departureAt, LocalDateTime arriveAt) {
         this.departure = departure;
         this.destination = destination;
         this.departureAt = departureAt;

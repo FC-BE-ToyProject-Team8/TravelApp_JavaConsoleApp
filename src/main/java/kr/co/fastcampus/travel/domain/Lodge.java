@@ -2,12 +2,12 @@ package kr.co.fastcampus.travel.domain;
 
 import java.time.LocalDateTime;
 
-public class LodgeInfo {
+public class Lodge {
     private String accommodation;
     private LocalDateTime checkInAt;
     private LocalDateTime checkOutAt;
 
-    public LodgeInfo(String accommodation, LocalDateTime checkInAt, LocalDateTime checkOutAt) {
+    public Lodge(String accommodation, LocalDateTime checkInAt, LocalDateTime checkOutAt) {
         this.accommodation = accommodation;
         this.checkInAt = checkInAt;
         this.checkOutAt = checkOutAt;

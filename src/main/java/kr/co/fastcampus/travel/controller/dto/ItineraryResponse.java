@@ -13,38 +13,6 @@ public class ItineraryResponse {
     private LocalDateTime checkInAt;
     private LocalDateTime checkOutAt;
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getDeparture() {
-        return departure;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public LocalDateTime getDepartureAt() {
-        return departureAt;
-    }
-
-    public LocalDateTime getArriveAt() {
-        return arriveAt;
-    }
-
-    public String getAccommodation() {
-        return accommodation;
-    }
-
-    public LocalDateTime getCheckInAt() {
-        return checkInAt;
-    }
-
-    public LocalDateTime getCheckOutAt() {
-        return checkOutAt;
-    }
-
     @Override
     public String toString() {
         return null;

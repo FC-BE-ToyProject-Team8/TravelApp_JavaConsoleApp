@@ -17,7 +17,7 @@ public class TripCsvRepository implements TripRepository {
     }
 
     @Override
-    public Trip save(Trip trip) {
+    public Optional<Trip> save(Trip trip) {
         return null;
     }
 }

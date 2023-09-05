@@ -10,7 +10,7 @@ public class TripService {
         return null;
     }
 
-    public Trip findTrip(Long tripId) {
+    public Trip findTrip(Long id) {
         return null;
     }
 

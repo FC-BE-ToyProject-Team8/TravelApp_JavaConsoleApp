@@ -5,11 +5,11 @@ import kr.co.fastcampus.travel.controller.dto.*;
 import java.util.List;
 
 public class TravelController {
-    public List<TripNameResponse> getTripList() {
+    public List<TripInfoResponse> getTripList() {
         return null;
     }
 
-    public TripResponse findTrip() {
+    public TripResponse findTrip(Long id) {
         return null;
     }
 
@@ -17,7 +17,7 @@ public class TravelController {
         return null;
     }
 
-    public List<ItineraryResponse> getItineraryList() {
+    public List<ItineraryResponse> getItineraryList(Long tripId) {
         return null;
     }
 
