@@ -2,14 +2,20 @@ package kr.co.fastcampus.travel.controller.dto;
 
 
 import java.time.LocalDateTime;
+import lombok.Builder;
 
-public record ItineraryResponse(Long id, String departure, String destination,
-                                LocalDateTime departureAt, LocalDateTime arriveAt,
-                                String accommodation, LocalDateTime checkInAt,
-                                LocalDateTime checkOutAt) {
+@Builder
+public record ItineraryResponse(Long id,
+								String departure,
+								String destination,
+								LocalDateTime departureAt,
+								LocalDateTime arriveAt,
+								String accommodation,
+								LocalDateTime checkInAt,
+								LocalDateTime checkOutAt) {
 
-    @Override
-    public String toString() {
-        return null;
-    }
+	@Override
+	public String toString() {
+		return null;
+	}
 }
