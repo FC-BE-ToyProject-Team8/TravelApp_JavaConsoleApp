@@ -1,12 +1,12 @@
 package kr.co.fastcampus.travel.infrastructure.repository;
 
+import java.util.List;
 import java.util.Optional;
+import kr.co.fastcampus.travel.domain.FileType;
 import kr.co.fastcampus.travel.domain.Itinerary;
 
-import java.util.List;
-
 public interface ItineraryRepository {
-    List<Itinerary> findByTripId(Long tripId);
-    Optional<Itinerary> findById(Long itineraryId);
-    Optional<Itinerary> save(Long tripId, Itinerary itinerary);
+    List<Itinerary> findByTripId(FileType fileType, Long tripId);
+    Optional<Itinerary> findById(FileType fileType, Long itineraryId);
+    Itinerary save(Long tripId, Itinerary itinerary);
 }

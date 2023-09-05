@@ -1,13 +1,12 @@
 package kr.co.fastcampus.travel.infrastructure.repository;
 
-import kr.co.fastcampus.travel.domain.Trip;
-
 import java.util.List;
 import java.util.Optional;
+import kr.co.fastcampus.travel.domain.FileType;
+import kr.co.fastcampus.travel.domain.Trip;
 
-// itineraries는 null로 채운다
 public interface TripRepository {
-    List<Trip> findAll();
-    Optional<Trip> findById(Long id);
-    Optional<Trip> save(Trip trip);
+    List<Trip> findAll(FileType fileType);
+    Optional<Trip> findById(FileType fileType, Long id);
+    Trip save(Trip trip);
 }
