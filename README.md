@@ -1,5 +1,19 @@
 # TravelApp
 
+## 📍 소개
+**프로젝트 내용**: 여행 기록/조회하는 Java 콘솔 어플리케이션
+
+**프로젝트 목적**: Java 문법, 파일 입출력, 예외처리, 클래스 설계 능력 향상
+
+**프로젝트 기간**: 2023년 9월 4일(월)~9월 8일(금)
+
+### 기술 스택
+- **언어**: Java 17
+- **개발 환경**: IntelliJ, Gradle
+- **라이브러리**: JUnit5, lombok
+- **DevOps**: GitHub Actions(CI)
+- **협업** : Slack, Discord 
+
 ## ⚖️ 컨벤션
 
 ### GitHub Flow
