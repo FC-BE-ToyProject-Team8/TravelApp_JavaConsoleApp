@@ -11,14 +11,14 @@
 ### 코딩 컨벤션
 
 - 구글 코딩 컨벤션을 사용합니다.
-- **구글 코딩 컨벤션**(번역): https://newwisdom.tistory.com/96
-- **IntelliJ 플러그인 적용법**: https://055055.tistory.com/97
+- 구글 코딩 컨벤션(번역): https://newwisdom.tistory.com/96
+- IntelliJ 플러그인 적용법: https://055055.tistory.com/97
 
 ### 커밋 메시지 컨벤션
 
 - 커밋 제목은 `prefix: 커밋 메시지` 형태로 합니다.
   - prefix의 목록과 각각의 용도는 IntelliJ 플러그인에서 볼 수 있습니다.
-  - **IntelliJ 플러그인 적용법**: https://blog.naver.com/rinjyu/222157082860
+  - IntelliJ 플러그인 적용법: https://blog.naver.com/rinjyu/222157082860
 - 커밋 내용을 자세하게 적습니다. (커밋 제목과 내용만 보더라도 코드 내용이 파악 가능할 정도로)
 
 ### 테스트 컨벤션
@@ -218,7 +218,7 @@ json
 Enter를 누르면 시작 메뉴로 돌아갑니다.
 ```
 
-## 여행 조회
+#### 여행 조회
 
 ```
 조회할 여행을 번호를 입력해주세요.
