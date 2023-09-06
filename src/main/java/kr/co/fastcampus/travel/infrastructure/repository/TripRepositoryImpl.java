@@ -10,9 +10,14 @@ public class TripRepositoryImpl implements TripRepository {
     private static long SEQUENCE_NUMBER;
 
     private final TravelJsonRepository travelJsonRepository;
+    private final TravelCsvRepository travelCsvRepository;
 
-    public TripRepositoryImpl(TravelJsonRepository travelJsonRepository) {
+    public TripRepositoryImpl(
+            TravelJsonRepository travelJsonRepository,
+            TravelCsvRepository travelCsvRepository
+    ) {
         this.travelJsonRepository = travelJsonRepository;
+        this.travelCsvRepository = travelCsvRepository;
         SEQUENCE_NUMBER = initSequence();
     }
 
@@ -34,6 +39,7 @@ public class TripRepositoryImpl implements TripRepository {
     public Trip save(Trip trip) {
         trip.setId(SEQUENCE_NUMBER);
         travelJsonRepository.saveTripFile(trip);
+        travelCsvRepository.saveTripFile(trip);
 
         SEQUENCE_NUMBER++;
         return trip;
