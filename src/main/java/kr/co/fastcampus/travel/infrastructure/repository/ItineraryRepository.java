@@ -4,9 +4,13 @@ import java.util.List;
 import java.util.Optional;
 import kr.co.fastcampus.travel.domain.FileType;
 import kr.co.fastcampus.travel.domain.Itinerary;
+import kr.co.fastcampus.travel.domain.Trip;
 
 public interface ItineraryRepository {
-    List<Itinerary> findByTripId(FileType fileType, Long tripId);
-    Optional<Itinerary> findById(FileType fileType, Long itineraryId);
-    Itinerary save(Long tripId, Itinerary itinerary);
+
+    List<Itinerary> findByTripId(FileType fileType, Trip trip);
+
+    Optional<Itinerary> findById(FileType fileType, Long id);
+
+    Itinerary save(Itinerary itinerary);
 }

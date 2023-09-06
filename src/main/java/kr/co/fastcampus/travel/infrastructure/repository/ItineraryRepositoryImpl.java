@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.Optional;
 import kr.co.fastcampus.travel.domain.FileType;
 import kr.co.fastcampus.travel.domain.Itinerary;
+import kr.co.fastcampus.travel.domain.Trip;
 
 public class ItineraryRepositoryImpl implements ItineraryRepository {
 
     @Override
-    public List<Itinerary> findByTripId(FileType fileType, Long tripId) {
+    public List<Itinerary> findByTripId(FileType fileType, Trip trip) {
         return null;
     }
 
@@ -18,7 +19,7 @@ public class ItineraryRepositoryImpl implements ItineraryRepository {
     }
 
     @Override
-    public Itinerary save(Long tripId, Itinerary itinerary) {
+    public Itinerary save(Itinerary itinerary) {
         return null;
     }
 }
