@@ -5,18 +5,20 @@ import java.util.Optional;
 import kr.co.fastcampus.travel.domain.FileType;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public class ItineraryRepositoryImpl implements ItineraryRepository {
 
-    private static long SEQUENCE_NUMBER = initSequence();
+    private static long SEQUENCE_NUMBER;
 
     private final TravelJsonRepository travelJsonRepository;
 
-    public static long initSequence() {
-        // todo: Application 시작 시, 마지막 Sequence로 초기화 로직 필요
-        return 1L;
+    public ItineraryRepositoryImpl(TravelJsonRepository travelJsonRepository) {
+        this.travelJsonRepository = travelJsonRepository;
+        SEQUENCE_NUMBER = initSequence();
+    }
+
+    public long initSequence() {
+        return travelJsonRepository.getItineraryCount();
     }
 
     @Override

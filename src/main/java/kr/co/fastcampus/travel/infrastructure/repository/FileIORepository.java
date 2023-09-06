@@ -43,4 +43,15 @@ public abstract class FileIORepository {
             throw new RuntimeException(e);
         }
     }
+
+    protected String[] getFilenames(String directoryPath) {
+        File directory = new File(directoryPath);
+        if (directory.exists()) {
+            String[] filenames = directory.list();
+            if (filenames != null) {
+                return filenames;
+            }
+        }
+        return new String[0];
+    }
 }

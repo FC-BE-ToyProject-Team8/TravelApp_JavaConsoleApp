@@ -4,14 +4,21 @@ import java.util.List;
 import java.util.Optional;
 import kr.co.fastcampus.travel.domain.FileType;
 import kr.co.fastcampus.travel.domain.Trip;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public class TripRepositoryImpl implements TripRepository {
 
-    private static long SEQUENCE_NUMBER = initSequence();
+    private static long SEQUENCE_NUMBER;
 
     private final TravelJsonRepository travelJsonRepository;
+
+    public TripRepositoryImpl(TravelJsonRepository travelJsonRepository) {
+        this.travelJsonRepository = travelJsonRepository;
+        SEQUENCE_NUMBER = initSequence();
+    }
+
+    public long initSequence() {
+        return travelJsonRepository.getTripCount();
+    }
 
     @Override
     public List<Trip> findAll(FileType fileType) {
@@ -30,10 +37,5 @@ public class TripRepositoryImpl implements TripRepository {
 
         SEQUENCE_NUMBER++;
         return trip;
-    }
-
-    public static long initSequence() {
-        // todo: Application 시작 시, 마지막 Sequence로 초기화 로직 필요
-        return 1L;
     }
 }

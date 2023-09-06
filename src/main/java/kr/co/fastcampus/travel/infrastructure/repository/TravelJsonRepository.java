@@ -13,23 +13,33 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TravelJsonRepository extends FileIORepository {
 
-    private static final String ROOT_PATH = "travel/json";
-    private static final String TRIP_LIST_FILENAME = ROOT_PATH + "/trips";
-    private static final String TRIP_INFO_FILENAME = ROOT_PATH + "/trip/trip_";
-    private static final String ITINERARY_FILENAME_PREFIX = ROOT_PATH + "/itinerary/trip_";
-    private static final String ITINERARY_FILENAME_MIDDLE = "_itinerary_";
     private static final String EXTENSION = ".json";
+    private static final String ROOT_PATH = "travel/json";
+    private static final String TRIP_LIST_FILENAME = ROOT_PATH + "/trips" + EXTENSION;
+    private static final String TRIP_INFO_PATH = ROOT_PATH + "/trip";
+    private static final String TRIP_INFO_FILENAME_PREFIX = TRIP_INFO_PATH + "/trip_";
+    private static final String ITINERARY_PATH = ROOT_PATH + "/itinerary";
+    private static final String ITINERARY_FILENAME_PREFIX = ITINERARY_PATH + "/trip_";
+    private static final String ITINERARY_FILENAME_MIDDLE = "_itinerary_";
 
     private final ObjectMapper objectMapper;
 
+    public long getTripCount() {
+        return parseJsonArray(TRIP_LIST_FILENAME).size() + 1;
+    }
+
+    public long getItineraryCount() {
+        return getFilenames(ITINERARY_PATH).length + 1;
+    }
+
     public void saveTripFile(Trip trip) {
-        String filename = TRIP_LIST_FILENAME + EXTENSION;
+        String filename = TRIP_LIST_FILENAME;
         ArrayNode jsonTrip = getJsonTrip(filename, trip);
         writeFile(filename, jsonTrip.toPrettyString());
     }
 
     public void saveTripInfoFile(Itinerary itinerary) {
-        String filename = TRIP_INFO_FILENAME + itinerary.getTrip().getId()
+        String filename = TRIP_INFO_FILENAME_PREFIX + itinerary.getTrip().getId()
                 + EXTENSION;
         ObjectNode jsonTripInfo = getJsonTripInfo(filename, itinerary);
         writeFile(filename, jsonTripInfo.toPrettyString());
