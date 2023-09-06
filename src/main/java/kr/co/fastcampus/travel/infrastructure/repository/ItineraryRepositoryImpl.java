@@ -1,5 +1,8 @@
 package kr.co.fastcampus.travel.infrastructure.repository;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import kr.co.fastcampus.travel.domain.FileType;
@@ -11,9 +14,14 @@ public class ItineraryRepositoryImpl implements ItineraryRepository {
     private static long SEQUENCE_NUMBER;
 
     private final TravelJsonRepository travelJsonRepository;
+    private final TravelCsvRepository travelCsvRepository;
 
-    public ItineraryRepositoryImpl(TravelJsonRepository travelJsonRepository) {
+    public ItineraryRepositoryImpl(
+            TravelJsonRepository travelJsonRepository,
+            TravelCsvRepository travelCsvRepository
+    ) {
         this.travelJsonRepository = travelJsonRepository;
+        this.travelCsvRepository = travelCsvRepository;
         SEQUENCE_NUMBER = initSequence();
     }
 
@@ -36,6 +44,8 @@ public class ItineraryRepositoryImpl implements ItineraryRepository {
         itinerary.setId(SEQUENCE_NUMBER);
         travelJsonRepository.saveTripInfoFile(itinerary);
         travelJsonRepository.saveItineraryFile(itinerary);
+        travelCsvRepository.saveTripInfoFile(itinerary);
+        travelCsvRepository.saveItineraryFile(itinerary);
 
         SEQUENCE_NUMBER++;
         return itinerary;
