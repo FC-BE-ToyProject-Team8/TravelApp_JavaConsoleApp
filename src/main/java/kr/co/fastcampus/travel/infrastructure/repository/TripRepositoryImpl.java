@@ -16,7 +16,7 @@ public class TripRepositoryImpl implements TripRepository {
 
     @Override
     public List<Trip> findAll(FileType fileType) {
-        return null;
+        return travelJsonRepository.findAll();
     }
 
     @Override

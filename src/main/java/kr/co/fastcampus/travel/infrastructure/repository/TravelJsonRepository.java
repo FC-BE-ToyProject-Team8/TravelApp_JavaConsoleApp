@@ -1,10 +1,12 @@
 package kr.co.fastcampus.travel.infrastructure.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.util.List;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,23 @@ public class TravelJsonRepository extends FileIORepository {
         sequenceNode.put(fieldName, sequence + INITIAL_SEQUENCE);
         writeFile(SEQUENCE_FILE, sequenceNode.toPrettyString());
         return sequence;
+    }
+
+    public List<Trip> findAll() {
+        String content = readFile(TRIP_LIST_FILENAME);
+        return parseObject(content);
+    }
+
+    private List<Trip> parseObject(String content) {
+        if (content.isEmpty()) {
+            return List.of();
+        }
+
+        try {
+            return objectMapper.readValue(content, new TypeReference<>() {});
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void saveTripFile(Trip trip) {
