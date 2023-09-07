@@ -17,6 +17,9 @@ public class ItineraryRepositoryImpl implements ItineraryRepository {
 
     @Override
     public List<Itinerary> findByTripId(FileType fileType, Trip trip) {
+        if (fileType == FileType.CSV) {
+            return travelCsvRepository.findByTrip(trip);
+        }
         return travelJsonRepository.findByTrip(trip);
     }
 

@@ -2,8 +2,10 @@ package kr.co.fastcampus.travel.domain;
 
 import java.time.LocalDateTime;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class Lodge {
 
     private String accommodation;
@@ -11,8 +13,8 @@ public class Lodge {
     private LocalDateTime checkOutAt;
 
     public Lodge(String accommodation,
-        LocalDateTime checkInAt,
-        LocalDateTime checkOutAt
+            LocalDateTime checkInAt,
+            LocalDateTime checkOutAt
     ) {
         this.accommodation = accommodation;
         this.checkInAt = checkInAt;
