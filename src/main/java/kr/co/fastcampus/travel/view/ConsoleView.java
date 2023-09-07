@@ -29,7 +29,6 @@ public class ConsoleView {
 
         Menu menu = inputMenu();
         if (menu == Menu.LOG_TRIP) {
-
             logTrip();
         }
 
