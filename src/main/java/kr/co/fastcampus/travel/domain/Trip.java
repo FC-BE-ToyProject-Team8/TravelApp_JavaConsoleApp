@@ -8,18 +8,20 @@ import lombok.Getter;
 
 @Getter
 public class Trip {
+
     private Long id;
     private String name;
     private LocalDate startAt;
     private LocalDate endAt;
+
     private List<Itinerary> itineraries = new ArrayList<>();
 
     @Builder
     public Trip(
-        Long id,
-        String name,
-        LocalDate startAt,
-        LocalDate endAt
+            Long id,
+            String name,
+            LocalDate startAt,
+            LocalDate endAt
     ) {
         this.id = id;
         this.name = name;
