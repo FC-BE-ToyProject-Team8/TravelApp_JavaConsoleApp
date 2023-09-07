@@ -3,6 +3,8 @@ package kr.co.fastcampus.travel.view;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class ConsoleView {
     private boolean isExited = false;
@@ -10,9 +12,14 @@ public class ConsoleView {
     private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     public void process() {
-        System.out.println("[메뉴]\n"
-            + "1: 여행기록, 2: 여정기록, 3: 여행조회, 4: 여정조회, 5: 종료\n");
-        System.out.println("메뉴 번호를 입력해주세요");
+        System.out.println("[메뉴]");
+        System.out.println(
+            Arrays.stream(Menu.values())
+                .map(menu -> String.format("%d: %s", menu.getNumber(), menu.getName()))
+                .collect(Collectors.joining(", "))
+        );
+
+        System.out.println("\n메뉴 번호를 입력해주세요");
 
         Menu menu = inputMenu();
         if (menu == Menu.LOG_TRIP) {
@@ -24,7 +31,7 @@ public class ConsoleView {
 
     private void logTrip() {
         System.out.println("여행 기록을 시작합니다.");
-        
+
     }
 
     private Menu inputMenu() {
