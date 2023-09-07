@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class Route {
+
     private String departure;
     private String destination;
     private LocalDateTime departureAt;

@@ -5,6 +5,7 @@ import kr.co.fastcampus.travel.controller.dto.*;
 import java.util.List;
 
 public class TravelController {
+
     public List<TripInfoResponse> getTripList() {
         return null;
     }
@@ -28,5 +29,4 @@ public class TravelController {
     public String saveItineraries(Long tripId, List<ItinerarySaveRequest> saveRequests) {
         return null;
     }
-
 }

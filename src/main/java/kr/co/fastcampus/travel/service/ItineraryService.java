@@ -6,6 +6,7 @@ import kr.co.fastcampus.travel.domain.Itinerary;
 import java.util.List;
 
 public class ItineraryService {
+
     public Itinerary findItinerary(Long id) {
         return null;
     }

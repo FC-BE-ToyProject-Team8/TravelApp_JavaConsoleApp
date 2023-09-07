@@ -6,6 +6,7 @@ import kr.co.fastcampus.travel.domain.Trip;
 import java.util.List;
 
 public class TripService {
+
     public List<Trip> findAllTrips() {
         return null;
     }

@@ -97,6 +97,7 @@ class SignUp {
   - Model, Service 영역 public 메서드에 대해 테스트 코드 작성 필수
 - **추가 코딩 컨벤션**
   - 목록을 가져올 때는 get 동사를 쓴다
+  - class/enum/interface/record 정의 시 맨 윗줄에는 줄바꿈을 넣고, 맨 아래 줄은 넣지 않는다
 
 ## 🔧 프로젝트 설계
 
