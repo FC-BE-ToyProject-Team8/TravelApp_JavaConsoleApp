@@ -3,7 +3,6 @@ package kr.co.fastcampus.travel.view;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.function.Predicate;
 
 public class ConsoleView {
     private boolean isExited = false;
@@ -15,8 +14,8 @@ public class ConsoleView {
             + "1: 여행기록, 2: 여정기록, 3: 여행조회, 4: 여정조회, 5: 종료\n");
         System.out.println("메뉴 번호를 입력해주세요");
 
-        int menuNum = inputNumber("잘못된 메뉴 번호입니다. 다시 입력해주세요", (num) -> num >= Menu.MIN.getNumber() && num <= Menu.MAX.getNumber());
-        if (menuNum == Menu.LOG_TRIP.getNumber()) {
+        Menu menu = inputMenu();
+        if (menu == Menu.LOG_TRIP) {
             logTrip();
         }
 
@@ -25,31 +24,34 @@ public class ConsoleView {
 
     private void logTrip() {
         System.out.println("여행 기록을 시작합니다.");
-
+        
     }
 
-    private int inputNumber(String errorMessage, Predicate<Integer> isValid) {
-        String strNum;
-        int num = 0;
-        while (true) {
-            strNum = readLine();
-            if (canParseInt(strNum) && isValid.test(Integer.parseInt(strNum))) {
-                num = Integer.parseInt(strNum);
-                break;
-            }
-            System.out.println(errorMessage);
-        }
-
-        return num;
-    }
-
-    private boolean canParseInt(String strNum) {
+    private Menu inputMenu() {
         try {
-            Integer.parseInt(strNum);
-        } catch (NumberFormatException e) {
-            return false;
+            int menuNumber = inputNumber("잘못된 메뉴 번호입니다. 다시 입력해주세요;");
+            return Menu.fromNumber(menuNumber);
+        } catch (IllegalArgumentException e) {
+            return inputMenu();
         }
-        return true;
+    }
+
+    private int inputNumber(String errorMessage) {
+        while (true) {
+            try {
+                return parseInt(readLine());
+            } catch (IllegalArgumentException e) {
+                System.out.println(errorMessage);
+            }
+        }
+    }
+
+    private int parseInt(String strNum) {
+        try {
+            return Integer.parseInt(strNum);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException();
+        }
     }
 
     private String readLine() {
