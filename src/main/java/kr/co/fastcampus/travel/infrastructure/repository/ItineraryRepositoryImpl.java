@@ -21,8 +21,8 @@ public class ItineraryRepositoryImpl implements ItineraryRepository {
     }
 
     @Override
-    public Optional<Itinerary> findById(FileType fileType, Long itineraryId) {
-        return Optional.empty();
+    public Optional<Itinerary> findById(FileType fileType, Long id) {
+        return travelJsonRepository.findByItineraryId(id);
     }
 
     @Override

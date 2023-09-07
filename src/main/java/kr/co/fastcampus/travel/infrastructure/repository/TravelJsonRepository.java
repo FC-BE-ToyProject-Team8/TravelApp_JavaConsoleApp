@@ -9,8 +9,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import kr.co.fastcampus.travel.domain.Itinerary;
+import java.util.Optional;
 import kr.co.fastcampus.travel.domain.Trip;
 import lombok.RequiredArgsConstructor;
 
