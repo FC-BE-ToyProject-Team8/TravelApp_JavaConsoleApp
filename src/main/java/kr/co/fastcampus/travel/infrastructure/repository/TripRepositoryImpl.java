@@ -21,7 +21,7 @@ public class TripRepositoryImpl implements TripRepository {
 
     @Override
     public Optional<Trip> findById(FileType fileType, Long id) {
-        return Optional.empty();
+        return travelJsonRepository.findById(id);
     }
 
     @Override

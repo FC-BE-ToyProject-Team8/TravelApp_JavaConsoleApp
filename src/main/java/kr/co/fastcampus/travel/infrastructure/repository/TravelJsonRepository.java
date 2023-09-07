@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
 import kr.co.fastcampus.travel.domain.Itinerary;
+import java.util.Optional;
 import kr.co.fastcampus.travel.domain.Trip;
 import lombok.RequiredArgsConstructor;
 
@@ -39,6 +40,12 @@ public class TravelJsonRepository extends FileIORepository {
     public List<Trip> findAll() {
         String content = readFile(TRIP_LIST_FILENAME);
         return parseObject(content);
+    }
+
+    public Optional<Trip> findById(Long id) {
+        return findAll().stream()
+                .filter(trip -> trip.getId().equals(id))
+                .findFirst();
     }
 
     private List<Trip> parseObject(String content) {
