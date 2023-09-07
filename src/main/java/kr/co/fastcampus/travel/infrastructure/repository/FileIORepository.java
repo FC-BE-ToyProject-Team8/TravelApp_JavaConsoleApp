@@ -13,7 +13,10 @@ public abstract class FileIORepository {
         File file = new File(filename);
         if (!file.exists()) {
             try {
-                if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
+                if (file.getParentFile() != null
+                        && !file.getParentFile().exists()
+                        && !file.getParentFile().mkdirs()
+                ) {
                     throw new RuntimeException(filename + " 폴더 생성 실패");
                 }
                 if (!file.createNewFile()) {
@@ -42,16 +45,5 @@ public abstract class FileIORepository {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    protected String[] getFilenames(String directoryPath) {
-        File directory = new File(directoryPath);
-        if (directory.exists()) {
-            String[] filenames = directory.list();
-            if (filenames != null) {
-                return filenames;
-            }
-        }
-        return new String[0];
     }
 }

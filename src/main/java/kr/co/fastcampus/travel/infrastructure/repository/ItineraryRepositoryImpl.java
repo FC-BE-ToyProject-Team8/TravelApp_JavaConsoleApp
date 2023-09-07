@@ -5,26 +5,15 @@ import java.util.Optional;
 import kr.co.fastcampus.travel.domain.FileType;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class ItineraryRepositoryImpl implements ItineraryRepository {
 
-    private static long SEQUENCE_NUMBER;
+    private static final String SEQUENCE_FIELD_NAME = "itinerary_id";
 
     private final TravelJsonRepository travelJsonRepository;
     private final TravelCsvRepository travelCsvRepository;
-
-    public ItineraryRepositoryImpl(
-            TravelJsonRepository travelJsonRepository,
-            TravelCsvRepository travelCsvRepository
-    ) {
-        this.travelJsonRepository = travelJsonRepository;
-        this.travelCsvRepository = travelCsvRepository;
-        SEQUENCE_NUMBER = initSequence();
-    }
-
-    public long initSequence() {
-        return travelJsonRepository.getItineraryCount();
-    }
 
     @Override
     public List<Itinerary> findByTripId(FileType fileType, Trip trip) {
@@ -38,11 +27,9 @@ public class ItineraryRepositoryImpl implements ItineraryRepository {
 
     @Override
     public Itinerary save(Itinerary itinerary) {
-        itinerary.setId(SEQUENCE_NUMBER);
+        itinerary.setId(travelJsonRepository.getSequence(SEQUENCE_FIELD_NAME));
         travelJsonRepository.saveItineraryFile(itinerary);
         travelCsvRepository.saveItineraryFile(itinerary);
-
-        SEQUENCE_NUMBER++;
         return itinerary;
     }
 }

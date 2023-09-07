@@ -1,16 +1,19 @@
 package kr.co.fastcampus.travel.infrastructure.repository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import java.io.IOException;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class TravelJsonRepository extends FileIORepository {
+
+    public static final String SEQUENCE_FILE = "travel/sequence.json";
+    public static final long INITIAL_SEQUENCE = 1L;
 
     private static final String EXTENSION = ".json";
     private static final String ROOT_PATH = "travel/json";
@@ -19,13 +22,16 @@ public class TravelJsonRepository extends FileIORepository {
 
     private final ObjectMapper objectMapper;
 
-    public long getTripCount() {
-        String content = readFile(TRIP_LIST_FILENAME);
-        return parseJsonArray(content).size() + 1;
-    }
+    public long getSequence(String fieldName) {
+        ObjectNode sequenceNode = (ObjectNode) parseJsonNode(readFile(SEQUENCE_FILE));
+        if (sequenceNode.get(fieldName) == null) {
+            sequenceNode.put(fieldName, INITIAL_SEQUENCE);
+        }
 
-    public long getItineraryCount() {
-        return getFilenames(ROOT_PATH + "/itinerary").length + 1;
+        long sequence = sequenceNode.get(fieldName).asLong(1L);
+        sequenceNode.put(fieldName, sequence + INITIAL_SEQUENCE);
+        writeFile(SEQUENCE_FILE, sequenceNode.toPrettyString());
+        return sequence;
     }
 
     public void saveTripFile(Trip trip) {
@@ -50,15 +56,23 @@ public class TravelJsonRepository extends FileIORepository {
     }
 
     private ArrayNode parseJsonArray(String content) {
-        try {
-            JsonNode readJson = objectMapper.readTree(content);
-            if (readJson != null && readJson.isArray()) {
-                return (ArrayNode) readJson;
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        JsonNode readJson = parseJsonNode(content);
+        if (readJson != null && readJson.isArray()) {
+            return (ArrayNode) readJson;
         }
         return objectMapper.createArrayNode();
+    }
+
+    private JsonNode parseJsonNode(String content) {
+        if (content == null || content.trim().isEmpty()) {
+            return objectMapper.createObjectNode();
+        }
+
+        try {
+            return objectMapper.readTree(content);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("JSON 파싱 오류: " + e.getMessage(), e);
+        }
     }
 
     private ObjectNode parserJson(Trip trip) {
