@@ -7,16 +7,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-public abstract class FileIORepository {
+public abstract class FileIoRepository {
+
 
     private void createFile(String filename) {
         File file = new File(filename);
         if (!file.exists()) {
             try {
-                if (file.getParentFile() != null
-                        && !file.getParentFile().exists()
-                        && !file.getParentFile().mkdirs()
-                ) {
+                if (file.getParentFile() != null && !file.getParentFile().exists()
+                        && !file.getParentFile().mkdirs()) {
                     throw new RuntimeException(filename + " 폴더 생성 실패");
                 }
                 if (!file.createNewFile()) {
@@ -33,9 +32,9 @@ public abstract class FileIORepository {
             File file = new File(filename);
             List<String> lines = Files.readAllLines(file.toPath());
             return String.join("\n", lines);
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            return "";
         }
-        return "";
     }
 
     protected void writeFile(String filename, String content) {
