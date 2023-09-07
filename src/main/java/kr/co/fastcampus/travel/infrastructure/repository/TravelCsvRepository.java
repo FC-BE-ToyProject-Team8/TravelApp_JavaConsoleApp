@@ -68,6 +68,21 @@ public class TravelCsvRepository extends FileIORepository {
         return parseItineraries(trip, lines);
     }
 
+    public Optional<Itinerary> findByItineraryId(Long id) {
+        List<Trip> trips = findAllTrip();
+        for (Trip trip : trips) {
+            List<Itinerary> itineraries = findByTrip(trip);
+            Optional<Itinerary> findItinerary = itineraries.stream()
+                    .filter(itinerary -> itinerary.getId().equals(id))
+                    .findFirst();
+
+            if (findItinerary.isPresent()) {
+                return findItinerary;
+            }
+        }
+        return Optional.empty();
+    }
+
     public void saveTripFile(Trip trip) {
         saveFile(TRIP_LIST_COLUMN, TRIP_LIST_FILENAME, parserCsv(trip));
     }
