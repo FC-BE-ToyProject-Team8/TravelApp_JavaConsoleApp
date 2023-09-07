@@ -54,8 +54,4 @@ public abstract class FileIORepository {
         }
         return new String[0];
     }
-
-    protected boolean isExist(String filename) {
-        return new File(filename).exists();
-    }
 }

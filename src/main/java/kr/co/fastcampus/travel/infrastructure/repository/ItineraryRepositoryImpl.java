@@ -40,7 +40,6 @@ public class ItineraryRepositoryImpl implements ItineraryRepository {
     public Itinerary save(Itinerary itinerary) {
         itinerary.setId(SEQUENCE_NUMBER);
         travelJsonRepository.saveItineraryFile(itinerary);
-        travelCsvRepository.saveTripInfoFile(itinerary);
         travelCsvRepository.saveItineraryFile(itinerary);
 
         SEQUENCE_NUMBER++;
