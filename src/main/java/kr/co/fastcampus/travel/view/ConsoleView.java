@@ -6,76 +6,64 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import kr.co.fastcampus.travel.common.exception.UnknownException;
+import java.util.function.Predicate;
 
 public class ConsoleView {
-    private boolean isExited = false;
 
-    private final BufferedReader br;
+	private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	private boolean isExited = false;
 
-    public ConsoleView() {
-        br = new BufferedReader(new InputStreamReader(System.in));
-    }
+	public void process() {
+		System.out.println("[메뉴]\n" + "1: 여행기록, 2: 여정기록, 3: 여행조회, 4: 여정조회, 5: 종료\n");
+		System.out.println("메뉴 번호를 입력해주세요");
 
-    public void process() {
-        System.out.println("[메뉴]");
-        System.out.println(
-            Arrays.stream(Menu.values())
-                .map(menu -> String.format("%d: %s", menu.getNumber(), menu.getName()))
-                .collect(Collectors.joining(", "))
-        );
+		int menuNum = inputNumber("잘못된 메뉴 번호입니다. 다시 입력해주세요",
+			(num) -> num >= Menu.MIN.getNumber() && num <= Menu.MAX.getNumber());
+		if (menuNum == Menu.LOG_TRIP.getNumber()) {
+			logTrip();
+		}
 
-        System.out.println("\n메뉴 번호를 입력해주세요");
+		isExited = true;
+	}
 
-        Menu menu = inputMenu();
-        if (menu == Menu.LOG_TRIP) {
-            logTrip();
-        }
+	private void logTrip() {
+		System.out.println("여행 기록을 시작합니다.");
 
-        isExited = true;
-    }
+	}
 
-    private void logTrip() {
-        System.out.println("여행 기록을 시작합니다.");
+	private int inputNumber(String errorMessage, Predicate<Integer> isValid) {
+		String strNum;
+		int num = 0;
+		while (true) {
+			strNum = readLine();
+			if (canParseInt(strNum) && isValid.test(Integer.parseInt(strNum))) {
+				num = Integer.parseInt(strNum);
+				break;
+			}
+			System.out.println(errorMessage);
+		}
 
-    }
+		return num;
+	}
 
-    private Menu inputMenu() {
-        try {
-            int menuNumber = inputNumber("잘못된 메뉴 번호입니다. 다시 입력해주세요;");
-            return Menu.fromNumber(menuNumber);
-        } catch (IllegalArgumentException e) {
-            return inputMenu();
-        }
-    }
+	private boolean canParseInt(String strNum) {
+		try {
+			Integer.parseInt(strNum);
+		} catch (NumberFormatException e) {
+			return false;
+		}
+		return true;
+	}
 
-    private int inputNumber(String errorMessage) {
-        while (true) {
-            try {
-                return parseInt(readLine());
-            } catch (IllegalArgumentException e) {
-                System.out.println(errorMessage);
-            }
-        }
-    }
+	private String readLine() {
+		try {
+			return br.readLine();
+		} catch (IOException e) {
+			System.out.println("입력을 받는 도중 알 수 없는 에러가 발생했습니다.");
+			throw new RuntimeException();
+		}
+	}
 
-    private int parseInt(String strNum) {
-        try {
-            return Integer.parseInt(strNum);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    private String readLine() {
-        try {
-            return br.readLine();
-        } catch (IOException e) {
-            System.out.println("입력을 받는 도중 알 수 없는 에러가 발생했습니다.");
-            throw new UnknownException();
-        }
-    }
-
-    public boolean isExited() {
-        return isExited;
-    }
-}
+	public boolean isExited() {
+		return isExited;
+	}
