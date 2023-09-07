@@ -1,5 +1,6 @@
 package kr.co.fastcampus.travel.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
 import kr.co.fastcampus.travel.controller.dto.ItineraryResponse;
@@ -9,6 +10,7 @@ import kr.co.fastcampus.travel.controller.dto.TripResponse;
 import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
 import kr.co.fastcampus.travel.domain.FileType;
 import kr.co.fastcampus.travel.domain.Itinerary;
+import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.service.ItineraryService;
 import lombok.RequiredArgsConstructor;
 
@@ -29,8 +31,29 @@ public class TravelController {
 		return null;
 	}
 
-	public List<ItineraryResponse> getItineraryList(Long tripId) {
-		return null;
+	public List<ItineraryResponse> getItineraryList(FileType fileType, Trip trip) {
+		List<ItineraryResponse> itineraryList = new ArrayList<>();
+		List<Itinerary> response = itineraryService.findItineraries(fileType, trip);
+
+		if (response.isEmpty()) {
+			throw new TravelDoesNotExistException("해당 여행에 여정 정보가 없습니다.");
+		}
+
+		for (Itinerary itinerary : response) {
+			ItineraryResponse itineraryResponse =
+				ItineraryResponse.builder()
+					.id(itinerary.getId())
+					.departure(itinerary.getRoute().getDeparture())
+					.destination(itinerary.getRoute().getDestination())
+					.departureAt(itinerary.getRoute().getDepartureAt())
+					.arriveAt(itinerary.getRoute().getArriveAt())
+					.accommodation(itinerary.getLodge().getAccommodation())
+					.checkInAt(itinerary.getLodge().getCheckInAt())
+					.checkOutAt(itinerary.getLodge().getCheckOutAt())
+					.build();
+			itineraryList.add(itineraryResponse);
+		}
+		return itineraryList;
 	}
 
 	public ItineraryResponse findItinerary(FileType fileType, Long id) {

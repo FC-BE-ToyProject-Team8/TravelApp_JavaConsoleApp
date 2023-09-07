@@ -23,7 +23,7 @@ public class ItineraryService {
 	}
 
 	public List<Itinerary> findItineraries(FileType fileType, Trip trip) {
-		return null;
+		return itineraryRepository.findByTripId(fileType, trip);
 	}
 
 	public List<Itinerary> saveItineraries(Long tripId) {
