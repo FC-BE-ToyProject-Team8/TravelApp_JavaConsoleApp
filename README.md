@@ -301,42 +301,30 @@ Enter를 누르면 시작 메뉴로 돌아갑니다.
 ]
 ```
 
-**trip_0.json**
+**trip_{id}.json**
 ```json
-{
-  "id": 1,
-  "name": "이름",
-  "startAt": "0000-00-00",
-  "endAt": "0000-00-00",
-  "itineraries": [
-    {
-      "id": 1,
-      "departure": "출발지",
-      "destination": "도착지",
-      "accommodation": "숙박업소명"	
-    },
-    {
-      "id": 2,
-      "departure": "출발지",
-      "destination": "도착지",
-      "accommodation": "숙박업소명"
-    }
-  ]
-}
-```
-
-**trip_0_itinerary1.json**
-```json
-{
-  "id": 1,
-  "departure": "출발지",
-  "destination": "도착지",
-  "departureAt": "0000-00-00 00:00",
-  "arriveAt": "0000-00-00 00:00",
-  "accommodation": "숙박업소",
-  "checkInAt": null,
-  "checkOutAt": null
-}
+[
+  {
+    "id": 1,
+    "departure": "출발지",
+    "destination": "도착지",
+    "departureAt": "0000-00-00 00:00",
+    "arriveAt": "0000-00-00 00:00",
+    "accommodation": "숙박업소",
+    "checkInAt": null,
+    "checkOutAt": null
+  },
+  {
+    "id": 2,
+    "departure": "출발지",
+    "destination": "도착지",
+    "departureAt": "0000-00-00 00:00",
+    "arriveAt": "0000-00-00 00:00",
+    "accommodation": "숙박업소",
+    "checkInAt": null,
+    "checkOutAt": null
+  }
+]
 ```
 
 #### csv
@@ -346,19 +334,12 @@ Enter를 누르면 시작 메뉴로 돌아갑니다.
 id,name,startAt,endAt
 1,이름,0000-00-00,0000-00-00
 2,이름,0000-00-00,0000-00-00
-3,이름,0000-00-00,0000-00-00
 ```
 
 **trip_0.csv**
 ```csv
-id,name,startAt,endAt,itinerary_id,departure,destination,accommodation,checkInAt
-1,이름,0000-00-00,0000-00-00,1,출발지,도착지,숙박명,0000-00-00 00:00
-1,이름,0000-00-00,0000-00-00,2,출발지,도착지,숙박명,0000-00-00 00:00
-1,이름,0000-00-00,0000-00-00,3,출발지,도착지,숙박명,0000-00-00 00:00
+id,departure,destination,departureAt,arriveAt,accommodation,checkInAt,checkOutAt
+1,출발지,도착지,0000-00-00 00:00,0000-00-00 00:00,,,
+2,,,,,숙박업소,0000-00-00 00:00,0000-00-00 00:00
 ```
 
-**trip_0_itinerary1.csv**
-```csv
-id,departure,destination,departureAt,arriveAt,accommodation,checkInAt,checkOutAt
-1,출발지,도착지,0000-00-00 00:00,0000-00-00 00:00,숙박명,0000-00-00 00:00,0000-00-00 00:00
-```
