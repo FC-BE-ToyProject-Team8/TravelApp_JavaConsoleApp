@@ -16,9 +16,10 @@ public class ConsoleView {
 	public void process() {
 		System.out.println("[메뉴]\n" + "1: 여행기록, 2: 여정기록, 3: 여행조회, 4: 여정조회, 5: 종료\n");
 		System.out.println("메뉴 번호를 입력해주세요");
-
-		int menuNum = inputNumber("잘못된 메뉴 번호입니다. 다시 입력해주세요",
-			(num) -> num >= Menu.MIN.getNumber() && num <= Menu.MAX.getNumber());
+		int menuNum = inputNumber(
+			"잘못된 메뉴 번호입니다. 다시 입력해주세요",
+			(num) -> num >= Menu.MIN.getNumber() && num <= Menu.MAX.getNumber()
+		);
 		if (menuNum == Menu.LOG_TRIP.getNumber()) {
 			logTrip();
 		}
@@ -67,3 +68,4 @@ public class ConsoleView {
 	public boolean isExited() {
 		return isExited;
 	}
+}
