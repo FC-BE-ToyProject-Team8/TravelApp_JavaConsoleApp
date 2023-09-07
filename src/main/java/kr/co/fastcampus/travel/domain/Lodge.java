@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class Lodge {
+
     private String accommodation;
     private LocalDateTime checkInAt;
     private LocalDateTime checkOutAt;

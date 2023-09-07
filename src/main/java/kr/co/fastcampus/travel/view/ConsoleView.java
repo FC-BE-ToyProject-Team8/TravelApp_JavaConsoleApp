@@ -1,6 +1,7 @@
 package kr.co.fastcampus.travel.view;
 
 public class ConsoleView {
+
     public void process() {
 
     }
