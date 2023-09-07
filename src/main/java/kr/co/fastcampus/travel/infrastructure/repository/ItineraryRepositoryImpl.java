@@ -1,8 +1,5 @@
 package kr.co.fastcampus.travel.infrastructure.repository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import kr.co.fastcampus.travel.domain.FileType;
@@ -42,7 +39,6 @@ public class ItineraryRepositoryImpl implements ItineraryRepository {
     @Override
     public Itinerary save(Itinerary itinerary) {
         itinerary.setId(SEQUENCE_NUMBER);
-        travelJsonRepository.saveTripInfoFile(itinerary);
         travelJsonRepository.saveItineraryFile(itinerary);
         travelCsvRepository.saveTripInfoFile(itinerary);
         travelCsvRepository.saveItineraryFile(itinerary);
