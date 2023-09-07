@@ -9,7 +9,11 @@ import java.util.stream.Collectors;
 public class ConsoleView {
     private boolean isExited = false;
 
-    private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    private final BufferedReader br;
+
+    public ConsoleView() {
+        br = new BufferedReader(new InputStreamReader(System.in));
+    }
 
     public void process() {
         System.out.println("[메뉴]");
