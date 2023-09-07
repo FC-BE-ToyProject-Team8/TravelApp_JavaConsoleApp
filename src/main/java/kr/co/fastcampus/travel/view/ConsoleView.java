@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import kr.co.fastcampus.travel.common.exception.UnknownException;
 
 public class ConsoleView {
     private boolean isExited = false;
@@ -70,7 +71,7 @@ public class ConsoleView {
             return br.readLine();
         } catch (IOException e) {
             System.out.println("입력을 받는 도중 알 수 없는 에러가 발생했습니다.");
-            throw new RuntimeException();
+            throw new UnknownException();
         }
     }
 
