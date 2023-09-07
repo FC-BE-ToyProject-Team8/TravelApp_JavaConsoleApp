@@ -3,6 +3,7 @@ package kr.co.fastcampus.travel.infrastructure.repository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 
@@ -47,6 +48,12 @@ public class TravelCsvRepository extends FileIORepository {
             trips.add(parseTrip(csvTrip));
         }
         return trips;
+    }
+
+    public Optional<Trip> findByTripId(Long id) {
+        return findAllTrip().stream()
+                .filter(trip -> trip.getId().equals(id))
+                .findFirst();
     }
 
     public void saveTripFile(Trip trip) {

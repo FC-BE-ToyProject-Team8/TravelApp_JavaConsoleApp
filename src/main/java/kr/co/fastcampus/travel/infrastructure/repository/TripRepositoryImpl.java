@@ -1,7 +1,5 @@
 package kr.co.fastcampus.travel.infrastructure.repository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.util.List;
 import java.util.Optional;
 import kr.co.fastcampus.travel.domain.FileType;
@@ -10,13 +8,6 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class TripRepositoryImpl implements TripRepository {
-
-    public static void main(String[] args) {
-        TripRepositoryImpl target = new TripRepositoryImpl(
-                new TravelJsonRepository(new ObjectMapper().registerModule(new JavaTimeModule())),
-                new TravelCsvRepository());
-        target.findAll(FileType.CSV).forEach(System.out::println);
-    }
 
     private static final String SEQUENCE_FIELD_NAME = "trip_id";
 
@@ -33,6 +24,9 @@ public class TripRepositoryImpl implements TripRepository {
 
     @Override
     public Optional<Trip> findById(FileType fileType, Long id) {
+        if (fileType == FileType.CSV) {
+            return travelCsvRepository.findByTripId(id);
+        }
         return travelJsonRepository.findByTripId(id);
     }
 
