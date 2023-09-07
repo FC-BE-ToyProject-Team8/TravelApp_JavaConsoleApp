@@ -17,7 +17,7 @@ public class ItineraryRepositoryImpl implements ItineraryRepository {
 
     @Override
     public List<Itinerary> findByTripId(FileType fileType, Trip trip) {
-        return null;
+        return travelJsonRepository.findByTrip(trip);
     }
 
     @Override

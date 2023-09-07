@@ -6,9 +6,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import kr.co.fastcampus.travel.domain.Itinerary;
 import java.util.Optional;
+import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 import lombok.RequiredArgsConstructor;
 
@@ -37,27 +39,38 @@ public class TravelJsonRepository extends FileIORepository {
         return sequence;
     }
 
-    public List<Trip> findAll() {
+    public List<Trip> findAllTrip() {
         String content = readFile(TRIP_LIST_FILENAME);
         return parseObject(content);
     }
 
-    public Optional<Trip> findById(Long id) {
-        return findAll().stream()
+    public Optional<Trip> findByTripId(Long id) {
+        return findAllTrip().stream()
                 .filter(trip -> trip.getId().equals(id))
                 .findFirst();
     }
 
-    private List<Trip> parseObject(String content) {
-        if (content.isEmpty()) {
-            return List.of();
-        }
+    public List<Itinerary> findByTrip(Trip trip) {
+        String filename = ITINERARY_FILENAME_PREFIX + trip.getId()
+                + EXTENSION;
+        String content = readFile(filename);
+        ArrayNode jsonItineraries = parseJsonArray(content);
+        return parseItineraries(trip, jsonItineraries);
+    }
 
-        try {
-            return objectMapper.readValue(content, new TypeReference<>() {});
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+    public Optional<Itinerary> findByItineraryId(Long id) {
+        List<Trip> trips = findAllTrip();
+        for (Trip trip : trips) {
+            List<Itinerary> itineraries = findByTrip(trip);
+            Optional<Itinerary> findItinerary = itineraries.stream()
+                    .filter(itinerary -> itinerary.getId().equals(id))
+                    .findFirst();
+
+            if (findItinerary.isPresent()) {
+                return findItinerary;
+            }
         }
+        return Optional.empty();
     }
 
     public void saveTripFile(Trip trip) {
@@ -79,6 +92,18 @@ public class TravelJsonRepository extends FileIORepository {
         ArrayNode jsonArray = parseJsonArray(content);
         jsonArray.add(node);
         writeFile(filename, jsonArray.toPrettyString());
+    }
+
+    private List<Trip> parseObject(String content) {
+        if (content.isEmpty()) {
+            return List.of();
+        }
+
+        try {
+            return objectMapper.readValue(content, new TypeReference<>() {});
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private ArrayNode parseJsonArray(String content) {
@@ -121,5 +146,28 @@ public class TravelJsonRepository extends FileIORepository {
         jsonItinerary.put("checkInAt", itinerary.getLodge().getCheckInAt().toString());
         jsonItinerary.put("checkOutAt", itinerary.getLodge().getCheckOutAt().toString());
         return jsonItinerary;
+    }
+
+    private Itinerary parseItinerary(JsonNode jsonItinerary) {
+        return Itinerary.builder()
+                .id(jsonItinerary.get("id").asLong())
+                .departure(jsonItinerary.get("departure").asText())
+                .destination(jsonItinerary.get("destination").asText())
+                .departureAt(LocalDateTime.parse(jsonItinerary.get("departureAt").asText()))
+                .arriveAt(LocalDateTime.parse(jsonItinerary.get("arriveAt").asText()))
+                .accommodation(jsonItinerary.get("accommodation").asText())
+                .checkInAt(LocalDateTime.parse(jsonItinerary.get("checkInAt").asText()))
+                .checkOutAt(LocalDateTime.parse(jsonItinerary.get("checkOutAt").asText()))
+                .build();
+    }
+
+    private List<Itinerary> parseItineraries(Trip trip, ArrayNode jsonItineraries) {
+        List<Itinerary> itineraries = new ArrayList<>();
+        for (JsonNode jsonItinerary : jsonItineraries) {
+            Itinerary itinerary = parseItinerary(jsonItinerary);
+            itinerary.setTrip(trip);
+            itineraries.add(itinerary);
+        }
+        return itineraries;
     }
 }
