@@ -19,3 +19,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tool_name: 'testtool'
           level: error
+          checkstyle_config: ./custom_google_checks.xml
