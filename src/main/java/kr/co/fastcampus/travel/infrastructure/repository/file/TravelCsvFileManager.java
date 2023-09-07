@@ -1,4 +1,4 @@
-package kr.co.fastcampus.travel.infrastructure.repository;
+package kr.co.fastcampus.travel.infrastructure.repository.file;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -8,7 +8,7 @@ import java.util.Optional;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 
-public class TravelCsvRepository extends FileIoRepository {
+public class TravelCsvFileManager extends FileIoRepository {
 
     private static final String EXTENSION = ".csv";
     private static final String ROOT_PATH = "travel/csv";
@@ -67,7 +67,7 @@ public class TravelCsvRepository extends FileIoRepository {
     }
 
     public void saveTripFile(Trip trip) {
-        saveFile(TRIP_LIST_COLUMN, TRIP_LIST_FILENAME, parserCsv(trip));
+        saveFile(TRIP_LIST_COLUMN, TRIP_LIST_FILENAME, parseCsv(trip));
     }
 
     public void saveItineraryFile(Itinerary itinerary) {
@@ -76,7 +76,7 @@ public class TravelCsvRepository extends FileIoRepository {
         }
 
         String filename = ITINERARY_FILENAME_PREFIX + itinerary.getTrip().getId() + EXTENSION;
-        saveFile(ITINERARY_COLUMN, filename, parserCsv(itinerary));
+        saveFile(ITINERARY_COLUMN, filename, parseCsv(itinerary));
     }
 
     private void saveFile(String[] columns, String filename, String csvObject) {
@@ -93,12 +93,12 @@ public class TravelCsvRepository extends FileIoRepository {
         return content;
     }
 
-    private static String parserCsv(Trip trip) {
+    private static String parseCsv(Trip trip) {
         return trip.getId() + SEPARATE + trip.getName() + SEPARATE + trip.getStartAt() + SEPARATE
                 + trip.getEndAt();
     }
 
-    private static String parserCsv(Itinerary itinerary) {
+    private static String parseCsv(Itinerary itinerary) {
         return itinerary.getId() + SEPARATE + itinerary.getRoute().getDeparture() + SEPARATE
                 + itinerary.getRoute().getDestination() + SEPARATE + itinerary.getRoute()
                 .getDepartureAt() + SEPARATE + itinerary.getRoute().getArriveAt() + SEPARATE

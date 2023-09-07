@@ -5,6 +5,8 @@ import java.util.Optional;
 import kr.co.fastcampus.travel.domain.FileType;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
+import kr.co.fastcampus.travel.infrastructure.repository.file.TravelCsvFileManager;
+import kr.co.fastcampus.travel.infrastructure.repository.file.TravelJsonFileManager;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -12,30 +14,30 @@ public class ItineraryRepositoryImpl implements ItineraryRepository {
 
     private static final String SEQUENCE_FIELD_NAME = "itinerary_id";
 
-    private final TravelJsonRepository travelJsonRepository;
-    private final TravelCsvRepository travelCsvRepository;
+    private final TravelJsonFileManager travelJsonFileManager;
+    private final TravelCsvFileManager travelCsvFileManager;
 
     @Override
     public List<Itinerary> findByTripId(FileType fileType, Trip trip) {
         if (fileType == FileType.CSV) {
-            return travelCsvRepository.findByTrip(trip);
+            return travelCsvFileManager.findByTrip(trip);
         }
-        return travelJsonRepository.findByTrip(trip);
+        return travelJsonFileManager.findByTrip(trip);
     }
 
     @Override
     public Optional<Itinerary> findById(FileType fileType, Long id) {
         if (fileType == FileType.CSV) {
-            return travelCsvRepository.findByItineraryId(id);
+            return travelCsvFileManager.findByItineraryId(id);
         }
-        return travelJsonRepository.findByItineraryId(id);
+        return travelJsonFileManager.findByItineraryId(id);
     }
 
     @Override
     public Itinerary save(Itinerary itinerary) {
-        itinerary.setId(travelJsonRepository.getSequence(SEQUENCE_FIELD_NAME));
-        travelJsonRepository.saveItineraryFile(itinerary);
-        travelCsvRepository.saveItineraryFile(itinerary);
+        itinerary.setId(travelJsonFileManager.getSequence(SEQUENCE_FIELD_NAME));
+        travelJsonFileManager.saveItineraryFile(itinerary);
+        travelCsvFileManager.saveItineraryFile(itinerary);
         return itinerary;
     }
 }

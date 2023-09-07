@@ -1,4 +1,4 @@
-package kr.co.fastcampus.travel.infrastructure.repository;
+package kr.co.fastcampus.travel.infrastructure.repository.file;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.util.List;
 
 public abstract class FileIoRepository {
-
 
     private void createFile(String filename) {
         File file = new File(filename);

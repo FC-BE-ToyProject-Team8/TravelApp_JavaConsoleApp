@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import kr.co.fastcampus.travel.domain.FileType;
 import kr.co.fastcampus.travel.domain.Trip;
+import kr.co.fastcampus.travel.infrastructure.repository.file.TravelCsvFileManager;
+import kr.co.fastcampus.travel.infrastructure.repository.file.TravelJsonFileManager;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -11,30 +13,30 @@ public class TripRepositoryImpl implements TripRepository {
 
     private static final String SEQUENCE_FIELD_NAME = "trip_id";
 
-    private final TravelJsonRepository travelJsonRepository;
-    private final TravelCsvRepository travelCsvRepository;
+    private final TravelJsonFileManager travelJsonFileManager;
+    private final TravelCsvFileManager travelCsvFileManager;
 
     @Override
     public List<Trip> findAll(FileType fileType) {
         if (fileType == FileType.CSV) {
-            return travelCsvRepository.findAllTrip();
+            return travelCsvFileManager.findAllTrip();
         }
-        return travelJsonRepository.findAllTrip();
+        return travelJsonFileManager.findAllTrip();
     }
 
     @Override
     public Optional<Trip> findById(FileType fileType, Long id) {
         if (fileType == FileType.CSV) {
-            return travelCsvRepository.findByTripId(id);
+            return travelCsvFileManager.findByTripId(id);
         }
-        return travelJsonRepository.findByTripId(id);
+        return travelJsonFileManager.findByTripId(id);
     }
 
     @Override
     public Trip save(Trip trip) {
-        trip.setId(travelJsonRepository.getSequence(SEQUENCE_FIELD_NAME));
-        travelJsonRepository.saveTripFile(trip);
-        travelCsvRepository.saveTripFile(trip);
+        trip.setId(travelJsonFileManager.getSequence(SEQUENCE_FIELD_NAME));
+        travelJsonFileManager.saveTripFile(trip);
+        travelCsvFileManager.saveTripFile(trip);
         return trip;
     }
 }

@@ -1,4 +1,4 @@
-package kr.co.fastcampus.travel.infrastructure.repository;
+package kr.co.fastcampus.travel.infrastructure.repository.file;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -15,7 +15,7 @@ import kr.co.fastcampus.travel.domain.Trip;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class TravelJsonRepository extends FileIoRepository {
+public class TravelJsonFileManager extends FileIoRepository {
 
     public static final String SEQUENCE_FILE = "travel/sequence.json";
     public static final long INITIAL_SEQUENCE = 1L;
@@ -70,7 +70,7 @@ public class TravelJsonRepository extends FileIoRepository {
     }
 
     public void saveTripFile(Trip trip) {
-        saveFile(TRIP_LIST_FILENAME, parserJson(trip));
+        saveFile(TRIP_LIST_FILENAME, parseJson(trip));
     }
 
     public void saveItineraryFile(Itinerary itinerary) {
@@ -79,7 +79,7 @@ public class TravelJsonRepository extends FileIoRepository {
         }
 
         String filename = ITINERARY_FILENAME_PREFIX + itinerary.getTrip().getId() + EXTENSION;
-        saveFile(filename, parserJson(itinerary));
+        saveFile(filename, parseJson(itinerary));
     }
 
     private void saveFile(String filename, ObjectNode node) {
@@ -122,7 +122,7 @@ public class TravelJsonRepository extends FileIoRepository {
         }
     }
 
-    private ObjectNode parserJson(Trip trip) {
+    private ObjectNode parseJson(Trip trip) {
         ObjectNode jsonTrip = objectMapper.createObjectNode();
         jsonTrip.put("id", trip.getId());
         jsonTrip.put("name", trip.getName());
@@ -131,7 +131,7 @@ public class TravelJsonRepository extends FileIoRepository {
         return jsonTrip;
     }
 
-    private ObjectNode parserJson(Itinerary itinerary) {
+    private ObjectNode parseJson(Itinerary itinerary) {
         ObjectNode jsonItinerary = objectMapper.createObjectNode();
         jsonItinerary.put("id", itinerary.getId());
         jsonItinerary.put("departure", itinerary.getRoute().getDeparture());
