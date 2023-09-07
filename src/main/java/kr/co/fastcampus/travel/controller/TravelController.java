@@ -29,8 +29,4 @@ public class TravelController {
         return null;
     }
 
-    public List<ItineraryResponse> findItineraries(Long tripId) {
-        return null;
-    }
-
 }
