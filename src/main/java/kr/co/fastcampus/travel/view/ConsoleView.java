@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import kr.co.fastcampus.travel.common.exception.UnknownException;
 
 public class ConsoleView {
+
     private boolean isExited = false;
 
     private final BufferedReader br;
@@ -28,6 +29,7 @@ public class ConsoleView {
 
         Menu menu = inputMenu();
         if (menu == Menu.LOG_TRIP) {
+
             logTrip();
         }
 
