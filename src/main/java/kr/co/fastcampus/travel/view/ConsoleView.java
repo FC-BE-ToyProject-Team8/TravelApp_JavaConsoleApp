@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,7 +39,7 @@ public class ConsoleView {
         Menu menu = inputMenu();
         if (menu == Menu.LOG_TRIP) {
             logTrip();
-            Long id = 0L;// 여행 기록 저장 후 넘어온 여행의 id 값 패싱
+            Long id = 0L;// 진홍님의 여행 기록 저장 후 넘어온 여행의 id 값 패싱
             logItineraries(id);
         } else if (menu == Menu.LOG_ITINERARY) {
             // 창호님의 여행 전체 조회 메소드 호출
@@ -60,36 +61,39 @@ public class ConsoleView {
         boolean isDone = false;
         List<ItinerarySaveRequest> saveRequests = new ArrayList<>();
         while (!isDone) {
-            System.out.println("출발지:");
-            String departure = readLine();
-            System.out.println("도착지:");
-            String destination = readLine();
-            System.out.println("출발 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):");
-            String departureAt = readLine();
-            System.out.println("도착 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):");
-            String arriveAt = readLine();
-            System.out.println("숙박지명:");
-            String accommodation = readLine();
-            System.out.println("체크인 시간 (YYYY-mm-DD HH:MM 형식으로 입력):");
-            String checkInAt = readLine();
-            System.out.println("체크아웃 시간 (YYYY-mm-DD HH:MM 형식으로 입력):");
-            String checkOutAt = readLine();
-            ItinerarySaveRequest itineraryRequest = new ItinerarySaveRequest(
+            String departureQuestion = "출발지:";
+            String departure = isValidAnswer(departureQuestion);
+            String destinationQuestion = "도착지:";
+            String destination = isValidAnswer(destinationQuestion);
+            String departureAtQuestion = "출발 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):";
+            String departureAt = isValidDepartureAndDestinationTime(departureAtQuestion);
+            String arriveAtQuestion = "도착 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):";
+            String arriveAt = isValidDepartureAndDestinationTime(arriveAtQuestion);
+            String accommodationQuestion = "숙박지명:";
+            String accommodation = isValidAnswer(accommodationQuestion);
+            String checkInAtQuestion = "체크인 시간 (YYYY-mm-DD HH:MM 형식으로 입력):";
+            String checkInAt = isValidCheckInAndCheckOutTime(checkInAtQuestion);
+            String checkOutAtQuestion = "체크아웃 시간 (YYYY-mm-DD HH:MM 형식으로 입력):";
+            String checkOutAt = isValidCheckInAndCheckOutTime(checkOutAtQuestion);
+
+            ItinerarySaveRequest itineraryRequest = setItinerarySaveRequest(
                     departure,
                     destination,
-                    stringToLocalDateTime(departureAt),
-                    stringToLocalDateTime(arriveAt),
+                    departureAt,
+                    arriveAt,
                     accommodation,
-                    stringToLocalDateTime(checkInAt),
-                    stringToLocalDateTime(checkOutAt)
+                    checkInAt,
+                    checkOutAt
             );
             saveRequests.add(itineraryRequest);
             System.out.println("여정 기록을 멈추고 싶다면 Y(y)를 입력해주세요.");
-            if (readLine().equals("Y") || readLine().equals("y")) {
+            String choice = readLine();
+            if (choice.equals("Y") || choice.equals("y")) {
                 isDone = true;
             }
         }
         travelController.saveItineraries(id, saveRequests);
+        System.out.println("여정 기록이 완료되었습니다.");
     }
 
     private Menu inputMenu() {
@@ -133,6 +137,101 @@ public class ConsoleView {
         LocalDateTime localDateTime = LocalDateTime.parse(dateString, outputFormatter);
         return localDateTime;
     }
+
+    private String isValidDepartureAndDestinationTime(String input) {
+        boolean check = false;
+        String answer = "";
+        while (!check) {
+            System.out.println(input);
+            answer = readLine();
+            if (answer.isEmpty()) {
+                check = true;
+            } else {
+                if (!containsComma(answer)) {
+                    if (isValidDate(answer)) {
+                        check = true;
+                    }
+                }
+                System.out.println("0000-00-00 00:00 날짜와 시간 형식에 맞지 않습니다. 다시 입력해주세요");
+            }
+        }
+        return answer;
+    }
+
+    private String isValidCheckInAndCheckOutTime(String input) {
+        boolean check = false;
+        String answer = "";
+        while (!check) {
+            System.out.println(input);
+            answer = readLine();
+            if (!containsComma(answer)) {
+                if (isValidDate(answer)) {
+                    check = true;
+                }
+            }
+            System.out.println("0000-00-00 00:00 날짜와 시간 형식에 맞지 않습니다. 다시 입력해주세요");
+        }
+        return answer;
+    }
+
+    private String isValidAnswer(String input) {
+        boolean check = false;
+        String answer = "";
+        while (!check) {
+            System.out.println(input);
+            answer = readLine();
+            if (!isEmpty(answer)) {
+                check = true;
+            }
+        }
+        return answer;
+    }
+
+    private boolean isEmpty(String input) {
+        if (input.trim().isEmpty()) {
+            System.out.println("빈 칸으로는 입력할 수 없습니다. 다시 입력해주세요.");
+            return true;
+        }
+        return false;
+    }
+
+    private boolean containsComma(String input) {
+        if (input.contains(",")) {
+            System.out.println("컴마(,)는 입력할 수 없습니다.");
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isValidDate(String input) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        try {
+            LocalDateTime dateTime = LocalDateTime.parse(input, formatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+
+    private ItinerarySaveRequest setItinerarySaveRequest(String departure,
+                                                         String destination,
+                                                         String departureAt,
+                                                         String arriveAt,
+                                                         String accommodation,
+                                                         String checkInAt,
+                                                         String checkOutAt) {
+        return new ItinerarySaveRequest(
+                departure,
+                destination,
+                stringToLocalDateTime(departureAt),
+                stringToLocalDateTime(arriveAt),
+                accommodation,
+                stringToLocalDateTime(checkInAt),
+                stringToLocalDateTime(checkOutAt)
+        );
+    }
+
 
     public boolean isExited() {
         return isExited;
