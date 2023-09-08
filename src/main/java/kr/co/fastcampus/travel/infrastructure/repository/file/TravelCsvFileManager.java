@@ -8,7 +8,7 @@ import java.util.Optional;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 
-public class TravelCsvFileManager extends FileIoRepository {
+public class TravelCsvFileManager extends FileIoManager {
 
     private static final String EXTENSION = ".csv";
     private static final String ROOT_PATH = "travel/csv";

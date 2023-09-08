@@ -15,7 +15,7 @@ import kr.co.fastcampus.travel.domain.Trip;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class TravelJsonFileManager extends FileIoRepository {
+public class TravelJsonFileManager extends FileIoManager {
 
     public static final String SEQUENCE_FILE = "travel/sequence.json";
     public static final long INITIAL_SEQUENCE = 1L;

@@ -8,7 +8,7 @@ import kr.co.fastcampus.travel.domain.Trip;
 
 public interface ItineraryRepository {
 
-    List<Itinerary> findByTripId(FileType fileType, Trip trip);
+    List<Itinerary> findByTrip(FileType fileType, Trip trip);
 
     Optional<Itinerary> findById(FileType fileType, Long id);
 

@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-public abstract class FileIoRepository {
+public abstract class FileIoManager {
 
     private void createFile(String filename) {
         File file = new File(filename);
