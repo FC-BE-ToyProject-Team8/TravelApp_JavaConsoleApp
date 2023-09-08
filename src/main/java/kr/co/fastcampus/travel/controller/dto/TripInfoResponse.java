@@ -6,6 +6,6 @@ public record TripInfoResponse(Long id, String name, LocalDate startAt, LocalDat
 
     @Override
     public String toString() {
-        return null;
+        return String.format("%d: %s (%s ~ %s)", id, name, startAt, endAt);
     }
 }

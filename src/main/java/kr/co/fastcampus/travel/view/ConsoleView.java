@@ -1,28 +1,47 @@
 package kr.co.fastcampus.travel.view;
 
+import static kr.co.fastcampus.travel.common.exception.ErrorCode.TRAVEL_DOES_NOT_EXIST;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import kr.co.fastcampus.travel.common.exception.UnknownException;
-import java.util.function.Predicate;
-import kr.co.fastcampus.travel.common.exception.UnknownException;
+import java.util.List;
+import kr.co.fastcampus.travel.common.exception.BaseException;
+import kr.co.fastcampus.travel.controller.TravelController;
+import kr.co.fastcampus.travel.controller.dto.ItineraryInfoResponse;
+import kr.co.fastcampus.travel.controller.dto.ItineraryResponse;
+import kr.co.fastcampus.travel.controller.dto.TripInfoResponse;
+import kr.co.fastcampus.travel.domain.FileType;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class ConsoleView {
 
-	private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	private final TravelController travelController;
+
+	private final BufferedReader br;
 	private boolean isExited = false;
 
+	public ConsoleView() {
+		br = new BufferedReader(new InputStreamReader(System.in));
+	}
+
 	public void process() {
-		System.out.println("[메뉴]\n" + "1: 여행기록, 2: 여정기록, 3: 여행조회, 4: 여정조회, 5: 종료\n");
-		System.out.println("메뉴 번호를 입력해주세요");
-		int menuNum = inputNumber(
-			"잘못된 메뉴 번호입니다. 다시 입력해주세요",
-			(num) -> num >= Menu.MIN.getNumber() && num <= Menu.MAX.getNumber()
-		);
-		if (menuNum == Menu.LOG_TRIP.getNumber()) {
+		System.out.println("[메뉴]");
+		System.out.println(Arrays.stream(Menu.values())
+			.map(menu -> String.format("%d: %s", menu.getNumber(), menu.getName()))
+			.collect(Collectors.joining(", ")));
+
+		System.out.println("\n메뉴 번호를 입력해주세요");
+
+		Menu menu = inputMenu();
+		if (menu == Menu.LOG_TRIP) {
 			logTrip();
+		} else if (menu == Menu.SHOW_ITINERARY) {
+			showItinerary();
 		}
 
 		isExited = true;
@@ -33,28 +52,65 @@ public class ConsoleView {
 
 	}
 
-	private int inputNumber(String errorMessage, Predicate<Integer> isValid) {
-		String strNum;
-		int num = 0;
-		while (true) {
-			strNum = readLine();
-			if (canParseInt(strNum) && isValid.test(Integer.parseInt(strNum))) {
-				num = Integer.parseInt(strNum);
-				break;
-			}
-			System.out.println(errorMessage);
+	private Menu inputMenu() {
+		try {
+			int menuNumber = inputNumber("잘못된 메뉴 번호입니다. 다시 입력해주세요;");
+			return Menu.fromNumber(menuNumber);
+		} catch (IllegalArgumentException e) {
+			return inputMenu();
 		}
-
-		return num;
 	}
 
-	private boolean canParseInt(String strNum) {
-		try {
-			Integer.parseInt(strNum);
-		} catch (NumberFormatException e) {
-			return false;
+	private void showItinerary() {
+		List<TripInfoResponse> trips = travelController.getTripList();
+		if (trips.isEmpty()) {
+			System.out.println("여행 목록이 비어 있습니다.");
+			throw new BaseException(TRAVEL_DOES_NOT_EXIST);
 		}
-		return true;
+		System.out.println("여정 조회를 시작합니다.");
+		for (TripInfoResponse tripInfo : trips) {
+			System.out.println(tripInfo);
+		}
+		System.out.println("조회할 여행의 번호를 입력하세요.");
+		Long tripNum = (long) inputNumber("잘못된 여행 번호입니다. 다시 입력해주세요")
+		System.out.print("조회할 여행의 데이터 타입을 입력하세요. (1. CSV, 2. JSON) : ");
+		FileType fileType = inputFileType();
+		List<ItineraryInfoResponse> itineraries = travelController.getItineraryList(fileType,
+			tripNum);
+		System.out.println("여정 목록");
+		for (ItineraryInfoResponse itineraryInfo : itineraries) {
+			System.out.println(itineraryInfo);
+		}
+		System.out.print("조회할 여정의 번호를 입력해주세요. : ");
+		Long itineraryNum = (long) inputNumber("잘못된 여정 번호입니다. 다시 입력해주세요")
+		System.out.print("조회할 여정의 데이터 타입을 입력하세요. (1. CSV, 2. JSON) : ");
+		fileType = inputFileType();
+		ItineraryResponse itineraryResponse = travelController.findItinerary(fileType,
+			itineraryNum);
+		System.out.println(itineraryResponse);
+		System.out.println("Enter를 누르면 시작 메뉴로 돌아갑니다.");
+		readLine();
+	}
+
+	private FileType inputFileType() {
+	}
+
+	private int inputNumber(String errorMessage) {
+		while (true) {
+			try {
+				return parseInt(readLine());
+			} catch (IllegalArgumentException e) {
+				System.out.println(errorMessage);
+			}
+		}
+	}
+
+	private int parseInt(String strNum) {
+		try {
+			return Integer.parseInt(strNum);
+		} catch (NumberFormatException e) {
+			throw new IllegalArgumentException();
+		}
 	}
 
 	private String readLine() {
@@ -70,3 +126,4 @@ public class ConsoleView {
 		return isExited;
 	}
 }
+
