@@ -1,7 +1,7 @@
 package kr.co.fastcampus.travel.controller;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
 import kr.co.fastcampus.travel.controller.dto.ItineraryInfoResponse;
 import kr.co.fastcampus.travel.controller.dto.ItineraryResponse;
@@ -11,6 +11,7 @@ import kr.co.fastcampus.travel.controller.dto.TripResponse;
 import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
 import kr.co.fastcampus.travel.domain.FileType;
 import kr.co.fastcampus.travel.domain.Itinerary;
+import kr.co.fastcampus.travel.service.ItineraryConverter;
 import kr.co.fastcampus.travel.service.ItineraryService;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class TravelController {
 
 	private final ItineraryService itineraryService;
+	private final ItineraryConverter itineraryConverter;
 
 	public List<TripInfoResponse> getTripList() {
 		return null;
@@ -33,19 +35,8 @@ public class TravelController {
 
 	public List<ItineraryInfoResponse> getItineraryList(FileType fileType, Long tripId) {
 		List<Itinerary> response = itineraryService.findItineraries(fileType, tripId);
-		if (response.isEmpty()) {
-			throw new TravelDoesNotExistException();
-		}
-		List<ItineraryInfoResponse> itineraryInfoList = new ArrayList<>();
-		for (Itinerary itinerary : response) {
-			ItineraryInfoResponse itineraryInfo =
-				ItineraryInfoResponse.builder()
-					.id(itinerary.getId())
-					.departure(itinerary.getRoute().getDeparture())
-					.destination(itinerary.getRoute().getDestination())
-					.build();
-			itineraryInfoList.add(itineraryInfo);
-		}
+		List<ItineraryInfoResponse> itineraryInfoList = response.stream()
+			.map(itineraryConverter::toInfoDto).collect(Collectors.toList());
 		return itineraryInfoList;
 	}
 
@@ -54,16 +45,7 @@ public class TravelController {
 		if (response == null) {
 			throw new TravelDoesNotExistException();
 		}
-		return ItineraryResponse.builder()
-			.id(response.getId())
-			.departure(response.getRoute().getDeparture())
-			.destination(response.getRoute().getDestination())
-			.departureAt(response.getRoute().getDepartureAt())
-			.arriveAt(response.getRoute().getArriveAt())
-			.accommodation(response.getLodge().getAccommodation())
-			.checkInAt(response.getLodge().getCheckInAt())
-			.checkOutAt(response.getLodge().getCheckOutAt())
-			.build();
+		return itineraryConverter.toResponseDto(response);
 	}
 
 	public String saveItineraries(Long tripId, List<ItinerarySaveRequest> saveRequests) {

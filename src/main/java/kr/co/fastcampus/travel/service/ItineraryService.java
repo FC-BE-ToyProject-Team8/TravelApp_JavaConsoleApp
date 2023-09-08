@@ -2,6 +2,7 @@ package kr.co.fastcampus.travel.service;
 
 import java.util.List;
 import java.util.Optional;
+import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
 import kr.co.fastcampus.travel.domain.FileType;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
@@ -16,11 +17,7 @@ public class ItineraryService {
 
 	public Itinerary findItinerary(FileType fileType, Long id) {
 		Optional<Itinerary> response = itineraryRepository.findById(fileType, id);
-		if (response.isPresent()) {
-			return response.get();
-		} else {
-			return null;
-		}
+		return response.orElseThrow(() -> new TravelDoesNotExistException());
 	}
 
 	public List<Itinerary> findItineraries(FileType fileType, Long tripId) {
