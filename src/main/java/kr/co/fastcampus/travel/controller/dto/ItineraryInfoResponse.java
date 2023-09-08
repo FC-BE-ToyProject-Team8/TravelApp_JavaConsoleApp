@@ -1,12 +1,12 @@
 package kr.co.fastcampus.travel.controller.dto;
 
-import lombok.Builder;
+import kr.co.fastcampus.travel.domain.Itinerary;
 
-@Builder
 public record ItineraryInfoResponse(Long id, String departure, String destination) {
 
-	@Override
-	public String toString() {
-		return String.format("%d: %s ~ %s", id, departure, destination);
+	public ItineraryInfoResponse(Itinerary itinerary) {
+		this(itinerary.getId(),
+			itinerary.getRoute().getDeparture(),
+			itinerary.getRoute().getDestination());
 	}
 }

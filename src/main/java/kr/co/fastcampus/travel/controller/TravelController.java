@@ -11,15 +11,15 @@ import kr.co.fastcampus.travel.controller.dto.TripResponse;
 import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
 import kr.co.fastcampus.travel.domain.FileType;
 import kr.co.fastcampus.travel.domain.Itinerary;
-import kr.co.fastcampus.travel.service.ItineraryConverter;
 import kr.co.fastcampus.travel.service.ItineraryService;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public class TravelController {
 
 	private final ItineraryService itineraryService;
-	private final ItineraryConverter itineraryConverter;
+
+	public TravelController() {
+		itineraryService = new ItineraryService();
+	}
 
 	public List<TripInfoResponse> getTripList() {
 		return null;
@@ -35,9 +35,9 @@ public class TravelController {
 
 	public List<ItineraryInfoResponse> getItineraryList(FileType fileType, Long tripId) {
 		List<Itinerary> response = itineraryService.findItineraries(fileType, tripId);
-		List<ItineraryInfoResponse> itineraryInfoList = response.stream()
-			.map(itineraryConverter::toInfoDto).collect(Collectors.toList());
-		return itineraryInfoList;
+		return response.stream()
+			.map(ItineraryInfoResponse::new)
+			.collect(Collectors.toList());
 	}
 
 	public ItineraryResponse findItinerary(FileType fileType, Long id) {
@@ -45,7 +45,7 @@ public class TravelController {
 		if (response == null) {
 			throw new TravelDoesNotExistException();
 		}
-		return itineraryConverter.toResponseDto(response);
+		return new ItineraryResponse(response);
 	}
 
 	public String saveItineraries(Long tripId, List<ItinerarySaveRequest> saveRequests) {
