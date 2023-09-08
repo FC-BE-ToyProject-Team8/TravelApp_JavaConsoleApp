@@ -62,13 +62,13 @@ public class ConsoleView {
         List<ItinerarySaveRequest> saveRequests = new ArrayList<>();
         Question question = new Question();
         while (!isDone) {
-            String departure = isValidAnswer(question.getDEPARTURE_QUESTION());
-            String destination = isValidAnswer(question.getDESTINATION_QUESTION());
-            String departureAt = isValidDepartureAndDestinationTime(question.getDEPARTURE_AT_QUESTION());
-            String arriveAt = isValidDepartureAndDestinationTime(question.getARRIVE_AT_QUESTION());
-            String accommodation = isValidAnswer(question.getACCOMMODATION_QUESTION());
-            String checkInAt = isValidCheckInAndCheckOutTime(question.getCHECK_IN_QUESTION());
-            String checkOutAt = isValidCheckInAndCheckOutTime(question.getCHECK_OUT_QUESTION());
+            String departure = isValidAnswer(question.getDepartureQuestion());
+            String destination = isValidAnswer(question.getDestinationQuestion());
+            String departureAt = isValidDepartureAndDestinationTime(question.getDepartureAtQuestion());
+            String arriveAt = isValidDepartureAndDestinationTime(question.getArriveAtQuestion());
+            String accommodation = isValidAnswer(question.getAccommodationQuestion());
+            String checkInAt = isValidCheckInAndCheckOutTime(question.getCheckInAtQuestion());
+            String checkOutAt = isValidCheckInAndCheckOutTime(question.getCheckOutAtQuestion());
 
             ItinerarySaveRequest itineraryRequest = setItinerarySaveRequest(
                     departure,
