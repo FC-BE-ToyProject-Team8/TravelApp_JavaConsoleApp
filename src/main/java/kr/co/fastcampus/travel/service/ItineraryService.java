@@ -11,30 +11,30 @@ import kr.co.fastcampus.travel.infrastructure.repository.ItineraryRepositoryImpl
 
 public class ItineraryService {
 
-	private final TripService tripService;
-	private final ItineraryRepository itineraryRepository;
+    private final TripService tripService;
+    private final ItineraryRepository itineraryRepository;
 
-	public ItineraryService() {
-		this.tripService = new TripService();
-		this.itineraryRepository = new ItineraryRepositoryImpl();
-	}
+    public ItineraryService() {
+        this.tripService = new TripService();
+        this.itineraryRepository = new ItineraryRepositoryImpl();
+    }
 
-	public ItineraryService(TripService tripService, ItineraryRepository itineraryRepository) {
-		this.tripService = tripService;
-		this.itineraryRepository = itineraryRepository;
-	}
+    public ItineraryService(TripService tripService, ItineraryRepository itineraryRepository) {
+        this.tripService = tripService;
+        this.itineraryRepository = itineraryRepository;
+    }
 
-	public Itinerary findItinerary(FileType fileType, Long id) {
-		Optional<Itinerary> response = itineraryRepository.findById(fileType, id);
-		return response.orElseThrow(TravelDoesNotExistException::new);
-	}
+    public Itinerary findItinerary(FileType fileType, Long id) {
+        Optional<Itinerary> response = itineraryRepository.findById(fileType, id);
+        return response.orElseThrow(TravelDoesNotExistException::new);
+    }
 
-	public List<Itinerary> findItineraries(FileType fileType, Long tripId) {
-		Trip trip = tripService.findTrip(tripId);
-		return itineraryRepository.findByTripId(fileType, trip);
-	}
+    public List<Itinerary> findItineraries(FileType fileType, Long tripId) {
+        Trip trip = tripService.findTrip(tripId);
+        return itineraryRepository.findByTripId(fileType, trip);
+    }
 
-	public List<Itinerary> saveItineraries(Long tripId) {
-		return null;
-	}
+    public List<Itinerary> saveItineraries(Long tripId) {
+        return null;
+    }
 }

@@ -15,40 +15,40 @@ import kr.co.fastcampus.travel.service.ItineraryService;
 
 public class TravelController {
 
-	private final ItineraryService itineraryService;
+    private final ItineraryService itineraryService;
 
-	public TravelController() {
-		itineraryService = new ItineraryService();
-	}
+    public TravelController() {
+        itineraryService = new ItineraryService();
+    }
 
-	public List<TripInfoResponse> getTripList() {
-		return null;
-	}
+    public List<TripInfoResponse> getTripList() {
+        return null;
+    }
 
-	public TripResponse findTrip(Long id) {
-		return null;
-	}
+    public TripResponse findTrip(Long id) {
+        return null;
+    }
 
-	public String saveTrips(TripSaveRequest saveRequest) {
-		return null;
-	}
+    public String saveTrips(TripSaveRequest saveRequest) {
+        return null;
+    }
 
-	public List<ItineraryInfoResponse> getItineraryList(FileType fileType, Long tripId) {
-		List<Itinerary> response = itineraryService.findItineraries(fileType, tripId);
-		return response.stream()
-			.map(ItineraryInfoResponse::new)
-			.collect(Collectors.toList());
-	}
+    public List<ItineraryInfoResponse> getItineraryList(FileType fileType, Long tripId) {
+        List<Itinerary> response = itineraryService.findItineraries(fileType, tripId);
+        return response.stream()
+                .map(ItineraryInfoResponse::new)
+                .collect(Collectors.toList());
+    }
 
-	public ItineraryResponse findItinerary(FileType fileType, Long id) {
-		Itinerary response = itineraryService.findItinerary(fileType, id);
-		if (response == null) {
-			throw new TravelDoesNotExistException();
-		}
-		return new ItineraryResponse(response);
-	}
+    public ItineraryResponse findItinerary(FileType fileType, Long id) {
+        Itinerary response = itineraryService.findItinerary(fileType, id);
+        if (response == null) {
+            throw new TravelDoesNotExistException();
+        }
+        return new ItineraryResponse(response);
+    }
 
-	public String saveItineraries(Long tripId, List<ItinerarySaveRequest> saveRequests) {
-		return null;
-	}
+    public String saveItineraries(Long tripId, List<ItinerarySaveRequest> saveRequests) {
+        return null;
+    }
 }
