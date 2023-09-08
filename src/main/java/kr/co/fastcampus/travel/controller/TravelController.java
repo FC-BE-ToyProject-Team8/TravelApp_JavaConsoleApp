@@ -49,12 +49,12 @@ public class TravelController {
     public TripResponse findTrip(FileType fileType, Long id) {
 
         Trip trip = tripService.findTrip(fileType, id);
-        List<Itinerary> itineraries=trip.getItineraries();
+        List<Itinerary> itineraries = trip.getItineraries();
         if (trip == null) {
             throw new TravelDoesNotExistException();
         }
 
-        return new TripResponse(trip,itineraries);
+        return new TripResponse(trip, itineraries);
     }
 
     public void saveTrip(TripSaveRequest saveRequest) {

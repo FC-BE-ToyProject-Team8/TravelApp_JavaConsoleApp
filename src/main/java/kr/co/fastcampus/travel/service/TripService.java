@@ -1,5 +1,6 @@
 package kr.co.fastcampus.travel.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Optional;
 import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
@@ -8,6 +9,8 @@ import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.infrastructure.repository.TripRepository;
 import kr.co.fastcampus.travel.infrastructure.repository.TripRepositoryImpl;
+import kr.co.fastcampus.travel.infrastructure.repository.file.TravelCsvFileManager;
+import kr.co.fastcampus.travel.infrastructure.repository.file.TravelJsonFileManager;
 
 public class TripService {
 
@@ -15,7 +18,10 @@ public class TripService {
     private final TripRepository tripRepository;
 
     public TripService() {
-        this.tripRepository = new TripRepositoryImpl();
+        this.tripRepository = new TripRepositoryImpl(
+            new TravelJsonFileManager(new ObjectMapper()),
+            new TravelCsvFileManager()
+        );
         this.itineraryService = new ItineraryService();
     }
 

@@ -20,7 +20,9 @@ public record TripResponse(Long id, String name, LocalDate startAt, LocalDate en
     }
 
     // Itinerary 리스트를 ItineraryResponse 리스트로 변환하는 메서드
-    private static List<ItineraryResponse> convertItinerariesToItineraryResponses(List<Itinerary> itineraries) {
+    private static List<ItineraryResponse> convertItinerariesToItineraryResponses(
+        List<Itinerary> itineraries
+    ) {
         List<ItineraryResponse> itineraryResponses = new ArrayList<>();
         for (Itinerary itinerary : itineraries) {
             itineraryResponses.add(new ItineraryResponse(itinerary));
