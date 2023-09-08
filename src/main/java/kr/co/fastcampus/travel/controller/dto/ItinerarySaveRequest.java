@@ -9,6 +9,7 @@ public record ItinerarySaveRequest(
         LocalDateTime arriveAt,
         String accommodation,
         LocalDateTime checkInAt,
-        LocalDateTime checkOutAt) {
+        LocalDateTime checkOutAt
+) {
 
 }

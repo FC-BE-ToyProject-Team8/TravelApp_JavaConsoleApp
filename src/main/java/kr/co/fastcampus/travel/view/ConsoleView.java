@@ -29,9 +29,9 @@ public class ConsoleView {
     public void process() {
         System.out.println("[메뉴]");
         System.out.println(
-                Arrays.stream(Menu.values())
-                        .map(menu -> String.format("%d: %s", menu.getNumber(), menu.getName()))
-                        .collect(Collectors.joining(", "))
+            Arrays.stream(Menu.values())
+                .map(menu -> String.format("%d: %s", menu.getNumber(), menu.getName()))
+                .collect(Collectors.joining(", "))
         );
 
         System.out.println("\n메뉴 번호를 입력해주세요");
@@ -39,12 +39,12 @@ public class ConsoleView {
         Menu menu = inputMenu();
         if (menu == Menu.LOG_TRIP) {
             logTrip();
-            Long id = 0L;// 진홍님의 여행 기록 저장 후 넘어온 여행의 id 값 패싱
+            Long id = 1L;
             logItineraries(id);
         } else if (menu == Menu.LOG_ITINERARY) {
             // 창호님의 여행 전체 조회 메소드 호출
             // 창호님의 여행 1개 보는 메소드 호출
-            Long id = 0L;// 1개의 여행의 id 값 패싱
+            Long id = 1L;
             logItineraries(id);
         }
 
@@ -60,21 +60,15 @@ public class ConsoleView {
         System.out.println("여행에 대한 여정 기록을 시작합니다.");
         boolean isDone = false;
         List<ItinerarySaveRequest> saveRequests = new ArrayList<>();
+        Question question = new Question();
         while (!isDone) {
-            String departureQuestion = "출발지:";
-            String departure = isValidAnswer(departureQuestion);
-            String destinationQuestion = "도착지:";
-            String destination = isValidAnswer(destinationQuestion);
-            String departureAtQuestion = "출발 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):";
-            String departureAt = isValidDepartureAndDestinationTime(departureAtQuestion);
-            String arriveAtQuestion = "도착 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):";
-            String arriveAt = isValidDepartureAndDestinationTime(arriveAtQuestion);
-            String accommodationQuestion = "숙박지명:";
-            String accommodation = isValidAnswer(accommodationQuestion);
-            String checkInAtQuestion = "체크인 시간 (YYYY-mm-DD HH:MM 형식으로 입력):";
-            String checkInAt = isValidCheckInAndCheckOutTime(checkInAtQuestion);
-            String checkOutAtQuestion = "체크아웃 시간 (YYYY-mm-DD HH:MM 형식으로 입력):";
-            String checkOutAt = isValidCheckInAndCheckOutTime(checkOutAtQuestion);
+            String departure = isValidAnswer(question.getDEPARTURE_QUESTION());
+            String destination = isValidAnswer(question.getDESTINATION_QUESTION());
+            String departureAt = isValidDepartureAndDestinationTime(question.getDEPARTURE_AT_QUESTION());
+            String arriveAt = isValidDepartureAndDestinationTime(question.getARRIVE_AT_QUESTION());
+            String accommodation = isValidAnswer(question.getACCOMMODATION_QUESTION());
+            String checkInAt = isValidCheckInAndCheckOutTime(question.getCHECK_IN_QUESTION());
+            String checkOutAt = isValidCheckInAndCheckOutTime(question.getCHECK_OUT_QUESTION());
 
             ItinerarySaveRequest itineraryRequest = setItinerarySaveRequest(
                     departure,
@@ -132,24 +126,23 @@ public class ConsoleView {
         }
     }
 
-    private LocalDateTime stringToLocalDateTime(String dateString) {
+    public static LocalDateTime stringToLocalDateTime(String dateString) {
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime localDateTime = LocalDateTime.parse(dateString, outputFormatter);
         return localDateTime;
     }
 
     private String isValidDepartureAndDestinationTime(String input) {
-        boolean check = false;
-        String answer = "";
-        while (!check) {
+        String answer;
+        while (true) {
             System.out.println(input);
             answer = readLine();
             if (answer.isEmpty()) {
-                check = true;
+                break;
             } else {
                 if (!containsComma(answer)) {
                     if (isValidDate(answer)) {
-                        check = true;
+                        break;
                     }
                 }
                 System.out.println("0000-00-00 00:00 날짜와 시간 형식에 맞지 않습니다. 다시 입력해주세요");
@@ -159,14 +152,13 @@ public class ConsoleView {
     }
 
     private String isValidCheckInAndCheckOutTime(String input) {
-        boolean check = false;
-        String answer = "";
-        while (!check) {
+        String answer;
+        while (true) {
             System.out.println(input);
             answer = readLine();
             if (!containsComma(answer)) {
                 if (isValidDate(answer)) {
-                    check = true;
+                    break;
                 }
             }
             System.out.println("0000-00-00 00:00 날짜와 시간 형식에 맞지 않습니다. 다시 입력해주세요");
@@ -175,13 +167,12 @@ public class ConsoleView {
     }
 
     private String isValidAnswer(String input) {
-        boolean check = false;
-        String answer = "";
-        while (!check) {
+        String answer;
+        while (true) {
             System.out.println(input);
             answer = readLine();
             if (!isEmpty(answer)) {
-                check = true;
+                break;
             }
         }
         return answer;
@@ -214,13 +205,15 @@ public class ConsoleView {
         }
     }
 
-    private ItinerarySaveRequest setItinerarySaveRequest(String departure,
-                                                         String destination,
-                                                         String departureAt,
-                                                         String arriveAt,
-                                                         String accommodation,
-                                                         String checkInAt,
-                                                         String checkOutAt) {
+    private ItinerarySaveRequest setItinerarySaveRequest(
+            String departure,
+            String destination,
+            String departureAt,
+            String arriveAt,
+            String accommodation,
+            String checkInAt,
+            String checkOutAt
+    ) {
         return new ItinerarySaveRequest(
                 departure,
                 destination,
@@ -231,7 +224,6 @@ public class ConsoleView {
                 stringToLocalDateTime(checkOutAt)
         );
     }
-
 
     public boolean isExited() {
         return isExited;
