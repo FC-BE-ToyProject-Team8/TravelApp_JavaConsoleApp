@@ -1,10 +1,11 @@
 package kr.co.fastcampus.travel.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
 import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
@@ -14,8 +15,6 @@ import kr.co.fastcampus.travel.infrastructure.repository.TripRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import static org.mockito.Mockito.*;
 
 public class TripServiceTest {
 
@@ -45,15 +44,16 @@ public class TripServiceTest {
         ItineraryService mockItinerarySvc = Mockito.mock(ItineraryService.class);
         when(mockItinerarySvc.saveItineraries(any(Long.class), any(List.class)))
             .thenAnswer(invocation -> {
-               Itinerary itinerary = Itinerary.builder()
-                   .departure(departure)
-                   .destination(destination)
-                   .accommodation(accommodation)
-                   .checkInAt(checkInAt)
-                   .checkOutAt(checkOutAt)
-                   .build();
-               return List.of(itinerary);
-            });
+                    Itinerary itinerary = Itinerary.builder()
+                        .departure(departure)
+                        .destination(destination)
+                        .accommodation(accommodation)
+                        .checkInAt(checkInAt)
+                        .checkOutAt(checkOutAt)
+                        .build();
+                    return List.of(itinerary);
+                }
+            );
 
         TripService tripService = new TripService(mockItinerarySvc, mockTripRepo);
 

@@ -45,14 +45,23 @@ public class ConsoleView {
         System.out.println("여행 기록을 시작합니다.\n");
 
         System.out.println("여행 이름:");
-        String name = inputView.inputNotEmptyString(str -> !str.contains(","), "컴마(,)는 입력할 수 없습니다.");
+        final String name = inputView.inputNotEmptyString(
+            str -> !str.contains(","),
+            "컴마(,)는 입력할 수 없습니다."
+        );
 
         System.out.println("시작 날짜 (2023-01-01 형식으로 입력):");
-        String startAtStr = inputView.inputNotEmptyString(this::isValidDate, "0000-00-00 날짜 형식에 맞지 않습니다. 다시 입력해주세요");
+        final String startAtStr = inputView.inputNotEmptyString(
+            this::isValidDate,
+            "0000-00-00 날짜 형식에 맞지 않습니다. 다시 입력해주세요"
+        );
         LocalDate startAt = LocalDate.parse(startAtStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         System.out.println("종료 날짜 (2023-01-01 형식으로 입력):");
-        String endAtStr = inputView.inputNotEmptyString(this::isValidDate, "0000-00-00 날짜 형식에 맞지 않습니다. 다시 입력해주세요");
+        final String endAtStr = inputView.inputNotEmptyString(
+            this::isValidDate,
+            "0000-00-00 날짜 형식에 맞지 않습니다. 다시 입력해주세요"
+        );
         LocalDate endAt = LocalDate.parse(endAtStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         List<ItinerarySaveRequest> itinerarySaveRequests = new ArrayList<>();
@@ -85,31 +94,60 @@ public class ConsoleView {
         System.out.printf("[%d번째 여정]\n", order);
 
         System.out.println("출발지:");
-        String departure = inputView.inputNotEmptyString(str -> !str.contains(","), "컴마(,)는 입력할 수 없습니다.");
+        String departure = inputView.inputNotEmptyString(
+            str -> !str.contains(","),
+            "컴마(,)는 입력할 수 없습니다."
+        );
 
         System.out.println("도착지: ");
-        String destination = inputView.inputNotEmptyString(str -> !str.contains(","), "컴마(,)는 입력할 수 없습니다.");
+        String destination = inputView.inputNotEmptyString(
+            str -> !str.contains(","),
+            "컴마(,)는 입력할 수 없습니다."
+        );
 
         ItinerarySaveRequest itinerarySaveRequest = null;
         while (itinerarySaveRequest == null) {
             System.out.println("출발 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):");
-            String departureAtStr = inputView.inputString(str -> str.isEmpty() || isValidDateTime(str), "0000-00-00 00:00 날짜와 시간 형식에 맞지 않습니다. 다시 입력해주세요");
-            LocalDateTime departureAt = departureAtStr.isEmpty() ? null : LocalDateTime.parse(departureAtStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            String departureAtStr = inputView.inputString(
+                str -> str.isEmpty() || isValidDateTime(str),
+                "0000-00-00 00:00 날짜와 시간 형식에 맞지 않습니다. 다시 입력해주세요"
+            );
+            LocalDateTime departureAt = departureAtStr.isEmpty()
+                ? null
+                : LocalDateTime.parse(departureAtStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
             System.out.println("도착 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):");
-            String arriveAtStr = inputView.inputString(str -> str.isEmpty() || isValidDateTime(str), "0000-00-00 00:00 날짜와 시간 형식에 맞지 않습니다. 다시 입력해주세요");
-            LocalDateTime arriveAt = arriveAtStr.isEmpty() ? null : LocalDateTime.parse(arriveAtStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            String arriveAtStr = inputView.inputString(
+                str -> str.isEmpty() || isValidDateTime(str),
+                "0000-00-00 00:00 날짜와 시간 형식에 맞지 않습니다. 다시 입력해주세요"
+            );
+            LocalDateTime arriveAt = arriveAtStr.isEmpty()
+                ? null
+                : LocalDateTime.parse(arriveAtStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
             System.out.println("숙박지 (Enter로 생략 가능):");
-            String accommodation = inputView.inputString(str -> !str.contains(","), "컴마(,)는 입력할 수 없습니다.");
+            String accommodation = inputView.inputString(
+                str -> !str.contains(","),
+                "컴마(,)는 입력할 수 없습니다."
+            );
 
             System.out.println("체크인 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):");
-            String checkInAtStr = inputView.inputString(str -> str.isEmpty() || isValidDateTime(str), "0000-00-00 00:00 날짜와 시간 형식에 맞지 않습니다. 다시 입력해주세요");
-            LocalDateTime checkInAt = checkInAtStr.isEmpty() ? null : LocalDateTime.parse(checkInAtStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            String checkInAtStr = inputView.inputString(
+                str -> str.isEmpty() || isValidDateTime(str),
+                "0000-00-00 00:00 날짜와 시간 형식에 맞지 않습니다. 다시 입력해주세요"
+            );
+            LocalDateTime checkInAt = checkInAtStr.isEmpty()
+                ? null
+                : LocalDateTime.parse(checkInAtStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
             System.out.println("체크아웃 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):");
-            String checkOutAtStr = inputView.inputString(str -> str.isEmpty() || isValidDateTime(str), "0000-00-00 00:00 날짜와 시간 형식에 맞지 않습니다. 다시 입력해주세요");
-            LocalDateTime checkOutAt = checkOutAtStr.isEmpty() ? null : LocalDateTime.parse(checkOutAtStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            String checkOutAtStr = inputView.inputString(
+                str -> str.isEmpty() || isValidDateTime(str),
+                "0000-00-00 00:00 날짜와 시간 형식에 맞지 않습니다. 다시 입력해주세요"
+            );
+            LocalDateTime checkOutAt = checkOutAtStr.isEmpty()
+                ? null
+                : LocalDateTime.parse(checkOutAtStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
             try {
                 itinerarySaveRequest = ItinerarySaveRequest.builder()

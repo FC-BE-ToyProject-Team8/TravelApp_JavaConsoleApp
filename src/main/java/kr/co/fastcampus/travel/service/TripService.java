@@ -41,7 +41,10 @@ public class TripService {
 
         Trip savedTrip = tripRepository.save(trip);
 
-        List<Itinerary> itineraries = itineraryService.saveItineraries(savedTrip.getId(), saveRequest.itinerarySaveRequests());
+        List<Itinerary> itineraries = itineraryService.saveItineraries(
+            savedTrip.getId(),
+            saveRequest.itinerarySaveRequests()
+        );
         itineraries.forEach(trip::addItinerary);
 
         return trip;
