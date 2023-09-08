@@ -51,18 +51,10 @@ public class ConsoleView {
         );
 
         System.out.println("시작 날짜 (2023-01-01 형식으로 입력):");
-        final String startAtStr = inputView.inputNotEmptyString(
-            this::isValidDate,
-            "0000-00-00 날짜 형식에 맞지 않습니다. 다시 입력해주세요"
-        );
-        LocalDate startAt = LocalDate.parse(startAtStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate startAt = inputView.inputDate();
 
         System.out.println("종료 날짜 (2023-01-01 형식으로 입력):");
-        final String endAtStr = inputView.inputNotEmptyString(
-            this::isValidDate,
-            "0000-00-00 날짜 형식에 맞지 않습니다. 다시 입력해주세요"
-        );
-        LocalDate endAt = LocalDate.parse(endAtStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate endAt = inputView.inputDate();
 
         List<ItinerarySaveRequest> itinerarySaveRequests = new ArrayList<>();
         int order = 1;
@@ -108,22 +100,10 @@ public class ConsoleView {
         ItinerarySaveRequest itinerarySaveRequest = null;
         while (itinerarySaveRequest == null) {
             System.out.println("출발 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):");
-            String departureAtStr = inputView.inputString(
-                str -> str.isEmpty() || isValidDateTime(str),
-                "0000-00-00 00:00 날짜와 시간 형식에 맞지 않습니다. 다시 입력해주세요"
-            );
-            LocalDateTime departureAt = departureAtStr.isEmpty()
-                ? null
-                : LocalDateTime.parse(departureAtStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            LocalDateTime departureAt = inputView.inputDateTime();
 
             System.out.println("도착 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):");
-            String arriveAtStr = inputView.inputString(
-                str -> str.isEmpty() || isValidDateTime(str),
-                "0000-00-00 00:00 날짜와 시간 형식에 맞지 않습니다. 다시 입력해주세요"
-            );
-            LocalDateTime arriveAt = arriveAtStr.isEmpty()
-                ? null
-                : LocalDateTime.parse(arriveAtStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            LocalDateTime arriveAt = inputView.inputDateTime();
 
             System.out.println("숙박지 (Enter로 생략 가능):");
             String accommodation = inputView.inputString(
@@ -132,22 +112,10 @@ public class ConsoleView {
             );
 
             System.out.println("체크인 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):");
-            String checkInAtStr = inputView.inputString(
-                str -> str.isEmpty() || isValidDateTime(str),
-                "0000-00-00 00:00 날짜와 시간 형식에 맞지 않습니다. 다시 입력해주세요"
-            );
-            LocalDateTime checkInAt = checkInAtStr.isEmpty()
-                ? null
-                : LocalDateTime.parse(checkInAtStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            LocalDateTime checkInAt = inputView.inputDateTime();
 
             System.out.println("체크아웃 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):");
-            String checkOutAtStr = inputView.inputString(
-                str -> str.isEmpty() || isValidDateTime(str),
-                "0000-00-00 00:00 날짜와 시간 형식에 맞지 않습니다. 다시 입력해주세요"
-            );
-            LocalDateTime checkOutAt = checkOutAtStr.isEmpty()
-                ? null
-                : LocalDateTime.parse(checkOutAtStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            LocalDateTime checkOutAt = inputView.inputDateTime();
 
             try {
                 itinerarySaveRequest = ItinerarySaveRequest.builder()
@@ -165,24 +133,6 @@ public class ConsoleView {
         }
 
         return itinerarySaveRequest;
-    }
-
-    private boolean isValidDateTime(String dateTimeStr) {
-        try {
-            LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-            return true;
-        } catch (DateTimeParseException e) {
-            return false;
-        }
-    }
-
-    private boolean isValidDate(String dateStr) {
-        try {
-            LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            return true;
-        } catch (DateTimeParseException e) {
-            return false;
-        }
     }
 
     public boolean isExited() {
