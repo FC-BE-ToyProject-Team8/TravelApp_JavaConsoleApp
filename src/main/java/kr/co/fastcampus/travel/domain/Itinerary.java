@@ -1,10 +1,15 @@
 package kr.co.fastcampus.travel.domain;
 
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class Itinerary {
 
     private Long id;
@@ -14,7 +19,7 @@ public class Itinerary {
     private Trip trip;
 
     @Builder
-    public Itinerary(
+    private Itinerary(
             Long id,
             String departure,
             String destination,
@@ -33,5 +38,9 @@ public class Itinerary {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setTrip(Trip trip) {
+        this.trip = trip;
     }
 }
