@@ -1,9 +1,8 @@
 package kr.co.fastcampus.travel.service;
 
+import java.util.List;
 import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
 import kr.co.fastcampus.travel.domain.Trip;
-
-import java.util.List;
 
 public class TripService {
 
