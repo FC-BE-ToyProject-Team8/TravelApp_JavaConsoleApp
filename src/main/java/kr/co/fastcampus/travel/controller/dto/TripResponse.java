@@ -1,27 +1,27 @@
 package kr.co.fastcampus.travel.controller.dto;
 
+import java.util.ArrayList;
 import java.util.stream.IntStream;
 import kr.co.fastcampus.travel.domain.Itinerary;
 
 import java.time.LocalDate;
 import java.util.List;
+import kr.co.fastcampus.travel.domain.Trip;
 
-//Itinerary 도메인 사용 수정 필요
 public record TripResponse(Long id, String name, LocalDate startAt, LocalDate endAt,
-                           List<Itinerary> itineraries) {
+                           List<ItineraryResponse> itineraries) {
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\"").append(name).append("\"\n");
-        sb.append("기간 : ").append(startAt).append(" ~ ").append(endAt).append("\n");
+    public TripResponse(Trip trip,List<Itinerary> itineraries){
+        this(trip.getId(), trip.getName(), trip.getStartAt(), trip.getEndAt(),
+            convertItinerariesToItineraryResponses(itineraries));
+    }
 
-        //그에 따라 수정 필요
-        IntStream.range(0, itineraries.size())
-            .forEach(index -> {
-                sb.append("[").append(index + 1).append("번째 여정]\n");
-                sb.append(itineraries.get(index).toString()).append("\n");
-            });
-        return sb.toString();
+    // Itinerary 리스트를 ItineraryResponse 리스트로 변환하는 메서드
+    private static List<ItineraryResponse> convertItinerariesToItineraryResponses(List<Itinerary> itineraries) {
+        List<ItineraryResponse> itineraryResponses = new ArrayList<>();
+        for (Itinerary itinerary : itineraries) {
+            itineraryResponses.add(new ItineraryResponse(itinerary));
+        }
+        return itineraryResponses;
     }
 }

@@ -10,11 +10,10 @@ import kr.co.fastcampus.travel.infrastructure.repository.TripRepository;
 
 public class TripService {
 
-    private TripRepository tripRepository;
+    //TripRepository
 
     public List<Trip> findAllTrips(FileType fileType) {
-        List<Trip> trips = tripRepository.findAll(fileType);
-        return trips;
+        return tripRepository.findAll(fileType);
     }
 
     public Trip findTrip(FileType fileType, Long id) {

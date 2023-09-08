@@ -3,9 +3,12 @@ package kr.co.fastcampus.travel.view;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import kr.co.fastcampus.travel.common.exception.UnknownException;
 import kr.co.fastcampus.travel.controller.TravelController;
 import kr.co.fastcampus.travel.controller.dto.TripInfoResponse;
@@ -50,21 +53,42 @@ public class ConsoleView {
     }
 
     private void showTrip() {
-
         FileType fileType = inputFileType();
 
         System.out.print("조회 타입의 번호를 입력해주세요. (1.CSV/2.JSON) ");
         List<TripInfoResponse> tripInfoResponses = travelController.getTripList(fileType);
         for (TripInfoResponse tripInfoResponse : tripInfoResponses) {
-            System.out.println(tripInfoResponse);
+            System.out.println(printShortTripInfo(tripInfoResponse));
         }
 
         System.out.println("조회할 여행의 번호를 입력해주세요.");
         Long travelId = (long) inputNumber("잘못된 여행 번호입니다. 다시 입력해주세요");
-        TripResponse trip = travelController.findTrip(fileType, travelId);
+        TripResponse tripResponse = travelController.findTrip(fileType, travelId);
+        System.out.println(printDetailTripInfo(tripResponse));
+    }
 
-        System.out.println(trip);
+    private String printShortTripInfo(TripInfoResponse tripInfoResponse) {
+        return String.format("%d : %s + ( %s ~ %s )",
+            tripInfoResponse.id(),
+            tripInfoResponse.name(),
+            tripInfoResponse.startAt(),
+            tripInfoResponse.endAt());
+    }
 
+    //리팩토링 예정
+    private String printDetailTripInfo(TripResponse tripResponse) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\"").append(tripResponse.name()).append("\"\n");
+        sb.append("기간 : ").append(stringToLocalDate(tripResponse.startAt().toString()))
+            .append(" ~ ").append(stringToLocalDate(tripResponse.endAt().toString())).append("\n");
+
+        IntStream.range(0, tripResponse.itineraries().size())
+            .forEach(index -> {
+                sb.append("[").append(index + 1).append("번째 여정]\n");
+                sb.append(tripResponse.itineraries().get(index).toString()).append("\n");
+            });
+
+        return sb.toString();
     }
 
     private Menu inputMenu() {
@@ -104,15 +128,18 @@ public class ConsoleView {
     }
 
     private FileType inputFileType() {
-        int fileNum = inputNumber("잘못된 번호입니다. 다시 입력해주세요");
-
-        FileType fileType;
-        if (fileNum == FileType.CSV.getNumber()) {
-            fileType = FileType.CSV;
-        } else {
-            fileType = FileType.JSON;
+        try {
+            int fileNum = inputNumber("잘못된 번호입니다. 다시 입력해주세요");
+            return FileType.fromNumber(fileNum);
+        } catch (IllegalArgumentException e) {
+            return inputFileType();
         }
-        return fileType;
+    }
+
+    private static LocalDate stringToLocalDate(String dateString) {
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(dateString, outputFormatter);
+        return localDate;
     }
 
     public boolean isExited() {

@@ -6,30 +6,24 @@ import kr.co.fastcampus.travel.controller.dto.*;
 
 import java.util.List;
 import kr.co.fastcampus.travel.domain.FileType;
+import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.service.TripService;
 
 public class TravelController {
 
-    private TripService tripService;
+    //TripService
 
     public List<TripInfoResponse> getTripList(FileType fileType) {
 
         List<Trip> trips = tripService.findAllTrips(fileType);
-
         if (trips.isEmpty()) {
             throw new TravelDoesNotExistException();
         }
 
         List<TripInfoResponse> tripInfoResponses = new ArrayList<>();
         for (int i = 0; i < trips.size(); i++) {
-            TripInfoResponse tripInfoResponse = new TripInfoResponse(
-                trips.get(i).getId(),
-                trips.get(i).getName(),
-                trips.get(i).getStartAt(),
-                trips.get(i).getEndAt()
-            );
-
+            TripInfoResponse tripInfoResponse = new TripInfoResponse(trips.get(i));
             tripInfoResponses.add(tripInfoResponse);
         }
 
@@ -39,19 +33,12 @@ public class TravelController {
     public TripResponse findTrip(FileType fileType, Long id) {
 
         Trip trip = tripService.findTrip(fileType, id);
+        List<Itinerary> itineraries=trip.getItineraries();
         if (trip == null) {
             throw new TravelDoesNotExistException();
         }
 
-        TripResponse tripResponse = new TripResponse(
-            trip.getId(),
-            trip.getName(),
-            trip.getStartAt(),
-            trip.getEndAt(),
-            trip.getItineraries()
-        );
-
-        return tripResponse;
+        return new TripResponse(trip,itineraries);
     }
 
     public String saveTrips(TripSaveRequest saveRequest) {
