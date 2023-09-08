@@ -3,16 +3,22 @@ package kr.co.fastcampus.travel.view;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
 import kr.co.fastcampus.travel.controller.TravelController;
 import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
+import kr.co.fastcampus.travel.controller.dto.TripInfoResponse;
+import kr.co.fastcampus.travel.controller.dto.TripResponse;
 import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
+import kr.co.fastcampus.travel.domain.FileType;
 
 public class ConsoleView {
+
     private boolean isExited = false;
 
     private final TravelController travelController;
@@ -22,6 +28,7 @@ public class ConsoleView {
         travelController = new TravelController();
         inputView = new InputView();
     }
+
 
     public void process() {
         System.out.println("[메뉴]");
@@ -36,6 +43,8 @@ public class ConsoleView {
         Menu menu = inputView.inputMenu();
         if (menu == Menu.LOG_TRIP) {
             logTrip();
+        } else if (menu == Menu.SHOW_TRIP) {
+            showTrip();
         }
 
         isExited = true;
@@ -80,6 +89,58 @@ public class ConsoleView {
 
         travelController.saveTrip(tripSaveRequest);
         System.out.println("여행 및 여정 기록이 완료되었습니다.");
+    }
+
+    private void showTrip() {
+        System.out.print("조회 타입의 번호를 입력해주세요. (1.CSV/2.JSON) ");
+        FileType fileType = inputFileType();
+
+        List<TripInfoResponse> tripInfoResponses;
+        try {
+            tripInfoResponses = travelController.getTripList(fileType);
+        } catch (TravelDoesNotExistException e) {
+            System.out.println("\n등록된 여행이 없습니다.");
+            return;
+        }
+
+        for (TripInfoResponse tripInfoResponse : tripInfoResponses) {
+            System.out.println(printShortTripInfo(tripInfoResponse));
+        }
+
+        System.out.println("\n조회할 여행의 번호를 입력해주세요.");
+        Long travelId = (long) inputView.inputNumber(
+            "잘못된 여행 번호입니다. 다시 입력해주세요",
+            tripNum -> tripInfoResponses.stream()
+                .anyMatch(it -> Objects.equals(it.id(), Long.valueOf(tripNum)))
+        );
+
+        TripResponse tripResponse = travelController.findTrip(fileType, travelId);
+        System.out.println(printDetailTripInfo(tripResponse));
+
+    }
+
+    private String printShortTripInfo(TripInfoResponse tripInfoResponse) {
+        return String.format("%d : %s ( %s ~ %s ) ",
+            tripInfoResponse.id(),
+            tripInfoResponse.name(),
+            tripInfoResponse.startAt(),
+            tripInfoResponse.endAt());
+    }
+
+    //리팩토링 (토요일) 예정
+    private String printDetailTripInfo(TripResponse tripResponse) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\"").append(tripResponse.name()).append("\"\n");
+        sb.append("기간 : ").append(stringToLocalDate(tripResponse.startAt().toString()))
+            .append(" ~ ").append(stringToLocalDate(tripResponse.endAt().toString())).append("\n");
+
+        IntStream.range(0, tripResponse.itineraries().size())
+            .forEach(index -> {
+                sb.append("[").append(index + 1).append("번째 여정]\n");
+                sb.append(tripResponse.itineraries().get(index).toString()).append("\n");
+            });
+
+        return sb.toString();
     }
 
     private ItinerarySaveRequest logOneItinerary(int order) {
@@ -133,6 +194,21 @@ public class ConsoleView {
         }
 
         return itinerarySaveRequest;
+    }
+
+    private FileType inputFileType() {
+        try {
+            int fileNum = inputView.inputNumber("잘못된 번호입니다. 다시 입력해주세요");
+            return FileType.fromNumber(fileNum);
+        } catch (IllegalArgumentException e) {
+            return inputFileType();
+        }
+    }
+
+    private static LocalDate stringToLocalDate(String dateString) {
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(dateString, outputFormatter);
+        return localDate;
     }
 
     public boolean isExited() {

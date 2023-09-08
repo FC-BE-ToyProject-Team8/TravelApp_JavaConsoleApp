@@ -81,6 +81,19 @@ public class InputView {
         }
     }
 
+    public int inputNumber(String errorMessage, Predicate<Integer> isValid) {
+        while (true) {
+            try {
+                int num = parseInt(readLine());
+                if (isValid.test(num)) {
+                    return num;
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println(errorMessage);
+            }
+        }
+    }
+
     private boolean isValidDateTime(String dateTimeStr) {
         try {
             LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));

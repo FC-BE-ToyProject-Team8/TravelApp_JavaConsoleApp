@@ -1,11 +1,13 @@
 package kr.co.fastcampus.travel.service;
 
-import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
 import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
+import java.util.Optional;
+import kr.co.fastcampus.travel.domain.FileType;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 
 import java.util.List;
+
 import kr.co.fastcampus.travel.infrastructure.repository.TripRepository;
 import kr.co.fastcampus.travel.infrastructure.repository.TripRepositoryImpl;
 
@@ -28,8 +30,13 @@ public class TripService {
         return null;
     }
 
-    public Trip findTrip(Long id) {
-        return null;
+    public List<Trip> findAllTrips(FileType fileType) {
+        return tripRepository.findAll(fileType);
+    }
+
+    public Trip findTrip(FileType fileType, Long id) {
+        Optional<Trip> trip = tripRepository.findById(fileType, id);
+        return trip.orElse(null);
     }
 
     public Trip saveTrip(TripSaveRequest saveRequest) {
