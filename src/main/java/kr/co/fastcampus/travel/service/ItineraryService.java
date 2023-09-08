@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class ItineraryService {
-
+	private final TripService tripService;
 	private final ItineraryRepository itineraryRepository;
 
 	public Itinerary findItinerary(FileType fileType, Long id) {
@@ -22,7 +22,8 @@ public class ItineraryService {
 		}
 	}
 
-	public List<Itinerary> findItineraries(FileType fileType, Trip trip) {
+	public List<Itinerary> findItineraries(FileType fileType, Long tripId) {
+		Trip trip = tripService.findTrip(tripId);
 		return itineraryRepository.findByTripId(fileType, trip);
 	}
 

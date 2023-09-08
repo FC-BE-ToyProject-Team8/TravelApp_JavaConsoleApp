@@ -10,7 +10,6 @@ import kr.co.fastcampus.travel.controller.dto.TripResponse;
 import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
 import kr.co.fastcampus.travel.domain.FileType;
 import kr.co.fastcampus.travel.domain.Itinerary;
-import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.service.ItineraryService;
 import lombok.RequiredArgsConstructor;
 
@@ -31,14 +30,12 @@ public class TravelController {
 		return null;
 	}
 
-	public List<ItineraryResponse> getItineraryList(FileType fileType, Trip trip) {
-		List<ItineraryResponse> itineraryList = new ArrayList<>();
-		List<Itinerary> response = itineraryService.findItineraries(fileType, trip);
-
+	public List<ItineraryResponse> getItineraryList(FileType fileType, Long tripId) {
+		List<Itinerary> response = itineraryService.findItineraries(fileType, tripId);
 		if (response.isEmpty()) {
-			throw new TravelDoesNotExistException("해당 여행에 여정 정보가 없습니다.");
+			throw new TravelDoesNotExistException();
 		}
-
+		List<ItineraryResponse> itineraryList = new ArrayList<>();
 		for (Itinerary itinerary : response) {
 			ItineraryResponse itineraryResponse =
 				ItineraryResponse.builder()
@@ -57,14 +54,10 @@ public class TravelController {
 	}
 
 	public ItineraryResponse findItinerary(FileType fileType, Long id) {
-		// TOOD
-		// fileType, id의 valid check
-
 		Itinerary response = itineraryService.findItinerary(fileType, id);
 		if (response == null) {
-			throw new TravelDoesNotExistException("해당 id의 여정이 존재하지 않습니다.");
+			throw new TravelDoesNotExistException();
 		}
-
 		return ItineraryResponse.builder()
 			.id(response.getId())
 			.departure(response.getRoute().getDeparture())
