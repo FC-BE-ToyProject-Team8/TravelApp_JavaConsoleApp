@@ -12,7 +12,7 @@ import kr.co.fastcampus.travel.service.TripService;
 
 public class TravelController {
 
-    //TripService
+    private TripService tripService=new TripService();
 
     public List<TripInfoResponse> getTripList(FileType fileType) {
 

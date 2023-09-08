@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
 import kr.co.fastcampus.travel.common.exception.UnknownException;
 import kr.co.fastcampus.travel.controller.TravelController;
 import kr.co.fastcampus.travel.controller.dto.TripInfoResponse;
@@ -18,7 +19,7 @@ import kr.co.fastcampus.travel.domain.FileType;
 public class ConsoleView {
 
     private boolean isExited = false;
-    private TravelController travelController;
+    private TravelController travelController = new TravelController();
 
     private final BufferedReader br;
 
@@ -52,30 +53,40 @@ public class ConsoleView {
 
     }
 
+    //예외 처리 과정 피드백 필요!
+    //"잘못된 여행 번호 입니디." 라는 문구 보단 해당 번호로 controller를 통해 조회 후
+    // 없다는 걸 인지 그리고 예외를 처리하는 것이기 때문에 이름도 바꿔야 하지 않나 싶습니다.
     private void showTrip() {
-        FileType fileType = inputFileType();
-
         System.out.print("조회 타입의 번호를 입력해주세요. (1.CSV/2.JSON) ");
-        List<TripInfoResponse> tripInfoResponses = travelController.getTripList(fileType);
-        for (TripInfoResponse tripInfoResponse : tripInfoResponses) {
-            System.out.println(printShortTripInfo(tripInfoResponse));
-        }
+        FileType fileType = inputFileType();
+        try {
+            List<TripInfoResponse> tripInfoResponses = travelController.getTripList(fileType);
+            for (TripInfoResponse tripInfoResponse : tripInfoResponses) {
+                System.out.println(printShortTripInfo(tripInfoResponse));
+            }
 
-        System.out.println("조회할 여행의 번호를 입력해주세요.");
-        Long travelId = (long) inputNumber("잘못된 여행 번호입니다. 다시 입력해주세요");
-        TripResponse tripResponse = travelController.findTrip(fileType, travelId);
-        System.out.println(printDetailTripInfo(tripResponse));
+            try {
+                System.out.println("\n조회할 여행의 번호를 입력해주세요.");
+                Long travelId = (long) inputNumber("ID(숫자)를 입력해 주세요.");
+                TripResponse tripResponse = travelController.findTrip(fileType, travelId);
+                System.out.println(printDetailTripInfo(tripResponse));
+            }catch (TravelDoesNotExistException e){
+                System.out.println("\n 잘못된 여행 번호입니다. 다시 입력햊주세요");
+            }
+        } catch (TravelDoesNotExistException e) {
+            System.out.println("\n등록된 여행이 없습니다.");
+        }
     }
 
     private String printShortTripInfo(TripInfoResponse tripInfoResponse) {
-        return String.format("%d : %s + ( %s ~ %s )",
+        return String.format("%d : %s ( %s ~ %s ) ",
             tripInfoResponse.id(),
             tripInfoResponse.name(),
             tripInfoResponse.startAt(),
             tripInfoResponse.endAt());
     }
 
-    //리팩토링 예정
+    //리팩토링 (토요일) 예정
     private String printDetailTripInfo(TripResponse tripResponse) {
         StringBuilder sb = new StringBuilder();
         sb.append("\"").append(tripResponse.name()).append("\"\n");
@@ -96,6 +107,7 @@ public class ConsoleView {
             int menuNumber = inputNumber("잘못된 메뉴 번호입니다. 다시 입력해주세요;");
             return Menu.fromNumber(menuNumber);
         } catch (IllegalArgumentException e) {
+            System.out.println("잘못된 메뉴 번호입니다. 다시 입력해주세요;");
             return inputMenu();
         }
     }

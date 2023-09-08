@@ -12,15 +12,14 @@ public enum FileType {
 
     private final int number;
 
-    public static FileType fromNumber(int number){
-        try{
+    public static FileType fromNumber(int number) {
+        try {
             return Arrays.stream(FileType.values())
                 .filter(fileType -> fileType.number == number)
                 .findFirst()
                 .orElseThrow();
-        } catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             throw new IllegalArgumentException();
         }
     }
-
 }

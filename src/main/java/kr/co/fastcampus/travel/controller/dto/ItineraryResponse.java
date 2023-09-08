@@ -14,9 +14,4 @@ public record ItineraryResponse(Long id, String departure, String destination,
             ,itinerary.getRoute().getDepartureAt(),itinerary.getRoute().getArriveAt(),itinerary.getLodge().getAccommodation(),
             itinerary.getLodge().getCheckInAt(), itinerary.getLodge().getCheckOutAt());
     }
-
-    @Override
-    public String toString() {
-        return null;
-    }
 }
