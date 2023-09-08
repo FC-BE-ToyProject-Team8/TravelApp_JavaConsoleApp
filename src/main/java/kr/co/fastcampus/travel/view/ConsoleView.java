@@ -18,21 +18,15 @@ import kr.co.fastcampus.travel.controller.dto.ItineraryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
 import kr.co.fastcampus.travel.controller.dto.TripInfoResponse;
 import kr.co.fastcampus.travel.domain.FileType;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public class ConsoleView {
 
-    private final TravelController travelController;
-
+    private final TravelController travelController = new TravelController();
     private final BufferedReader br;
     private boolean isExited = false;
 
-    private final TravelController travelController = new TravelController();
-
     public ConsoleView() {
         br = new BufferedReader(new InputStreamReader(System.in));
-        travelController = new TravelController();
     }
 
     public void process() {
@@ -116,8 +110,8 @@ public class ConsoleView {
         }
         System.out.println("여정 조회를 시작합니다.");
         for (TripInfoResponse tripInfo : trips) {
-            System.out.println(String.format("%d: %s (%s ~ %s)",
-                    tripInfo.id(), tripInfo.name(), tripInfo.startAt(), tripInfo.endAt()));
+            System.out.printf("%d: %s (%s ~ %s)%n",
+                    tripInfo.id(), tripInfo.name(), tripInfo.startAt(), tripInfo.endAt());
         }
         System.out.println("조회할 여행의 번호를 입력하세요.");
         Long tripNum = (long) inputNumber("잘못된 여행 번호입니다. 다시 입력해주세요");
@@ -127,9 +121,8 @@ public class ConsoleView {
                 tripNum);
         System.out.println("여정 목록");
         for (ItineraryInfoResponse itineraryInfo : itineraries) {
-            System.out.println(
-                    String.format("%d: %s ~ %s",
-                            itineraryInfo.id(), itineraryInfo.departure(), itineraryInfo.destination()));
+            System.out.printf("%d: %s ~ %s%n",
+                    itineraryInfo.id(), itineraryInfo.departure(), itineraryInfo.destination());
         }
         System.out.print("조회할 여정의 번호를 입력해주세요. : ");
         Long itineraryNum = (long) inputNumber("잘못된 여정 번호입니다. 다시 입력해주세요");
@@ -146,7 +139,7 @@ public class ConsoleView {
         StringBuilder sb = new StringBuilder();
         sb.append("출발 : ").append(itineraryResponse.departure()).append(", ")
                 .append(formatterDate.format(itineraryResponse.departureAt())).append("\n");
-        sb.append("도착 : ").append(itineraryResponse.destination())
+        sb.append("도착 : ").append(itineraryResponse.destination()).append(", ")
                 .append(formatterDate.format(itineraryResponse.departureAt())).append("\n");
         sb.append("숙박 시설: ").append(itineraryResponse.accommodation()).append("\n");
         sb.append("체크인: ").append(formatterTime.format(itineraryResponse.checkInAt())).append("\n");

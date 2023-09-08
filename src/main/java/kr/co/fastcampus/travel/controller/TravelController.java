@@ -19,7 +19,7 @@ public class TravelController {
 
     public TravelController() {
         itineraryService = new ItineraryService();
-
+    }
     public List<TripInfoResponse> getTripList() {
         return null;
     }
