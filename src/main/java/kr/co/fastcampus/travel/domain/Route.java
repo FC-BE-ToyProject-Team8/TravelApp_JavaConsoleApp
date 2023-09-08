@@ -2,8 +2,10 @@ package kr.co.fastcampus.travel.domain;
 
 import java.time.LocalDateTime;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class Route {
 
     private String departure;
@@ -12,10 +14,10 @@ public class Route {
     private LocalDateTime arriveAt;
 
     public Route(
-        String departure,
-        String destination,
-        LocalDateTime departureAt,
-        LocalDateTime arriveAt
+            String departure,
+            String destination,
+            LocalDateTime departureAt,
+            LocalDateTime arriveAt
     ) {
         this.departure = departure;
         this.destination = destination;

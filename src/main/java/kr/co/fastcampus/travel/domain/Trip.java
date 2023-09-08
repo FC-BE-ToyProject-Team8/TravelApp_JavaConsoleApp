@@ -3,10 +3,15 @@ package kr.co.fastcampus.travel.domain;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class Trip {
 
     private Long id;
@@ -14,10 +19,10 @@ public class Trip {
     private LocalDate startAt;
     private LocalDate endAt;
 
-    private List<Itinerary> itineraries = new ArrayList<>();
+    private final List<Itinerary> itineraries = new ArrayList<>();
 
     @Builder
-    public Trip(
+    private Trip(
             Long id,
             String name,
             LocalDate startAt,
