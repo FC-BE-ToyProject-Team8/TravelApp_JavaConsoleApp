@@ -37,13 +37,15 @@ public class ItineraryService {
     }
 
     public List<Itinerary> findItineraries(FileType fileType, Long tripId) {
-        Trip trip = tripService.findTrip(tripId);
+        Trip trip = tripService.findTrip(fileType, tripId);
         return itineraryRepository.findByTrip(fileType, trip);
     }
 
-    public List<Itinerary> saveItineraries(Long tripId,
-            List<ItinerarySaveRequest> itinerarySaveRequests) {
-        Trip trip = tripService.findTrip(tripId);
+    public List<Itinerary> saveItineraries(
+        Long tripId,
+        List<ItinerarySaveRequest> itinerarySaveRequests
+    ) {
+        Trip trip = tripService.findTrip(FileType.JSON, tripId);
         List<Itinerary> itineraries = new ArrayList<>();
         for (ItinerarySaveRequest itinerarySaveRequest : itinerarySaveRequests) {
             itineraries.add(

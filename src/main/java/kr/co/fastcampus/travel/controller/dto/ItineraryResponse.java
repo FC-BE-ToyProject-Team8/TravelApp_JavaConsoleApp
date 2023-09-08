@@ -24,6 +24,7 @@ public record ItineraryResponse(Long id,
              itinerary.getRoute().getArriveAt(),
              itinerary.getLodge().getAccommodation(),
              itinerary.getLodge().getCheckInAt(),
-             itinerary.getLodge().getCheckOutAt());
+             itinerary.getLodge().getCheckOutAt()
+        );
     }
 }
