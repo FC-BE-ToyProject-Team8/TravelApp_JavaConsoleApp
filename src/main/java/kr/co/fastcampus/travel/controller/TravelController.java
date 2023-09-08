@@ -3,6 +3,7 @@ package kr.co.fastcampus.travel.controller;
 import java.util.ArrayList;
 import java.util.List;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
+import kr.co.fastcampus.travel.controller.dto.ItineraryInfoResponse;
 import kr.co.fastcampus.travel.controller.dto.ItineraryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
 import kr.co.fastcampus.travel.controller.dto.TripInfoResponse;
@@ -30,27 +31,22 @@ public class TravelController {
 		return null;
 	}
 
-	public List<ItineraryResponse> getItineraryList(FileType fileType, Long tripId) {
+	public List<ItineraryInfoResponse> getItineraryList(FileType fileType, Long tripId) {
 		List<Itinerary> response = itineraryService.findItineraries(fileType, tripId);
 		if (response.isEmpty()) {
 			throw new TravelDoesNotExistException();
 		}
-		List<ItineraryResponse> itineraryList = new ArrayList<>();
+		List<ItineraryInfoResponse> itineraryInfoList = new ArrayList<>();
 		for (Itinerary itinerary : response) {
-			ItineraryResponse itineraryResponse =
-				ItineraryResponse.builder()
+			ItineraryInfoResponse itineraryInfo =
+				ItineraryInfoResponse.builder()
 					.id(itinerary.getId())
 					.departure(itinerary.getRoute().getDeparture())
 					.destination(itinerary.getRoute().getDestination())
-					.departureAt(itinerary.getRoute().getDepartureAt())
-					.arriveAt(itinerary.getRoute().getArriveAt())
-					.accommodation(itinerary.getLodge().getAccommodation())
-					.checkInAt(itinerary.getLodge().getCheckInAt())
-					.checkOutAt(itinerary.getLodge().getCheckOutAt())
 					.build();
-			itineraryList.add(itineraryResponse);
+			itineraryInfoList.add(itineraryInfo);
 		}
-		return itineraryList;
+		return itineraryInfoList;
 	}
 
 	public ItineraryResponse findItinerary(FileType fileType, Long id) {

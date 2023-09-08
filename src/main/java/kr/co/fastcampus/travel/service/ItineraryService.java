@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class ItineraryService {
+
 	private final TripService tripService;
 	private final ItineraryRepository itineraryRepository;
 
