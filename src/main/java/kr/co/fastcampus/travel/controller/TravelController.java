@@ -1,10 +1,12 @@
 package kr.co.fastcampus.travel.controller;
 
 import kr.co.fastcampus.travel.controller.dto.*;
-
+import kr.co.fastcampus.travel.service.ItineraryService;
 import java.util.List;
 
 public class TravelController {
+
+    private final ItineraryService itineraryService = new ItineraryService();
 
     public List<TripInfoResponse> getTripList() {
         return null;
@@ -26,7 +28,7 @@ public class TravelController {
         return null;
     }
 
-    public String saveItineraries(Long tripId, List<ItinerarySaveRequest> saveRequests) {
-        return null;
+    public void saveItineraries(Long tripId, List<ItinerarySaveRequest> saveRequests) {
+        itineraryService.saveItineraries(tripId, saveRequests);
     }
 }
