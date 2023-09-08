@@ -1,11 +1,11 @@
 package kr.co.fastcampus.travel.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.infrastructure.repository.ItineraryRepositoryImpl;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ItineraryService {
 
@@ -24,7 +24,9 @@ public class ItineraryService {
         Trip trip = tripService.findTrip(tripId);
         List<Itinerary> itineraries = new ArrayList<>();
         for (ItinerarySaveRequest itinerarySaveRequest : itinerarySaveRequests) {
-            itineraries.add(itineraryRepository.save(convertDtoToItinerary(trip, itinerarySaveRequest)));
+            itineraries.add(
+                    itineraryRepository.save(convertDtoToItinerary(trip, itinerarySaveRequest))
+            );
         }
         return itineraries;
     }

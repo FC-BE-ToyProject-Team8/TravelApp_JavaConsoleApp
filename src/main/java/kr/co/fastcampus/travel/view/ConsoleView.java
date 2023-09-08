@@ -64,8 +64,8 @@ public class ConsoleView {
         while (!isDone) {
             String departure = isValidAnswer(question.getDepartureQuestion());
             String destination = isValidAnswer(question.getDestinationQuestion());
-            String departureAt = isValidDepartureAndDestinationTime(question.getDepartureAtQuestion());
-            String arriveAt = isValidDepartureAndDestinationTime(question.getArriveAtQuestion());
+            String departureAt = isValidLocalDateTime(question.getDepartureAtQuestion());
+            String arriveAt = isValidLocalDateTime(question.getArriveAtQuestion());
             String accommodation = isValidAnswer(question.getAccommodationQuestion());
             String checkInAt = isValidCheckInAndCheckOutTime(question.getCheckInAtQuestion());
             String checkOutAt = isValidCheckInAndCheckOutTime(question.getCheckOutAtQuestion());
@@ -132,7 +132,7 @@ public class ConsoleView {
         return localDateTime;
     }
 
-    private String isValidDepartureAndDestinationTime(String input) {
+    private String isValidLocalDateTime(String input) {
         String answer;
         while (true) {
             System.out.println(input);
