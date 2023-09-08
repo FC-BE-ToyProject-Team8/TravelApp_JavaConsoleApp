@@ -19,7 +19,6 @@ public class TravelController {
 
     public TravelController() {
         itineraryService = new ItineraryService();
-    }
 
     public List<TripInfoResponse> getTripList() {
         return null;
@@ -48,7 +47,7 @@ public class TravelController {
         return new ItineraryResponse(response);
     }
 
-    public String saveItineraries(Long tripId, List<ItinerarySaveRequest> saveRequests) {
-        return null;
+    public void saveItineraries(Long tripId, List<ItinerarySaveRequest> saveRequests) {
+        itineraryService.saveItineraries(tripId, saveRequests);
     }
 }
