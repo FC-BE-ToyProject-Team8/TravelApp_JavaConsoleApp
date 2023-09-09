@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
 import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
-import kr.co.fastcampus.travel.domain.FileType;
+import kr.co.fastcampus.travel.view.enums.FileType;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.infrastructure.repository.ItineraryRepository;

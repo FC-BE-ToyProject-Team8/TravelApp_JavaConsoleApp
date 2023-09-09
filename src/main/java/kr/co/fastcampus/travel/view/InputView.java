@@ -11,7 +11,8 @@ import java.util.Arrays;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import kr.co.fastcampus.travel.common.exception.UnknownException;
-import kr.co.fastcampus.travel.domain.FileType;
+import kr.co.fastcampus.travel.view.enums.FileType;
+import kr.co.fastcampus.travel.view.enums.Menu;
 
 public class InputView {
     private final BufferedReader br;
