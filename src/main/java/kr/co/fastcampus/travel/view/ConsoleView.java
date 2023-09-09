@@ -303,14 +303,39 @@ public class ConsoleView {
         DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         StringBuilder sb = new StringBuilder();
-        sb.append("출발 : ").append(itineraryResponse.departure()).append(", ")
-                .append(formatterDate.format(itineraryResponse.departureAt())).append("\n");
-        sb.append("도착 : ").append(itineraryResponse.destination()).append(", ")
-                .append(formatterDate.format(itineraryResponse.departureAt())).append("\n");
-        sb.append("숙박 시설: ").append(itineraryResponse.accommodation()).append("\n");
-        sb.append("체크인: ").append(formatterTime.format(itineraryResponse.checkInAt())).append("\n");
-        sb.append("체크아웃: ").append(formatterTime.format(itineraryResponse.checkOutAt()))
-                .append("\n");
+        sb.append("출발 : ").append(itineraryResponse.departure());
+        if (itineraryResponse.departureAt() != null) {
+            sb.append(", ").append(formatterDate.format(itineraryResponse.departureAt()));
+        }
+        sb.append('\n');
+        sb.append("도착 : ").append(itineraryResponse.destination());
+        if (itineraryResponse.arriveAt() != null) {
+            sb.append(", ").append(formatterDate.format(itineraryResponse.departureAt()));
+        }
+        sb.append('\n');
+        sb.append("숙박 시설: ");
+        if (!itineraryResponse.accommodation().equals("")) {
+            sb.append(itineraryResponse.accommodation());
+        } else {
+            sb.append("X");
+        }
+        sb.append("\n");
+
+        sb.append("체크인: ");
+        if (itineraryResponse.checkInAt() != null) {
+            sb.append(formatterTime.format(itineraryResponse.checkInAt()));
+        } else {
+            sb.append("X");
+        }
+        sb.append("\n");
+
+        sb.append("체크아웃: ");
+        if (itineraryResponse.checkOutAt() != null) {
+            sb.append(formatterTime.format(itineraryResponse.checkOutAt()));
+        } else {
+            sb.append("X");
+        }
+        sb.append("\n");
         System.out.println(sb);
     }
 
