@@ -1,28 +1,20 @@
 package kr.co.fastcampus.travel.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Optional;
 import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
 import kr.co.fastcampus.travel.domain.FileType;
 import kr.co.fastcampus.travel.domain.Trip;
-import kr.co.fastcampus.travel.infrastructure.repository.TripRepositoryImpl;
-import kr.co.fastcampus.travel.infrastructure.repository.file.TravelCsvFileManager;
-import kr.co.fastcampus.travel.infrastructure.repository.file.TravelJsonFileManager;
+import kr.co.fastcampus.travel.infrastructure.repository.TripRepository;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class TripService {
 
-    public final TripRepositoryImpl tripRepository;
+    public final TripRepository tripRepository;
 
-    public TripService() {
-        this.tripRepository = new TripRepositoryImpl(
-            new TravelJsonFileManager(new ObjectMapper()),
-            new TravelCsvFileManager()
-        );
-    }
-
-    public TripService(TripRepositoryImpl tripRepository) {
-        this.tripRepository = tripRepository;
+    public List<Trip> findAllTrips() {
+        return null;
     }
 
     public List<Trip> findAllTrips(FileType fileType) {

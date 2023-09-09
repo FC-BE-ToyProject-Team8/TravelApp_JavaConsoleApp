@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import kr.co.fastcampus.travel.AppConfig;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
 import kr.co.fastcampus.travel.controller.TravelController;
 import kr.co.fastcampus.travel.controller.dto.ItineraryInfoResponse;
@@ -28,7 +29,7 @@ public class ConsoleView {
     private final InputView inputView;
 
     public ConsoleView() {
-        travelController = new TravelController();
+        travelController = AppConfig.travelController();
         inputView = new InputView();
     }
 

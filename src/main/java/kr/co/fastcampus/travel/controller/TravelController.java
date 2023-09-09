@@ -15,16 +15,13 @@ import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.service.ItineraryService;
 import kr.co.fastcampus.travel.service.TripService;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class TravelController {
 
-    private final ItineraryService itineraryService;
     private final TripService tripService;
-
-    public TravelController() {
-        itineraryService = new ItineraryService();
-        tripService = new TripService();
-    }
+    private final ItineraryService itineraryService;
 
     public List<TripInfoResponse> getTripList(FileType fileType) {
 

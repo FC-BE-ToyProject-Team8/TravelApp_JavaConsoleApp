@@ -1,6 +1,5 @@
 package kr.co.fastcampus.travel.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,26 +9,13 @@ import kr.co.fastcampus.travel.domain.FileType;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.infrastructure.repository.ItineraryRepository;
-import kr.co.fastcampus.travel.infrastructure.repository.ItineraryRepositoryImpl;
-import kr.co.fastcampus.travel.infrastructure.repository.file.TravelCsvFileManager;
-import kr.co.fastcampus.travel.infrastructure.repository.file.TravelJsonFileManager;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class ItineraryService {
 
     private final TripService tripService;
     private final ItineraryRepository itineraryRepository;
-
-    public ItineraryService() {
-        this.tripService = new TripService();
-        this.itineraryRepository = new ItineraryRepositoryImpl(
-                new TravelJsonFileManager(new ObjectMapper()), new TravelCsvFileManager()
-        );
-    }
-
-    public ItineraryService(TripService tripService, ItineraryRepository itineraryRepository) {
-        this.tripService = tripService;
-        this.itineraryRepository = itineraryRepository;
-    }
 
     public Itinerary findItinerary(FileType fileType, Long id) {
         Optional<Itinerary> response = itineraryRepository.findById(fileType, id);
