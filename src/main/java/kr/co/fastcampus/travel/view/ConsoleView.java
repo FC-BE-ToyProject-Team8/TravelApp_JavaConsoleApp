@@ -252,41 +252,24 @@ public class ConsoleView {
     }
 
     private void showItinerary() {
-        List<TripInfoResponse> trips;
         try {
             System.out.println("여정 조회를 시작합니다.");
-            System.out.println();
             // 여행 목록을 보여줄 때도 타입을 입력받아야 하는지 피드백 필요
             // showItinerary()에서
             // 여행 목록, 선택 여행 정보, 선택 여정 정보 3번의 파일 타입 질문이 필요함.
-            trips = travelController.getTripList(FileType.CSV);
-            System.out.println("여행 목록");
-            for (TripInfoResponse tripInfo : trips) {
-                System.out.printf("%d: %s (%s ~ %s)%n", tripInfo.id(), tripInfo.name(),
-                        tripInfo.startAt(), tripInfo.endAt());
-            }
-            System.out.print("조회할 여행의 번호를 입력해주세요. : ");
+            List<TripInfoResponse> trips = travelController.getTripList(FileType.CSV);
+            printTripList(trips);
             // 잘못된 번호를 입력했을 때 엔터를 한번 더 눌러야 작동. 추후 해결 예정.
-            Long tripNum = (long) inputView.inputNumber("잘못된 여행 번호입니다. 다시 입력해주세요",
-                    num -> num >= 1 && num <= trips.size());
+            Long tripNum = inputTripNumber(trips);
             System.out.print("조회할 여행의 데이터 타입을 입력하세요. (1. CSV, 2. JSON) : ");
             FileType fileType = inputView.inputFileType();
             List<ItineraryInfoResponse> itineraries = travelController.getItineraryList(fileType,
                     tripNum);
-            System.out.println("여정 목록");
-            Long itineraryIndex = 0L;
-            for (ItineraryInfoResponse itineraryInfo : itineraries) {
-                System.out.printf("%d: %s ~ %s%n", ++itineraryIndex, itineraryInfo.departure(),
-                        itineraryInfo.destination());
-            }
-            System.out.print("조회할 여정의 번호를 입력해주세요. : ");
-            Long itineraryEnd = itineraryIndex;
-            // 잘못된 번호를 입력했을 때 엔터를 한번 더 눌러야 작동. 추후 해결 예정.
-            Long itineraryNum = (long) inputView.inputNumber("잘못된 여정 번호입니다. 다시 입력해주세요",
-                    num -> num >= 1 && num <= itineraryEnd);
+            printItineraryList(itineraries);
+            Long itineraryNum = inputItineraryNumber(itineraries);
             System.out.print("조회할 여정의 데이터 타입을 입력하세요. (1. CSV, 2. JSON) : ");
             fileType = inputView.inputFileType();
-            itineraryIndex = itineraries.get((int) (itineraryNum - 1)).id();
+            Long itineraryIndex = itineraries.get((int) (itineraryNum - 1)).id();
             // 여정을 받아올 때 시간 등이 null이면 에러 발생. 추후 해결 예정.
             ItineraryResponse itineraryResponse = travelController.findItinerary(fileType,
                     itineraryIndex);
@@ -295,8 +278,36 @@ public class ConsoleView {
             System.out.println("조회할 수 있는 여행이 없습니다.");
         }
     }
+    private Long inputItineraryNumber(List<ItineraryInfoResponse> itineraries) {
+        System.out.print("조회할 여정의 번호를 입력해주세요. : ");
+        return (long) inputView.inputNumber("잘못된 여정 번호입니다. 다시 입력해주세요",
+                num -> num >= 1 && num <= itineraries.size());
+    }
+
+    private Long inputTripNumber(List<TripInfoResponse> trips) {
+        System.out.print("조회할 여행의 번호를 입력해주세요. : ");
+        return (long) inputView.inputNumber("잘못된 여행 번호입니다. 다시 입력해주세요",
+                num -> num >= 1 && num <= trips.size());
+    }
+
+    private void printItineraryList(List<ItineraryInfoResponse> itineraries) {
+        System.out.println("여정 목록");
+        for (int i = 0; i < itineraries.size(); i++) {
+            System.out.printf("%d: %s ~ %s%n", i + 1,
+                    itineraries.get(i).departure(), itineraries.get(i).destination());
+        }
+    }
+
+    private void printTripList(List<TripInfoResponse> trips) {
+        System.out.println("여행 목록");
+        for (TripInfoResponse tripInfo : trips) {
+            System.out.printf("%d: %s (%s ~ %s)%n",
+                    tripInfo.id(), tripInfo.name(), tripInfo.startAt(), tripInfo.endAt());
+        }
+    }
 
     private void printItineraryDetail(ItineraryResponse itineraryResponse) {
+        System.out.println("여정 정보");
         DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         StringBuilder sb = new StringBuilder();
