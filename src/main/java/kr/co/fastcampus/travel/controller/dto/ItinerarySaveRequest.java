@@ -14,15 +14,10 @@ public record ItinerarySaveRequest(
         LocalDateTime checkOutAt
 ) {
 
-    public ItinerarySaveRequest(String departure, String destination, LocalDateTime departureAt,
-        LocalDateTime arriveAt, String accommodation, LocalDateTime checkInAt,
-        LocalDateTime checkOutAt) {
-        this.departure = departure;
-        this.destination = destination;
-        this.departureAt = departureAt;
-        this.arriveAt = arriveAt;
-        this.accommodation = accommodation;
-        this.checkInAt = checkInAt;
-        this.checkOutAt = checkOutAt;
+    public ItinerarySaveRequest {
+        if ((departureAt == null && arriveAt == null)
+            || (checkInAt == null && checkOutAt == null)) {
+            throw new IllegalArgumentException();
+        }
     }
 }
