@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 import kr.co.fastcampus.travel.AppConfig;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
 import kr.co.fastcampus.travel.controller.TravelController;
@@ -62,10 +61,10 @@ public class ConsoleView {
         );
 
         System.out.print("시작 ");
-        LocalDate startAt = inputView.inputDate();
+        final LocalDate startAt = inputView.inputDate();
 
         System.out.print("종료 ");
-        LocalDate endAt = inputView.inputDate();
+        final LocalDate endAt = inputView.inputDate();
 
         List<ItinerarySaveRequest> itinerarySaveRequests = new ArrayList<>();
         int order = 1;
@@ -116,7 +115,7 @@ public class ConsoleView {
         System.out.println("여행 및 여정 기록이 완료되었습니다.");
     }
 
-    private List<TripInfoResponse> getTripList(FileType fileType){
+    private List<TripInfoResponse> getTripList(FileType fileType) {
         List<TripInfoResponse> tripInfoResponses;
         try {
             tripInfoResponses = travelController.getTripList(fileType);
@@ -126,20 +125,17 @@ public class ConsoleView {
         }
         return tripInfoResponses;
     }
-    private Long getTripId(FileType fileType){
+
+    private Long getTripId(FileType fileType) {
         List<TripInfoResponse> tripInfoResponses = getTripList(fileType);
         if (tripInfoResponses == null) {
             return null;
         }
         printShortTripInfo(tripInfoResponses);
-        Long travelId = inputTripNumber(tripInfoResponses);
-        return travelId;
+        return inputTripNumber(tripInfoResponses);
     }
 
 
-    //예외 처리 과정 피드백 필요!
-    //"잘못된 여행 번호 입니디." 라는 문구 보단 해당 번호로 controller를 통해 조회 후
-    // 없다는 걸 인지 그리고 예외를 처리하는 것이기 때문에 이름도 바꿔야 하지 않나 싶습니다.
     private void showTrip() {
         System.out.print("조회 타입의 번호를 입력해주세요. (1.CSV/2.JSON) ");
         FileType fileType = inputView.inputFileType();
@@ -152,7 +148,7 @@ public class ConsoleView {
     }
 
     private void printShortTripInfo(List<TripInfoResponse> tripInfoResponses) {
-        for (TripInfoResponse tripInfoResponse : tripInfoResponses){
+        for (TripInfoResponse tripInfoResponse : tripInfoResponses) {
             System.out.printf("%d: %s (%s ~ %s)%n",
                     tripInfoResponse.id(),
                     tripInfoResponse.name(),
@@ -168,8 +164,8 @@ public class ConsoleView {
                 tripResponse.endAt());
         int cnt = 1;
         List<ItineraryResponse> itineraryResponses = tripResponse.itineraries();
-        for (ItineraryResponse itineraryResponse : itineraryResponses){
-            System.out.printf("[%d번째 여정]%n",cnt);
+        for (ItineraryResponse itineraryResponse : itineraryResponses) {
+            System.out.printf("[%d번째 여정]%n", cnt);
             printItineraryDetail(itineraryResponse);
             cnt++;
         }
@@ -277,8 +273,8 @@ public class ConsoleView {
     }
 
     private void printItineraryDetail(ItineraryResponse itineraryResponse) {
-        DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        final DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        final DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         StringBuilder sb = new StringBuilder();
         appendField(sb, "출발", itineraryResponse.departure());
         appendField(sb, "도착", itineraryResponse.destination());
