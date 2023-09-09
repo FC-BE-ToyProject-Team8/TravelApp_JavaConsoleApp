@@ -142,7 +142,7 @@ public class ConsoleView {
 
         try {
             System.out.println("\n조회할 여행의 번호를 입력해주세요.");
-            Long travelId = (long) inputNumber("ID(숫자)를 입력해 주세요.");
+            Long travelId = (long) inputView.inputNumber("ID(숫자)를 입력해 주세요.");
             TripResponse tripResponse = travelController.findTrip(fileType, travelId);
             System.out.println(printDetailTripInfo(tripResponse));
         } catch (TravelDoesNotExistException e) {
