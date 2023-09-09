@@ -32,7 +32,7 @@ public class ConsoleView {
     public void process() {
         Menu menu = inputView.inputMenu();
         if (menu == Menu.LOG_TRIP) {
-            logTrip();
+            logTrips();
         } else if (menu == Menu.LOG_ITINERARY) {
             logItineraries();
         } else if (menu == Menu.SHOW_TRIP) {
@@ -42,6 +42,21 @@ public class ConsoleView {
         } else if (menu == Menu.EXIT) {
             System.out.println("프로그램을 종료합니다.");
             isExited = true;
+        }
+    }
+
+    private void logTrips() {
+        int order = 1;
+        String willContinueStr = "y";
+        while ("y".equalsIgnoreCase(willContinueStr)) {
+            System.out.printf("[%d번째 여행]\n", order);
+            logTrip();
+
+            System.out.println("\n여행 기록을 계속하시겠습니까? (y/n)");
+            willContinueStr = inputView.inputNotEmptyString();
+
+            System.out.println();
+            order++;
         }
     }
 
