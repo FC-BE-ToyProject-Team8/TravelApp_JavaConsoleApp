@@ -40,10 +40,8 @@ public class ConsoleView {
         } else if (menu == Menu.SHOW_TRIP) {
             showTrip();
         } else if (menu == Menu.LOG_ITINERARY) {
-            // 창호님의 여행 전체 조회 메소드 호출
-            // 창호님의 여행 1개 보는 메소드 호출
-            Long id = 1L;
-            logItineraries(id);
+            FileType fileType = FileType.fromNumber(1);
+            logItineraries(getTripId(fileType));
         } else if (menu == Menu.SHOW_ITINERARY) {
             showItinerary();
         } else if (menu == Menu.EXIT) {
@@ -125,6 +123,23 @@ public class ConsoleView {
         travelController.saveItineraries(id, saveRequests);
         System.out.println("여정 기록이 완료되었습니다.");
     }
+    private List<TripInfoResponse> getTripList(FileType fileType){
+        List<TripInfoResponse> tripInfoResponses;
+        try {
+            tripInfoResponses = travelController.getTripList(fileType);
+        } catch (TravelDoesNotExistException e) {
+            System.out.println("\n등록된 여행이 없습니다. 여행을 먼저 등록해주세요.");
+            return null;
+        }
+        return tripInfoResponses;
+    }
+    private long getTripId(FileType fileType){
+        List<TripInfoResponse> tripInfoResponses = getTripList(fileType);
+        printShortTripInfo(tripInfoResponses);
+        Long travelId = inputTripNumber(tripInfoResponses);
+        return travelId;
+    }
+
 
     //예외 처리 과정 피드백 필요!
     //"잘못된 여행 번호 입니디." 라는 문구 보단 해당 번호로 controller를 통해 조회 후
@@ -132,46 +147,19 @@ public class ConsoleView {
     private void showTrip() {
         System.out.print("조회 타입의 번호를 입력해주세요. (1.CSV/2.JSON) ");
         FileType fileType = inputView.inputFileType();
-
-        try {
-            System.out.println("\n조회할 여행의 번호를 입력해주세요.");
-            Long travelId = (long) inputView.inputNumber("ID(숫자)를 입력해 주세요.");
-            TripResponse tripResponse = travelController.findTrip(fileType, travelId);
-            System.out.println(printDetailTripInfo(tripResponse));
-        } catch (TravelDoesNotExistException e) {
-            System.out.println("\n 잘못된 여행 번호입니다. 다시 입력햊주세요");
-        }
-
-        List<TripInfoResponse> tripInfoResponses;
-        try {
-            tripInfoResponses = travelController.getTripList(fileType);
-        } catch (TravelDoesNotExistException e) {
-            System.out.println("\n등록된 여행이 없습니다.");
-            return;
-        }
-
-        for (TripInfoResponse tripInfoResponse : tripInfoResponses) {
-            System.out.println(printShortTripInfo(tripInfoResponse));
-        }
-
-        System.out.println("\n조회할 여행의 번호를 입력해주세요.");
-        Long travelId = (long) inputView.inputNumber(
-            "잘못된 여행 번호입니다. 다시 입력해주세요",
-            tripNum -> tripInfoResponses.stream()
-                .anyMatch(it -> Objects.equals(it.id(), Long.valueOf(tripNum)))
-        );
-
+        Long travelId = getTripId(fileType);
         TripResponse tripResponse = travelController.findTrip(fileType, travelId);
         System.out.println(printDetailTripInfo(tripResponse));
-
     }
 
-    private String printShortTripInfo(TripInfoResponse tripInfoResponse) {
-        return String.format("%d : %s ( %s ~ %s ) ",
-            tripInfoResponse.id(),
-            tripInfoResponse.name(),
-            tripInfoResponse.startAt(),
-            tripInfoResponse.endAt());
+    private void printShortTripInfo( List<TripInfoResponse> tripInfoResponses) {
+        for (TripInfoResponse tripInfoResponse : tripInfoResponses){
+            System.out.printf("%d: %s (%s ~ %s)%n",
+                    tripInfoResponse.id(),
+                    tripInfoResponse.name(),
+                    tripInfoResponse.startAt(),
+                    tripInfoResponse.endAt());
+        }
     }
 
     //리팩토링 (토요일) 예정
