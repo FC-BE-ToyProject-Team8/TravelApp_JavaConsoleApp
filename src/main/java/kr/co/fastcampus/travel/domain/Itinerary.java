@@ -9,7 +9,7 @@ import lombok.ToString;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
+@ToString(exclude = "trip")
 public class Itinerary {
 
     private Long id;

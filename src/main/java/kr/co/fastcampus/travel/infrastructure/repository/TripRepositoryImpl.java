@@ -26,6 +26,14 @@ public class TripRepositoryImpl implements TripRepository {
 
     @Override
     public Optional<Trip> findById(FileType fileType, Long id) {
+        Optional<Trip> findTrip = findTripById(fileType, id);
+        findTrip.ifPresent(trip -> travelCsvFileManager.findByTrip(trip)
+                .forEach(trip::addItinerary)
+        );
+        return findTrip;
+    }
+
+    private Optional<Trip> findTripById(FileType fileType, Long id) {
         if (fileType == FileType.CSV) {
             return travelCsvFileManager.findByTripId(id);
         }

@@ -11,7 +11,7 @@ import lombok.ToString;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
+@ToString(exclude = "itineraries")
 public class Trip {
 
     private Long id;
