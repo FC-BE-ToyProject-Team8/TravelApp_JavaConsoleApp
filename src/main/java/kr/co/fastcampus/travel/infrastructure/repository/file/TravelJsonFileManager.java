@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -136,11 +137,11 @@ public class TravelJsonFileManager extends FileIoManager {
         jsonItinerary.put("id", itinerary.getId());
         jsonItinerary.put("departure", itinerary.getRoute().getDeparture());
         jsonItinerary.put("destination", itinerary.getRoute().getDestination());
-        jsonItinerary.put("departureAt", itinerary.getRoute().getDepartureAt().toString());
-        jsonItinerary.put("arriveAt", itinerary.getRoute().getArriveAt().toString());
+        jsonItinerary.put("departureAt", Optional.ofNullable(itinerary.getRoute().getDepartureAt()).map(LocalDateTime::toString).orElse(""));
+        jsonItinerary.put("arriveAt", Optional.ofNullable(itinerary.getRoute().getArriveAt()).map(LocalDateTime::toString).orElse(""));
         jsonItinerary.put("accommodation", itinerary.getLodge().getAccommodation());
-        jsonItinerary.put("checkInAt", itinerary.getLodge().getCheckInAt().toString());
-        jsonItinerary.put("checkOutAt", itinerary.getLodge().getCheckOutAt().toString());
+        jsonItinerary.put("checkInAt", Optional.ofNullable(itinerary.getLodge().getCheckInAt()).map(LocalDateTime::toString).orElse(""));
+        jsonItinerary.put("checkOutAt", Optional.ofNullable(itinerary.getLodge().getCheckOutAt()).map(LocalDateTime::toString).orElse(""));
         return jsonItinerary;
     }
 
