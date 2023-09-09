@@ -75,24 +75,7 @@ public class ConsoleView {
         System.out.print("종료 ");
         final LocalDate endAt = inputView.inputDate();
 
-        List<ItinerarySaveRequest> itinerarySaveRequests = new ArrayList<>();
-        int order = 1;
-
-        System.out.println("\n여행에 대한 여정 기록을 시작합니다.\n");
-
-        String willContinueStr = "y";
-        while ("y".equalsIgnoreCase(willContinueStr)) {
-            ItinerarySaveRequest itinerarySaveRequest = logOneItinerary(order);
-            itinerarySaveRequests.add(itinerarySaveRequest);
-
-            System.out.println("\n여정 기록을 계속하시겠습니까? (Y/N)");
-            willContinueStr = inputView.inputNotEmptyString(
-                input -> input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n"),
-                "Y(y) 또는 N(n) 중 하나를 입력해주세요.");
-            System.out.println();
-            order++;
-        }
-
+        List<ItinerarySaveRequest> itinerarySaveRequests = getItinerarySaveRequests();
         TripSaveRequest tripSaveRequest = TripSaveRequest.builder()
             .name(name)
             .startAt(startAt)
@@ -108,8 +91,18 @@ public class ConsoleView {
         Long tripId = getTripId();
         System.out.println("\n여행에 대한 여정 기록을 시작합니다.\n");
 
+        List<ItinerarySaveRequest> itinerarySaveRequests = getItinerarySaveRequests();
+        travelController.saveItineraries(tripId, itinerarySaveRequests);
+        System.out.println("여행 및 여정 기록이 완료되었습니다.");
+    }
+
+    //logItineraries 와 logTrip메소드에서 중복 사용 되어 메소드로 빼 두었는데, 적절한 메소드 명이 필요합니다!
+    private List<ItinerarySaveRequest> getItinerarySaveRequests() {
         List<ItinerarySaveRequest> itinerarySaveRequests = new ArrayList<>();
         int order = 1;
+
+        System.out.println("\n여행에 대한 여정 기록을 시작합니다.\n");
+
         String willContinueStr = "y";
         while ("y".equalsIgnoreCase(willContinueStr)) {
             ItinerarySaveRequest itinerarySaveRequest = logOneItinerary(order);
@@ -122,10 +115,9 @@ public class ConsoleView {
             System.out.println();
             order++;
         }
-
-        travelController.saveItineraries(tripId, itinerarySaveRequests);
-        System.out.println("여행 및 여정 기록이 완료되었습니다.");
+        return itinerarySaveRequests;
     }
+
 
     private List<TripInfoResponse> getTripList(FileType fileType) {
         List<TripInfoResponse> tripInfoResponses;
