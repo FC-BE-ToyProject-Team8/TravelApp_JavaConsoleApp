@@ -24,8 +24,6 @@ import kr.co.fastcampus.travel.domain.FileType;
 
 public class ConsoleView {
 
-    private boolean isExited = false;
-
     private final TravelController travelController;
     private final BufferedReader br;
 
@@ -163,7 +161,7 @@ public class ConsoleView {
     }
 
     private void showItinerary() {
-        List<TripInfoResponse> trips = travelController.getTripList();
+        List<TripInfoResponse> trips = travelController.getTripList(FileType.CSV);
         if (trips.isEmpty()) {
             System.out.println("여행 목록이 비어 있습니다.");
             throw new TravelDoesNotExistException();
@@ -206,10 +204,6 @@ public class ConsoleView {
         sb.append("체크아웃: ").append(formatterTime.format(itineraryResponse.checkOutAt()))
                 .append("\n");
         System.out.println(sb);
-    }
-
-    private FileType inputFileType() {
-        return null;
     }
 
     private int inputNumber(String errorMessage) {
