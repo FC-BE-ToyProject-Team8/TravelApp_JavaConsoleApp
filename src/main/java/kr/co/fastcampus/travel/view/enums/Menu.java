@@ -1,4 +1,4 @@
-package kr.co.fastcampus.travel.view;
+package kr.co.fastcampus.travel.view.enums;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;

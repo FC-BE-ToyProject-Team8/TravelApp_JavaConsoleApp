@@ -2,7 +2,7 @@ package kr.co.fastcampus.travel.infrastructure.repository;
 
 import java.util.List;
 import java.util.Optional;
-import kr.co.fastcampus.travel.domain.FileType;
+import kr.co.fastcampus.travel.view.enums.FileType;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.infrastructure.repository.file.TravelCsvFileManager;

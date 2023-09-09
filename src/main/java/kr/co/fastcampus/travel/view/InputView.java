@@ -10,8 +10,8 @@ import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import kr.co.fastcampus.travel.common.exception.UnknownException;
-import kr.co.fastcampus.travel.domain.FileType;
+import kr.co.fastcampus.travel.view.enums.FileType;
+import kr.co.fastcampus.travel.view.enums.Menu;
 
 public class InputView {
     private final BufferedReader br;
@@ -148,7 +148,7 @@ public class InputView {
             return br.readLine();
         } catch (IOException e) {
             System.out.println("입력을 받는 도중 알 수 없는 에러가 발생했습니다.");
-            throw new UnknownException();
+            throw new RuntimeException(e);
         }
     }
 }

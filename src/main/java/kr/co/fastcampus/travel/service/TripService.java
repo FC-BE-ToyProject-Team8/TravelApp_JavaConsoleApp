@@ -3,7 +3,7 @@ package kr.co.fastcampus.travel.service;
 import java.util.List;
 import java.util.Optional;
 import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
-import kr.co.fastcampus.travel.domain.FileType;
+import kr.co.fastcampus.travel.view.enums.FileType;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.infrastructure.repository.TripRepository;
 import lombok.RequiredArgsConstructor;
