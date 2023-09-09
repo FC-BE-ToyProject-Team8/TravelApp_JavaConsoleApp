@@ -10,9 +10,8 @@
 ### 기술 스택
 - **언어**: Java 17
 - **개발 환경**: IntelliJ, Gradle
-- **라이브러리**: JUnit5, lombok
-- **DevOps**: GitHub Actions(CI)
-- **협업** : Slack, Discord 
+- **라이브러리**: JUnit5, lombok, Jackson
+- **CI**: GitHub Actions
 
 ## ⚖️ 컨벤션
 

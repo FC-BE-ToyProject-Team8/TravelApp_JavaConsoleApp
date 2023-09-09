@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 import kr.co.fastcampus.travel.AppConfig;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
 import kr.co.fastcampus.travel.controller.TravelController;
@@ -14,7 +15,8 @@ import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
 import kr.co.fastcampus.travel.controller.dto.TripInfoResponse;
 import kr.co.fastcampus.travel.controller.dto.TripResponse;
 import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
-import kr.co.fastcampus.travel.domain.FileType;
+import kr.co.fastcampus.travel.view.enums.FileType;
+import kr.co.fastcampus.travel.view.enums.Menu;
 
 public class ConsoleView {
 
@@ -31,14 +33,17 @@ public class ConsoleView {
 
     public void process() {
         Menu menu = inputView.inputMenu();
-
         if (menu == Menu.LOG_TRIP) {
             logTrip();
-        } else if (menu == Menu.SHOW_TRIP) {
-            showTrip();
         } else if (menu == Menu.LOG_ITINERARY) {
             FileType fileType = FileType.fromNumber(1);
-            logItineraries(getTripId(fileType));
+            Long tripId = getTripId(fileType);
+            if (tripId == null) {
+                return;
+            }
+            logItineraries(tripId);
+        } else if (menu == Menu.SHOW_TRIP) {
+            showTrip();
         } else if (menu == Menu.SHOW_ITINERARY) {
             showItinerary();
         } else if (menu == Menu.EXIT) {
@@ -120,8 +125,11 @@ public class ConsoleView {
         }
         return tripInfoResponses;
     }
-    private long getTripId(FileType fileType){
+    private Long getTripId(FileType fileType){
         List<TripInfoResponse> tripInfoResponses = getTripList(fileType);
+        if (tripInfoResponses == null) {
+            return null;
+        }
         printShortTripInfo(tripInfoResponses);
         Long travelId = inputTripNumber(tripInfoResponses);
         return travelId;
@@ -135,6 +143,9 @@ public class ConsoleView {
         System.out.print("조회 타입의 번호를 입력해주세요. (1.CSV/2.JSON) ");
         FileType fileType = inputView.inputFileType();
         Long travelId = getTripId(fileType);
+        if (travelId == null) {
+            return;
+        }
         TripResponse tripResponse = travelController.findTrip(fileType, travelId);
         printDetailTripInfo(tripResponse);
     }
