@@ -3,7 +3,6 @@ package kr.co.fastcampus.travel.view;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -169,19 +168,20 @@ public class ConsoleView {
     }
 
     private ItinerarySaveRequest logOneItinerary(int order) {
-        System.out.printf("[%d번째 여정]\n", order);
+        System.out.printf("[추가할 %d번째 여정]\n", order);
 
         System.out.println("출발지:");
         String departure = inputView.inputNotEmptyString(
-                str -> !str.contains(","),
-                "컴마(,)는 입력할 수 없습니다."
+            str -> !str.contains(","),
+            "컴마(,)는 입력할 수 없습니다."
         );
 
         System.out.println("도착지: ");
         String destination = inputView.inputNotEmptyString(
-                str -> !str.contains(","),
-                "컴마(,)는 입력할 수 없습니다."
+            str -> !str.contains(","),
+            "컴마(,)는 입력할 수 없습니다."
         );
+
         ItinerarySaveRequest itinerarySaveRequest = null;
         while (itinerarySaveRequest == null) {
             System.out.print("출발 ");
