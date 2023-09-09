@@ -139,7 +139,7 @@ public class ConsoleView {
     // 없다는 걸 인지 그리고 예외를 처리하는 것이기 때문에 이름도 바꿔야 하지 않나 싶습니다.
     private void showTrip() {
         System.out.print("조회 타입의 번호를 입력해주세요. (1.CSV/2.JSON) ");
-        FileType fileType = inputFileType();
+        FileType fileType = inputView.inputFileType();
 
         try {
             System.out.println("\n조회할 여행의 번호를 입력해주세요.");
@@ -265,7 +265,7 @@ public class ConsoleView {
         System.out.println("조회할 여행의 번호를 입력하세요.");
         Long tripNum = (long) inputView.inputNumber("잘못된 여행 번호입니다. 다시 입력해주세요");
         System.out.print("조회할 여행의 데이터 타입을 입력하세요. (1. CSV, 2. JSON) : ");
-        FileType fileType = inputFileType();
+        FileType fileType = inputView.inputFileType();
         List<ItineraryInfoResponse> itineraries = travelController.getItineraryList(fileType,
                 tripNum);
         System.out.println("여정 목록");
@@ -276,7 +276,7 @@ public class ConsoleView {
         System.out.print("조회할 여정의 번호를 입력해주세요. : ");
         Long itineraryNum = (long) inputView.inputNumber("잘못된 여정 번호입니다. 다시 입력해주세요");
         System.out.print("조회할 여정의 데이터 타입을 입력하세요. (1. CSV, 2. JSON) : ");
-        fileType = inputFileType();
+        fileType = inputView.inputFileType();
         ItineraryResponse itineraryResponse = travelController.findItinerary(fileType,
                 itineraryNum);
         printItineraryDetail(itineraryResponse);
@@ -295,15 +295,6 @@ public class ConsoleView {
         sb.append("체크아웃: ").append(formatterTime.format(itineraryResponse.checkOutAt()))
                 .append("\n");
         System.out.println(sb);
-    }
-
-    private FileType inputFileType() {
-        try {
-            int fileNum = inputView.inputNumber("잘못된 번호입니다. 다시 입력해주세요");
-            return FileType.fromNumber(fileNum);
-        } catch (IllegalArgumentException e) {
-            return inputFileType();
-        }
     }
 
     private static LocalDate stringToLocalDate(String dateString) {

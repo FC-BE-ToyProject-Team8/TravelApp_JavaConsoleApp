@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.function.Predicate;
 import kr.co.fastcampus.travel.common.exception.UnknownException;
+import kr.co.fastcampus.travel.domain.FileType;
 
 public class InputView {
     private final BufferedReader br;
@@ -35,6 +36,15 @@ public class InputView {
             "0000-00-00 날짜 형식에 맞지 않습니다. 다시 입력해주세요"
         );
         return LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    public FileType inputFileType() {
+        try {
+            int fileNum = inputNumber("잘못된 번호입니다. 다시 입력해주세요");
+            return FileType.fromNumber(fileNum);
+        } catch (IllegalArgumentException e) {
+            return inputFileType();
+        }
     }
 
     public Menu inputMenu() {
