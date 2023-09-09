@@ -110,6 +110,7 @@ public class InputView {
                 if (isValid.test(num)) {
                     return num;
                 }
+                throw new IllegalArgumentException();
             } catch (IllegalArgumentException e) {
                 System.out.println(errorMessage);
             }

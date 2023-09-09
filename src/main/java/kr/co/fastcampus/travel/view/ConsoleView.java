@@ -246,23 +246,16 @@ public class ConsoleView {
     private void showItinerary() {
         try {
             System.out.println("여정 조회를 시작합니다.");
-            // 여행 목록을 보여줄 때도 타입을 입력받아야 하는지 피드백 필요
-            // showItinerary()에서
-            // 여행 목록, 선택 여행 정보, 선택 여정 정보 3번의 파일 타입 질문이 필요함.
-            List<TripInfoResponse> trips = travelController.getTripList(FileType.CSV);
-            printTripList(trips);
-            // 잘못된 번호를 입력했을 때 엔터를 한번 더 눌러야 작동. 추후 해결 예정.
-            Long tripNum = inputTripNumber(trips);
             System.out.print("조회할 여행의 데이터 타입을 입력하세요. (1. CSV, 2. JSON) : ");
             FileType fileType = inputView.inputFileType();
+            List<TripInfoResponse> trips = travelController.getTripList(fileType);
+            printTripList(trips);
+            Long tripNum = inputTripNumber(trips);
             List<ItineraryInfoResponse> itineraries = travelController.getItineraryList(fileType,
                     tripNum);
             printItineraryList(itineraries);
             Long itineraryNum = inputItineraryNumber(itineraries);
-            System.out.print("조회할 여정의 데이터 타입을 입력하세요. (1. CSV, 2. JSON) : ");
-            fileType = inputView.inputFileType();
             Long itineraryIndex = itineraries.get((int) (itineraryNum - 1)).id();
-            // 여정을 받아올 때 시간 등이 null이면 에러 발생. 추후 해결 예정.
             ItineraryResponse itineraryResponse = travelController.findItinerary(fileType,
                     itineraryIndex);
             printItineraryDetail(itineraryResponse);
@@ -303,40 +296,34 @@ public class ConsoleView {
         DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         StringBuilder sb = new StringBuilder();
-        sb.append("출발 : ").append(itineraryResponse.departure());
-        if (itineraryResponse.departureAt() != null) {
-            sb.append(", ").append(formatterDate.format(itineraryResponse.departureAt()));
-        }
-        sb.append('\n');
-        sb.append("도착 : ").append(itineraryResponse.destination());
-        if (itineraryResponse.arriveAt() != null) {
-            sb.append(", ").append(formatterDate.format(itineraryResponse.departureAt()));
-        }
-        sb.append('\n');
-        sb.append("숙박 시설: ");
-        if (!itineraryResponse.accommodation().equals("")) {
-            sb.append(itineraryResponse.accommodation());
-        } else {
-            sb.append("X");
-        }
-        sb.append("\n");
-
-        sb.append("체크인: ");
-        if (itineraryResponse.checkInAt() != null) {
-            sb.append(formatterTime.format(itineraryResponse.checkInAt()));
-        } else {
-            sb.append("X");
-        }
-        sb.append("\n");
-
-        sb.append("체크아웃: ");
-        if (itineraryResponse.checkOutAt() != null) {
-            sb.append(formatterTime.format(itineraryResponse.checkOutAt()));
-        } else {
-            sb.append("X");
-        }
-        sb.append("\n");
+        appendField(sb, "출발", itineraryResponse.departure());
+        appendField(sb, "도착", itineraryResponse.destination());
+        appendDateField(sb, "출발일", itineraryResponse.departureAt(), formatterDate);
+        appendDateField(sb, "도착일", itineraryResponse.arriveAt(), formatterDate);
+        appendField(sb, "숙박 시설", itineraryResponse.accommodation().isEmpty() ? "X" : itineraryResponse.accommodation());
+        appendDateField(sb, "체크인", itineraryResponse.checkInAt(), formatterTime);
+        appendDateField(sb, "체크아웃", itineraryResponse.checkOutAt(), formatterTime);
         System.out.println(sb);
+    }
+
+    private void appendField(StringBuilder sb, String label, String value) {
+        sb.append(label).append(" : ");
+        if (value != null) {
+            sb.append(value);
+        } else {
+            sb.append("X");
+        }
+        sb.append('\n');
+    }
+
+    private void appendDateField(StringBuilder sb, String label, LocalDateTime value, DateTimeFormatter formatter) {
+        sb.append(label).append(" : ");
+        if (value != null) {
+            sb.append(formatter.format(value));
+        } else {
+            sb.append("X");
+        }
+        sb.append('\n');
     }
 
     private static LocalDate stringToLocalDate(String dateString) {
