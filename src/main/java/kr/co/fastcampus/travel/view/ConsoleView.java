@@ -111,10 +111,6 @@ public class ConsoleView {
         System.out.println("여행 및 여정 기록이 완료되었습니다.");
     }
 
-    private List<TripInfoResponse> getTripList() {
-        return getTripList(FileType.CSV);
-    }
-
     private List<TripInfoResponse> getTripList(FileType fileType) {
         List<TripInfoResponse> tripInfoResponses;
         try {
