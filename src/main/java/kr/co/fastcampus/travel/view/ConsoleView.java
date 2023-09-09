@@ -54,9 +54,9 @@ public class ConsoleView {
             logItineraries(id);
         } else if (menu == Menu.SHOW_ITINERARY) {
             showItinerary();
+        } else if (menu == Menu.EXIT) {
+            isExited = true;
         }
-
-        isExited = true;
     }
 
     private void logTrip() {
@@ -252,34 +252,48 @@ public class ConsoleView {
     }
 
     private void showItinerary() {
-        List<TripInfoResponse> trips = travelController.getTripList(FileType.CSV);
-        if (trips.isEmpty()) {
-            System.out.println("여행 목록이 비어 있습니다.");
-            throw new TravelDoesNotExistException();
+        List<TripInfoResponse> trips;
+        try {
+            System.out.println("여정 조회를 시작합니다.");
+            System.out.println();
+            // 여행 목록을 보여줄 때도 타입을 입력받아야 하는지 피드백 필요
+            // showItinerary()에서
+            // 여행 목록, 선택 여행 정보, 선택 여정 정보 3번의 파일 타입 질문이 필요함.
+            trips = travelController.getTripList(FileType.CSV);
+            System.out.println("여행 목록");
+            for (TripInfoResponse tripInfo : trips) {
+                System.out.printf("%d: %s (%s ~ %s)%n", tripInfo.id(), tripInfo.name(),
+                        tripInfo.startAt(), tripInfo.endAt());
+            }
+            System.out.print("조회할 여행의 번호를 입력해주세요. : ");
+            // 잘못된 번호를 입력했을 때 엔터를 한번 더 눌러야 작동. 추후 해결 예정.
+            Long tripNum = (long) inputView.inputNumber("잘못된 여행 번호입니다. 다시 입력해주세요",
+                    num -> num >= 1 && num <= trips.size());
+            System.out.print("조회할 여행의 데이터 타입을 입력하세요. (1. CSV, 2. JSON) : ");
+            FileType fileType = inputView.inputFileType();
+            List<ItineraryInfoResponse> itineraries = travelController.getItineraryList(fileType,
+                    tripNum);
+            System.out.println("여정 목록");
+            Long itineraryIndex = 0L;
+            for (ItineraryInfoResponse itineraryInfo : itineraries) {
+                System.out.printf("%d: %s ~ %s%n", ++itineraryIndex, itineraryInfo.departure(),
+                        itineraryInfo.destination());
+            }
+            System.out.print("조회할 여정의 번호를 입력해주세요. : ");
+            Long itineraryEnd = itineraryIndex;
+            // 잘못된 번호를 입력했을 때 엔터를 한번 더 눌러야 작동. 추후 해결 예정.
+            Long itineraryNum = (long) inputView.inputNumber("잘못된 여정 번호입니다. 다시 입력해주세요",
+                    num -> num >= 1 && num <= itineraryEnd);
+            System.out.print("조회할 여정의 데이터 타입을 입력하세요. (1. CSV, 2. JSON) : ");
+            fileType = inputView.inputFileType();
+            itineraryIndex = itineraries.get((int) (itineraryNum - 1)).id();
+            // 여정을 받아올 때 시간 등이 null이면 에러 발생. 추후 해결 예정.
+            ItineraryResponse itineraryResponse = travelController.findItinerary(fileType,
+                    itineraryIndex);
+            printItineraryDetail(itineraryResponse);
+        } catch (TravelDoesNotExistException e) {
+            System.out.println("조회할 수 있는 여행이 없습니다.");
         }
-        System.out.println("여정 조회를 시작합니다.");
-        for (TripInfoResponse tripInfo : trips) {
-            System.out.printf("%d: %s (%s ~ %s)%n",
-                    tripInfo.id(), tripInfo.name(), tripInfo.startAt(), tripInfo.endAt());
-        }
-        System.out.println("조회할 여행의 번호를 입력하세요.");
-        Long tripNum = (long) inputView.inputNumber("잘못된 여행 번호입니다. 다시 입력해주세요");
-        System.out.print("조회할 여행의 데이터 타입을 입력하세요. (1. CSV, 2. JSON) : ");
-        FileType fileType = inputView.inputFileType();
-        List<ItineraryInfoResponse> itineraries = travelController.getItineraryList(fileType,
-                tripNum);
-        System.out.println("여정 목록");
-        for (ItineraryInfoResponse itineraryInfo : itineraries) {
-            System.out.printf("%d: %s ~ %s%n",
-                    itineraryInfo.id(), itineraryInfo.departure(), itineraryInfo.destination());
-        }
-        System.out.print("조회할 여정의 번호를 입력해주세요. : ");
-        Long itineraryNum = (long) inputView.inputNumber("잘못된 여정 번호입니다. 다시 입력해주세요");
-        System.out.print("조회할 여정의 데이터 타입을 입력하세요. (1. CSV, 2. JSON) : ");
-        fileType = inputView.inputFileType();
-        ItineraryResponse itineraryResponse = travelController.findItinerary(fileType,
-                itineraryNum);
-        printItineraryDetail(itineraryResponse);
     }
 
     private void printItineraryDetail(ItineraryResponse itineraryResponse) {
