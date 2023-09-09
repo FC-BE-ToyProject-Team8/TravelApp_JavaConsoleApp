@@ -302,16 +302,6 @@ public class ConsoleView {
         sb.append('\n');
     }
 
-    private static LocalDate stringToLocalDate(String dateString) {
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return LocalDate.parse(dateString, outputFormatter);
-    }
-
-    public static LocalDateTime stringToLocalDateTime(String dateString) {
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        return LocalDateTime.parse(dateString, outputFormatter);
-    }
-
     public boolean isExited() {
         return isExited;
     }
