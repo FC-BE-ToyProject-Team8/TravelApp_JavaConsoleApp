@@ -35,12 +35,7 @@ public class ConsoleView {
         if (menu == Menu.LOG_TRIP) {
             logTrip();
         } else if (menu == Menu.LOG_ITINERARY) {
-            FileType fileType = FileType.fromNumber(1);
-            Long tripId = getTripId(fileType);
-            if (tripId == null) {
-                return;
-            }
-            logItineraries(tripId);
+            logItineraries();
         } else if (menu == Menu.SHOW_TRIP) {
             showTrip();
         } else if (menu == Menu.SHOW_ITINERARY) {
@@ -94,7 +89,8 @@ public class ConsoleView {
         System.out.println("여행 및 여정 기록이 완료되었습니다.");
     }
 
-    private void logItineraries(Long tripId) {
+    private void logItineraries() {
+        Long tripId = getTripId(FileType.CSV);
         System.out.println("\n여행에 대한 여정 기록을 시작합니다.\n");
 
         List<ItinerarySaveRequest> itinerarySaveRequests = new ArrayList<>();
@@ -226,7 +222,7 @@ public class ConsoleView {
     private void showItinerary() {
         try {
             System.out.println("여정 조회를 시작합니다.");
-            System.out.print("조회할 여행의 데이터 타입을 입력하세요. (1. CSV, 2. JSON) : ");
+            System.out.print("선택할 여행의 데이터 타입을 입력하세요. (1. CSV, 2. JSON) : ");
             FileType fileType = inputView.inputFileType();
             List<TripInfoResponse> trips = travelController.getTripList(fileType);
             printTripList(trips);
@@ -240,7 +236,7 @@ public class ConsoleView {
                     itineraryIndex);
             printItineraryDetail(itineraryResponse);
         } catch (TravelDoesNotExistException e) {
-            System.out.println("조회할 수 있는 여행이 없습니다.");
+            System.out.println("선택할 수 있는 여행이 없습니다.");
         }
     }
 
