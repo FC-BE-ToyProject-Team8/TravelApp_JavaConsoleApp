@@ -35,14 +35,8 @@ public class ConsoleView {
 
 
     public void process() {
-        System.out.println("[메뉴]");
-        System.out.println(Arrays.stream(Menu.values())
-                .map(menu -> String.format("%d: %s", menu.getNumber(), menu.getName()))
-                .collect(Collectors.joining(", ")));
-
-        System.out.println("\n메뉴 번호를 입력해주세요");
-
         Menu menu = inputView.inputMenu();
+
         if (menu == Menu.LOG_TRIP) {
             logTrip();
         } else if (menu == Menu.SHOW_TRIP) {

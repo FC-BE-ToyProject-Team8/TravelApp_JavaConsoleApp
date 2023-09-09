@@ -7,7 +7,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import kr.co.fastcampus.travel.common.exception.UnknownException;
 import kr.co.fastcampus.travel.domain.FileType;
 
@@ -48,12 +50,20 @@ public class InputView {
     }
 
     public Menu inputMenu() {
-        try {
-            int menuNumber = inputNumber("잘못된 메뉴 번호입니다. 다시 입력해주세요;");
-            return Menu.fromNumber(menuNumber);
-        } catch (IllegalArgumentException e) {
-            System.out.println("잘못된 메뉴 번호입니다. 다시 입력해주세요");
-            return inputMenu();
+        System.out.println("[메뉴]");
+        System.out.println(Arrays.stream(Menu.values())
+            .map(menu -> String.format("%d: %s", menu.getNumber(), menu.getName()))
+            .collect(Collectors.joining(", ")));
+
+        System.out.println("\n메뉴 번호를 입력해주세요");
+
+        while (true) {
+            try {
+                int menuNumber = inputNumber("잘못된 메뉴 번호입니다. 다시 입력해주세요;");
+                return Menu.fromNumber(menuNumber);
+            } catch (IllegalArgumentException e) {
+                System.out.println("잘못된 메뉴 번호입니다. 다시 입력해주세요");
+            }
         }
     }
 
