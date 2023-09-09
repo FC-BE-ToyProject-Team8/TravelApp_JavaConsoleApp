@@ -16,7 +16,7 @@ public record ItinerarySaveRequest(
 
     public ItinerarySaveRequest {
         if ((departureAt == null && arriveAt == null)
-            || (checkInAt == null && checkOutAt == null)) {
+            && (checkInAt == null && checkOutAt == null)) {
             throw new IllegalArgumentException();
         }
     }
