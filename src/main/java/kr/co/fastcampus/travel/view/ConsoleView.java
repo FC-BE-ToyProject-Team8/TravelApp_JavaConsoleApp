@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.IntStream;
 import kr.co.fastcampus.travel.AppConfig;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
 import kr.co.fastcampus.travel.controller.TravelController;
@@ -138,7 +136,7 @@ public class ConsoleView {
         FileType fileType = inputView.inputFileType();
         Long travelId = getTripId(fileType);
         TripResponse tripResponse = travelController.findTrip(fileType, travelId);
-        System.out.println(printDetailTripInfo(tripResponse));
+        printDetailTripInfo(tripResponse);
     }
 
     private void printShortTripInfo(List<TripInfoResponse> tripInfoResponses) {
@@ -151,20 +149,18 @@ public class ConsoleView {
         }
     }
 
-    //리팩토링 (토요일) 예정
-    private String printDetailTripInfo(TripResponse tripResponse) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\"").append(tripResponse.name()).append("\"\n");
-        sb.append("기간 : ").append(stringToLocalDate(tripResponse.startAt().toString()))
-            .append(" ~ ").append(stringToLocalDate(tripResponse.endAt().toString())).append("\n");
-
-        IntStream.range(0, tripResponse.itineraries().size())
-            .forEach(index -> {
-                sb.append("[").append(index + 1).append("번째 여정]\n");
-                sb.append(tripResponse.itineraries().get(index).toString()).append("\n");
-            });
-
-        return sb.toString();
+    private void printDetailTripInfo(TripResponse tripResponse) {
+        System.out.printf("\"%s\"%n기간: %s ~ %s%n%n",
+                tripResponse.name(),
+                tripResponse.startAt(),
+                tripResponse.endAt());
+        int cnt = 1;
+        List<ItineraryResponse> itineraryResponses = tripResponse.itineraries();
+        for (ItineraryResponse itineraryResponse : itineraryResponses){
+            System.out.printf("[%d번째 여정]%n",cnt);
+            printItineraryDetail(itineraryResponse);
+            cnt++;
+        }
     }
 
     private ItinerarySaveRequest logOneItinerary(int order) {
@@ -269,7 +265,6 @@ public class ConsoleView {
     }
 
     private void printItineraryDetail(ItineraryResponse itineraryResponse) {
-        System.out.println("여정 정보");
         DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         StringBuilder sb = new StringBuilder();
@@ -314,6 +309,7 @@ public class ConsoleView {
     }
 
     public boolean isExited() {
+        System.out.println("프로그램을 종료합니다.");
         return isExited;
     }
 }
