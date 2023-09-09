@@ -126,7 +126,7 @@ public class ConsoleView {
         }
 
         travelController.saveItineraries((long) tripId, itinerarySaveRequests);
-        System.out.println("여행 및 여정 기록이 완료되었습니다.");
+        System.out.println("여정 추가 기록이 완료되었습니다.");
     }
 
     //예외 처리 과정 피드백 필요!
