@@ -71,7 +71,7 @@ public class ConsoleView {
             ItinerarySaveRequest itinerarySaveRequest = logOneItinerary(order);
             itinerarySaveRequests.add(itinerarySaveRequest);
 
-            System.out.println("\n여정 기록을 멈추고 싶다면 Y(y)를 입력해주세요.");
+            System.out.println("\n여정 기록을 멈추시겠습니까? (y/n)");
             willContinueStr = inputView.inputNotEmptyString();
 
             System.out.println();
@@ -100,7 +100,7 @@ public class ConsoleView {
             ItinerarySaveRequest itinerarySaveRequest = logOneItinerary(order);
             itinerarySaveRequests.add(itinerarySaveRequest);
 
-            System.out.println("\n여정 기록을 멈추고 싶다면 Y(y)를 입력해주세요.");
+            System.out.println("\n여정 기록을 멈추시겠습니까? (y/n)");
             willContinueStr = inputView.inputNotEmptyString();
 
             System.out.println();
@@ -137,7 +137,7 @@ public class ConsoleView {
 
 
     private void showTrip() {
-        System.out.print("조회 타입의 번호를 입력해주세요. (1.CSV/2.JSON) ");
+        System.out.print("조회할 파일 형식을 선택해주세요. (1. CSV / 2. JSON)");
         FileType fileType = inputView.inputFileType();
         Long travelId = getTripId(fileType);
         if (travelId == null) {
@@ -226,7 +226,7 @@ public class ConsoleView {
     private void showItinerary() {
         try {
             System.out.println("여정 조회를 시작합니다.");
-            System.out.print("선택할 여행의 데이터 타입을 입력하세요. (1. CSV, 2. JSON) : ");
+            System.out.print("조회할 파일 형식을 선택해주세요. (1. CSV / 2. JSON)");
             FileType fileType = inputView.inputFileType();
             List<TripInfoResponse> trips = travelController.getTripList(fileType);
             printTripList(trips);
@@ -240,18 +240,18 @@ public class ConsoleView {
                     itineraryIndex);
             printItineraryDetail(itineraryResponse);
         } catch (TravelDoesNotExistException e) {
-            System.out.println("선택할 수 있는 여행이 없습니다.");
+            System.out.println("등록된 여행이 없습니다. 여행을 먼저 등록해주세요.");
         }
     }
 
     private Long inputItineraryNumber(List<ItineraryInfoResponse> itineraries) {
-        System.out.print("조회할 여정의 번호를 입력해주세요. : ");
+        System.out.println("조회할 여정의 번호를 입력해주세요.");
         return (long) inputView.inputNumber("잘못된 여정 번호입니다. 다시 입력해주세요",
                 num -> num >= 1 && num <= itineraries.size());
     }
 
     private Long inputTripNumber(List<TripInfoResponse> trips) {
-        System.out.print("조회할 여행의 번호를 입력해주세요. : ");
+        System.out.println("조회할 여행의 번호를 입력해주세요.");
         return (long) inputView.inputNumber("잘못된 여행 번호입니다. 다시 입력해주세요",
                 num -> num >= 1 && num <= trips.size());
     }
