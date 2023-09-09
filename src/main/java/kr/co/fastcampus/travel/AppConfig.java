@@ -1,0 +1,88 @@
+package kr.co.fastcampus.travel;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import kr.co.fastcampus.travel.controller.TravelController;
+import kr.co.fastcampus.travel.infrastructure.repository.ItineraryRepository;
+import kr.co.fastcampus.travel.infrastructure.repository.ItineraryRepositoryImpl;
+import kr.co.fastcampus.travel.infrastructure.repository.TripRepository;
+import kr.co.fastcampus.travel.infrastructure.repository.TripRepositoryImpl;
+import kr.co.fastcampus.travel.infrastructure.repository.file.TravelCsvFileManager;
+import kr.co.fastcampus.travel.infrastructure.repository.file.TravelJsonFileManager;
+import kr.co.fastcampus.travel.service.ItineraryService;
+import kr.co.fastcampus.travel.service.TripService;
+
+public class AppConfig {
+
+    private static TravelController TRAVEL_CONTROLLER;
+    private static TripService TRIP_SERVICE;
+    private static ItineraryService ITINERARY_SERVICE;
+    private static TripRepository TRIP_REPOSITORY;
+    private static ItineraryRepository ITINERARY_REPOSITORY;
+    private static TravelJsonFileManager TRAVEL_JSON_FILE_MANAGER;
+    private static ObjectMapper OBJECT_MAPPER;
+    private static TravelCsvFileManager TRAVEL_CSV_FILE_MANAGER;
+
+    private AppConfig() {
+    }
+
+    public static TravelController travelController() {
+        if (TRAVEL_CONTROLLER == null) {
+            TRAVEL_CONTROLLER = new TravelController(tripService(), itineraryService());
+        }
+        return TRAVEL_CONTROLLER;
+    }
+
+    private static TripService tripService() {
+        if (TRIP_SERVICE == null) {
+            TRIP_SERVICE = new TripService(tripRepository());
+        }
+        return TRIP_SERVICE;
+    }
+
+    private static ItineraryService itineraryService() {
+        if (ITINERARY_SERVICE == null) {
+            ITINERARY_SERVICE = new ItineraryService(tripService(), itineraryRepository());
+        }
+        return ITINERARY_SERVICE;
+    }
+
+    private static ItineraryRepository itineraryRepository() {
+        if (ITINERARY_REPOSITORY == null) {
+            ITINERARY_REPOSITORY = new ItineraryRepositoryImpl(
+                    travelJsonFileManager(),
+                    travelCsvFileManager());
+        }
+        return ITINERARY_REPOSITORY;
+    }
+
+    private static TripRepository tripRepository() {
+        if (TRIP_REPOSITORY == null) {
+            TRIP_REPOSITORY = new TripRepositoryImpl(
+                    travelJsonFileManager(),
+                    travelCsvFileManager());
+        }
+        return TRIP_REPOSITORY;
+    }
+
+    private static TravelCsvFileManager travelCsvFileManager() {
+        if (TRAVEL_CSV_FILE_MANAGER == null) {
+            TRAVEL_CSV_FILE_MANAGER = new TravelCsvFileManager();
+        }
+        return TRAVEL_CSV_FILE_MANAGER;
+    }
+
+    private static TravelJsonFileManager travelJsonFileManager() {
+        if (TRAVEL_JSON_FILE_MANAGER == null) {
+            TRAVEL_JSON_FILE_MANAGER = new TravelJsonFileManager(objectMapper());
+        }
+        return TRAVEL_JSON_FILE_MANAGER;
+    }
+
+    private static ObjectMapper objectMapper() {
+        if (OBJECT_MAPPER == null) {
+            OBJECT_MAPPER = new ObjectMapper().registerModule(new JavaTimeModule());
+        }
+        return OBJECT_MAPPER;
+    }
+}
