@@ -17,13 +17,15 @@ public record ItineraryResponse(Long id,
 ) {
 
     public ItineraryResponse(Itinerary itinerary) {
-        this(itinerary.getId(),
-             itinerary.getRoute().getDeparture(),
-             itinerary.getRoute().getDestination(),
-             itinerary.getRoute().getDepartureAt(),
-             itinerary.getRoute().getArriveAt(),
-             itinerary.getLodge().getAccommodation(),
-             itinerary.getLodge().getCheckInAt(),
-             itinerary.getLodge().getCheckOutAt());
+        this(
+            itinerary.getId(),
+            itinerary.getRoute().getDeparture(),
+            itinerary.getRoute().getDestination(),
+            itinerary.getRoute().getDepartureAt(),
+            itinerary.getRoute().getArriveAt(),
+            itinerary.getLodge().getAccommodation(),
+            itinerary.getLodge().getCheckInAt(),
+            itinerary.getLodge().getCheckOutAt()
+        );
     }
 }
