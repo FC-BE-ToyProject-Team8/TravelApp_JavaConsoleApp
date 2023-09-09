@@ -9,14 +9,12 @@ import lombok.ToString;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(exclude = "trip")
 public class Itinerary {
 
     private Long id;
     private Route route;
     private Lodge lodge;
 
-    private Trip trip;
 
     @Builder
     private Itinerary(
@@ -33,14 +31,9 @@ public class Itinerary {
         this.id = id;
         this.route = new Route(departure, destination, departureAt, arriveAt);
         this.lodge = new Lodge(accommodation, checkInAt, checkOutAt);
-        this.trip = trip;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public void setTrip(Trip trip) {
-        this.trip = trip;
     }
 }
