@@ -67,10 +67,10 @@ public class ConsoleView {
             "컴마(,)는 입력할 수 없습니다."
         );
 
-        System.out.println("시작 날짜 (2023-01-01 형식으로 입력):");
+        System.out.print("시작 ");
         LocalDate startAt = inputView.inputDate();
 
-        System.out.println("종료 날짜 (2023-01-01 형식으로 입력):");
+        System.out.print("종료 ");
         LocalDate endAt = inputView.inputDate();
 
         List<ItinerarySaveRequest> itinerarySaveRequests = new ArrayList<>();
@@ -214,10 +214,10 @@ public class ConsoleView {
 
         ItinerarySaveRequest itinerarySaveRequest = null;
         while (itinerarySaveRequest == null) {
-            System.out.println("출발 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):");
+            System.out.print("출발 ");
             LocalDateTime departureAt = inputView.inputDateTime();
 
-            System.out.println("도착 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):");
+            System.out.print("도착 ");
             LocalDateTime arriveAt = inputView.inputDateTime();
 
             System.out.println("숙박지 (Enter로 생략 가능):");
@@ -226,10 +226,10 @@ public class ConsoleView {
                 "컴마(,)는 입력할 수 없습니다."
             );
 
-            System.out.println("체크인 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):");
+            System.out.print("체크인 ");
             LocalDateTime checkInAt = inputView.inputDateTime();
 
-            System.out.println("체크아웃 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):");
+            System.out.print("체크아웃 ");
             LocalDateTime checkOutAt = inputView.inputDateTime();
 
             try {
