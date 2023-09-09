@@ -80,14 +80,15 @@ public class ConsoleView {
 
         System.out.println("\n여행에 대한 여정 기록을 시작합니다.\n");
 
-        String willContinueStr = "n";
-        while ("n".equalsIgnoreCase(willContinueStr)) {
+        String willContinueStr = "y";
+        while ("y".equalsIgnoreCase(willContinueStr)) {
             ItinerarySaveRequest itinerarySaveRequest = logOneItinerary(order);
             itinerarySaveRequests.add(itinerarySaveRequest);
 
-            System.out.println("\n여정 기록을 멈추시겠습니까? (y/n)");
-            willContinueStr = inputView.inputNotEmptyString();
-
+            System.out.println("\n여정 기록을 계속하시겠습니까? (Y/N)");
+            willContinueStr = inputView.inputNotEmptyString(
+                input -> input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n"),
+                "Y(y) 또는 N(n) 중 하나를 입력해주세요.");
             System.out.println();
             order++;
         }
@@ -116,8 +117,8 @@ public class ConsoleView {
 
             System.out.println("\n여정 기록을 계속하시겠습니까? (Y/N)");
             willContinueStr = inputView.inputNotEmptyString(
-                    input -> input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n"),
-                    "Y(y) 또는 N(n) 중 하나를 입력해주세요.");
+                input -> input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n"),
+                "Y(y) 또는 N(n) 중 하나를 입력해주세요.");
             System.out.println();
             order++;
         }
@@ -165,18 +166,18 @@ public class ConsoleView {
     private void printShortTripInfo(List<TripInfoResponse> tripInfoResponses) {
         for (TripInfoResponse tripInfoResponse : tripInfoResponses) {
             System.out.printf("%d: %s (%s ~ %s)%n",
-                    tripInfoResponse.id(),
-                    tripInfoResponse.name(),
-                    tripInfoResponse.startAt(),
-                    tripInfoResponse.endAt());
+                tripInfoResponse.id(),
+                tripInfoResponse.name(),
+                tripInfoResponse.startAt(),
+                tripInfoResponse.endAt());
         }
     }
 
     private void printDetailTripInfo(TripResponse tripResponse) {
         System.out.printf("\"%s\"%n기간: %s ~ %s%n%n",
-                tripResponse.name(),
-                tripResponse.startAt(),
-                tripResponse.endAt());
+            tripResponse.name(),
+            tripResponse.startAt(),
+            tripResponse.endAt());
         int cnt = 1;
         List<ItineraryResponse> itineraryResponses = tripResponse.itineraries();
         for (ItineraryResponse itineraryResponse : itineraryResponses) {
@@ -247,12 +248,12 @@ public class ConsoleView {
             printTripList(trips);
             Long tripNum = inputTripNumber(trips);
             List<ItineraryInfoResponse> itineraries = travelController.getItineraryList(fileType,
-                    tripNum);
+                tripNum);
             printItineraryList(itineraries);
             Long itineraryNum = inputItineraryNumber(itineraries);
             Long itineraryIndex = itineraries.get((int) (itineraryNum - 1)).id();
             ItineraryResponse itineraryResponse = travelController.findItinerary(fileType,
-                    itineraryIndex);
+                itineraryIndex);
             printItineraryDetail(itineraryResponse);
         } catch (TravelDoesNotExistException e) {
             System.out.println("등록된 여행이 없습니다. 여행을 먼저 등록해주세요.");
@@ -262,20 +263,20 @@ public class ConsoleView {
     private Long inputItineraryNumber(List<ItineraryInfoResponse> itineraries) {
         System.out.println("조회할 여정의 번호를 입력해주세요.");
         return (long) inputView.inputNumber("잘못된 여정 번호입니다. 다시 입력해주세요",
-                num -> num >= 1 && num <= itineraries.size());
+            num -> num >= 1 && num <= itineraries.size());
     }
 
     private Long inputTripNumber(List<TripInfoResponse> trips) {
         System.out.println("조회할 여행의 번호를 입력해주세요.");
         return (long) inputView.inputNumber("잘못된 여행 번호입니다. 다시 입력해주세요",
-                num -> num >= 1 && num <= trips.size());
+            num -> num >= 1 && num <= trips.size());
     }
 
     private void printItineraryList(List<ItineraryInfoResponse> itineraries) {
         System.out.println("여정 목록");
         for (int i = 0; i < itineraries.size(); i++) {
             System.out.printf("%d: %s ~ %s%n", i + 1,
-                    itineraries.get(i).departure(), itineraries.get(i).destination());
+                itineraries.get(i).departure(), itineraries.get(i).destination());
         }
     }
 
@@ -283,7 +284,7 @@ public class ConsoleView {
         System.out.println("여행 목록");
         for (TripInfoResponse tripInfo : trips) {
             System.out.printf("%d: %s (%s ~ %s)%n",
-                    tripInfo.id(), tripInfo.name(), tripInfo.startAt(), tripInfo.endAt());
+                tripInfo.id(), tripInfo.name(), tripInfo.startAt(), tripInfo.endAt());
         }
     }
 
