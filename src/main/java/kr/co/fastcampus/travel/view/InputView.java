@@ -42,6 +42,7 @@ public class InputView {
             int menuNumber = inputNumber("잘못된 메뉴 번호입니다. 다시 입력해주세요;");
             return Menu.fromNumber(menuNumber);
         } catch (IllegalArgumentException e) {
+            System.out.println("잘못된 메뉴 번호입니다. 다시 입력해주세요");
             return inputMenu();
         }
     }
