@@ -47,6 +47,7 @@ public class ConsoleView {
         } else if (menu == Menu.SHOW_ITINERARY) {
             showItinerary();
         } else if (menu == Menu.EXIT) {
+            System.out.println("프로그램을 종료합니다.");
             isExited = true;
         }
     }
@@ -320,7 +321,6 @@ public class ConsoleView {
     }
 
     public boolean isExited() {
-        System.out.println("프로그램을 종료합니다.");
         return isExited;
     }
 }
