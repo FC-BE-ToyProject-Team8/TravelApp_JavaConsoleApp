@@ -104,6 +104,8 @@ public class ConsoleView {
             willContinueStr = inputView.inputNotEmptyString(
                     input -> input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n"),
                     "Y(y) 또는 N(n) 중 하나를 입력해주세요.");
+            System.out.println();
+            order++;
         }
 
         travelController.saveItineraries(tripId, itinerarySaveRequests);
