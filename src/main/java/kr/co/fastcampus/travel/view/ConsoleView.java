@@ -3,7 +3,6 @@ package kr.co.fastcampus.travel.view;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -267,7 +266,7 @@ public class ConsoleView {
             System.out.println("조회할 수 있는 여행이 없습니다.");
         }
     }
-    
+
     private Long inputItineraryNumber(List<ItineraryInfoResponse> itineraries) {
         System.out.print("조회할 여정의 번호를 입력해주세요. : ");
         return (long) inputView.inputNumber("잘못된 여정 번호입니다. 다시 입력해주세요",
