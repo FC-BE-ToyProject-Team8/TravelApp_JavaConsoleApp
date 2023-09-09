@@ -29,7 +29,6 @@ public class ConsoleView {
         inputView = new InputView();
     }
 
-
     public void process() {
         Menu menu = inputView.inputMenu();
         if (menu == Menu.LOG_TRIP) {
@@ -281,7 +280,10 @@ public class ConsoleView {
         appendField(sb, "도착", itineraryResponse.destination());
         appendDateField(sb, "출발일", itineraryResponse.departureAt(), formatterDate);
         appendDateField(sb, "도착일", itineraryResponse.arriveAt(), formatterDate);
-        appendField(sb, "숙박 시설", itineraryResponse.accommodation().isEmpty() ? "X" : itineraryResponse.accommodation());
+        appendField(sb,
+            "숙박 시설",
+            itineraryResponse.accommodation().isEmpty() ? "X" : itineraryResponse.accommodation()
+        );
         appendDateField(sb, "체크인", itineraryResponse.checkInAt(), formatterTime);
         appendDateField(sb, "체크아웃", itineraryResponse.checkOutAt(), formatterTime);
         System.out.println(sb);
@@ -297,7 +299,12 @@ public class ConsoleView {
         sb.append('\n');
     }
 
-    private void appendDateField(StringBuilder sb, String label, LocalDateTime value, DateTimeFormatter formatter) {
+    private void appendDateField(
+        StringBuilder sb,
+        String label,
+        LocalDateTime value,
+        DateTimeFormatter formatter
+    ) {
         sb.append(label).append(" : ");
         if (value != null) {
             sb.append(formatter.format(value));

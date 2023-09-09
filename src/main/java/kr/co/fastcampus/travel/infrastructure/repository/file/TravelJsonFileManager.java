@@ -130,13 +130,37 @@ public class TravelJsonFileManager extends FileIoManager {
     private ObjectNode parseJson(Itinerary itinerary) {
         ObjectNode jsonItinerary = objectMapper.createObjectNode();
         jsonItinerary.put("id", itinerary.getId());
+
         jsonItinerary.put("departure", itinerary.getRoute().getDeparture());
         jsonItinerary.put("destination", itinerary.getRoute().getDestination());
-        jsonItinerary.put("departureAt", Optional.ofNullable(itinerary.getRoute().getDepartureAt()).map(LocalDateTime::toString).orElse(""));
-        jsonItinerary.put("arriveAt", Optional.ofNullable(itinerary.getRoute().getArriveAt()).map(LocalDateTime::toString).orElse(""));
+
+        jsonItinerary.put(
+            "departureAt",
+            Optional.ofNullable(itinerary.getRoute().getDepartureAt())
+                .map(LocalDateTime::toString)
+                .orElse("")
+        );
+        jsonItinerary.put(
+            "arriveAt",
+            Optional.ofNullable(itinerary.getRoute().getArriveAt())
+                .map(LocalDateTime::toString)
+                .orElse("")
+        );
+
         jsonItinerary.put("accommodation", itinerary.getLodge().getAccommodation());
-        jsonItinerary.put("checkInAt", Optional.ofNullable(itinerary.getLodge().getCheckInAt()).map(LocalDateTime::toString).orElse(""));
-        jsonItinerary.put("checkOutAt", Optional.ofNullable(itinerary.getLodge().getCheckOutAt()).map(LocalDateTime::toString).orElse(""));
+
+        jsonItinerary.put(
+            "checkInAt",
+            Optional.ofNullable(itinerary.getLodge().getCheckInAt())
+                .map(LocalDateTime::toString)
+                .orElse("")
+        );
+        jsonItinerary.put(
+            "checkOutAt",
+            Optional.ofNullable(itinerary.getLodge().getCheckOutAt())
+                .map(LocalDateTime::toString)
+                .orElse("")
+        );
         return jsonItinerary;
     }
 

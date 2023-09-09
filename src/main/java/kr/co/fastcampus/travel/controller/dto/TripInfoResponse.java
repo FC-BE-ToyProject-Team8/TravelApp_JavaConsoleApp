@@ -11,6 +11,12 @@ public record TripInfoResponse(Long id,
                                int itinerariesCount
 ) {
     public TripInfoResponse(Trip trip) {
-        this(trip.getId(), trip.getName(), trip.getStartAt(), trip.getEndAt(), trip.getItineraries().size());
+        this(
+            trip.getId(),
+            trip.getName(),
+            trip.getStartAt(),
+            trip.getEndAt(),
+            trip.getItineraries().size()
+        );
     }
 }
