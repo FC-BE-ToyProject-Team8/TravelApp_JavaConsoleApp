@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 public class TripService {
 
     public final TripRepository tripRepository;
-    
+
     public List<Trip> findAllTrips(FileType fileType) {
         return tripRepository.findAll(fileType);
     }
@@ -23,12 +23,7 @@ public class TripService {
     }
 
     public Trip saveTrip(TripSaveRequest saveRequest) {
-        Trip trip = Trip.builder()
-            .name(saveRequest.name())
-            .startAt(saveRequest.startAt())
-            .endAt(saveRequest.endAt())
-            .build();
-
+        Trip trip = saveRequest.toDomain();
         return tripRepository.save(trip);
     }
 }
