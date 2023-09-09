@@ -95,16 +95,15 @@ public class ConsoleView {
 
         List<ItinerarySaveRequest> itinerarySaveRequests = new ArrayList<>();
         int order = 1;
-        String willContinueStr = "n";
-        while ("n".equalsIgnoreCase(willContinueStr)) {
+        String willContinueStr = "y";
+        while ("y".equalsIgnoreCase(willContinueStr)) {
             ItinerarySaveRequest itinerarySaveRequest = logOneItinerary(order);
             itinerarySaveRequests.add(itinerarySaveRequest);
 
-            System.out.println("\n여정 기록을 멈추시겠습니까? (y/n)");
-            willContinueStr = inputView.inputNotEmptyString();
-
-            System.out.println();
-            order++;
+            System.out.println("\n여정 기록을 계속하시겠습니까? (Y/N)");
+            willContinueStr = inputView.inputNotEmptyString(
+                    input -> input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n"),
+                    "Y(y) 또는 N(n) 중 하나를 입력해주세요.");
         }
 
         travelController.saveItineraries(tripId, itinerarySaveRequests);
