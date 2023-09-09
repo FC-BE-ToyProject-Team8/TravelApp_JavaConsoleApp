@@ -35,77 +35,22 @@
   - IntelliJ 플러그인 적용법: https://blog.naver.com/rinjyu/222157082860
 - 커밋 내용을 자세하게 적습니다. (커밋 제목과 내용만 보더라도 코드 내용이 파악 가능할 정도로)
 
-### 테스트 컨벤션
-
-- 메서드 이름은 영어로 짓되, @DisplayName 어노테이션을 통해 한글로 설명하여 테스트를 쉽게 파악할 수 있도록 합니다.
-- given/when/then 주석을 통해 테스트 내용을 쉽게 파악할 수 있도록 합니다.
-  - 이 상황이 주어졌을때(given), 이렇게 하면(when), 이 결과가 나와야 한다(then)
-
-<details>
-<summary><strong>모범 예시</strong></summary>
-
-```java
-@DisplayName("signUp()은 ")
-@Nested
-class SignUp {
-    @DisplayName("회원가입을 할 수 있다.")
-    @Test
-    void _willSuccess() throws Exception {
-        // given
-        SignUpRequest requestDto = new SignUpRequest("user11", "password",
-                "password", "테스트유저1");
-
-        // when then
-        mockMvc.perform(
-                    post("/api/v1/signUp")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(requestDto)))
-                .andDo(print())
-                .andExpect(status().isCreated());
-    }
-
-    @DisplayName("username 은 ")
-    @Nested
-    class _username {
-        @DisplayName("null이면 실패한다.")
-        @Test
-        void null_willFail() throws Exception {
-            // given
-            SignUpRequest requestDto = new SignUpRequest(null, "password",
-                    "password", "테스트유저1");
-
-            // when then
-            mockMvc.perform(
-                        post("/api/v1/signUp")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDto)))
-                    .andDo(print())
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.message").value("아이디를 입력해주세요."));
-            }
-        }
-}
-```
-</details>
-
 ### 기타 합의사항
 
 - **협업 관련**
   - 데일리 스크럼: 평일 10:00~10:10에 모여서 각자의 진행상황 공유
   - 정규시간에는 Zoom, 끝난 후에는 Discord에서 상시 모각코 (필참 아님)
-- **개발 관련**
-  - Model, Service 영역 public 메서드에 대해 테스트 코드 작성 필수
 - **추가 코딩 컨벤션**
   - 목록을 가져올 때는 get 동사를 쓴다
   - class/enum/interface/record 정의 시 맨 윗줄에는 줄바꿈을 넣고, 맨 아래 줄은 넣지 않는다
 
-## 🔧 프로젝트 설계
+# 🗺️ 기획안
 
-### 클래스 다이어그램
-![클래스 다이어그램](https://i.imgur.com/tkXa21D.png)
+## 패키지 및 클래스 구성도
+![패키지 및 클래스 구성도](패키지%20및%20클래스%20구성도.drawio.png)
 
-### 콘솔 화면
-시작
+## 콘솔 화면
+**시작**
 ```
 [메뉴]
 1: 여행기록, 2: 여정기록, 3: 여행조회, 4: 여정조회, 5: 종료
@@ -114,12 +59,14 @@ class SignUp {
 0
 ```
 
-시작 - 잘못 입력 시
+**시작** - 잘못 입력 시
 ```
 잘못된 메뉴 번호입니다. 다시 입력해주세요
 ```
 
-여행 기록
+-----
+
+**여행 기록**
 ```
 여행 기록을 시작합니다.
 
@@ -145,7 +92,7 @@ class SignUp {
 ㅁㅁㅁ
 체크인 시간 (YYYY-mm-DD HH:MM 형식으로 입력):
 0000-00-00 00-00
-체크아웃 시간 (YYYY-mm-DD HH:MM0 형식으로 입력):
+체크아웃 시간 (YYYY-mm-DD HH:MM 형식으로 입력):
 0000-00-00 00-00
 
 여정 기록을 멈추고 싶다면 Y(y)를 입력해주세요.
@@ -160,7 +107,7 @@ Y
 여행 및 여정 기록이 완료되었습니다.
 ```
 
-여행 기록 - 잘못 입력 시
+**여행 기록** - 잘못 입력 시
 ```
 빈 칸으로는 입력할 수 없습니다. 다시 입력해주세요
 
@@ -171,7 +118,9 @@ Y
 컴마(,)는 입력할 수 없습니다.
 ```
 
-여정 기록
+-----
+
+**여정 기록**
 
 ```
 여정을 추가 기록할 여행을 선택해주세요
@@ -193,9 +142,11 @@ Y
 0000-00-00 00-00
 도착 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):
 0000-00-00 00-00
-체크인 시간 (YYYY-mm-DD HH:MM 형식으로 입력):
+숙박지 (Enter로 생략 가능)
+ㅁㅁㅁ
+체크인 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):
 0000-00-00 00-00
-체크아웃 시간 (YYYY-mm-DD HH:MM0 형식으로 입력):
+체크아웃 시간 (Enter로 생략 가능, YYYY-mm-DD HH:MM 형식으로 입력):
 0000-00-00 00-00
 
 여정 기록을 멈추고 싶다면 Y(y)를 입력해주세요.
@@ -210,7 +161,7 @@ Y
 여정 기록이 완료되었습니다.
 ```
 
-여정 기록 - 잘못 입력 시
+**여정 기록** - 잘못 입력 시
 ```
 잘못된 여행 번호입니다. 다시 입력해주세요
 
@@ -227,7 +178,9 @@ Y
 컴마(,)는 입력할 수 없습니다.
 ```
 
-여행 조회
+-----
+
+**여행 조회**
 
 ```
 1: 여행 이름1 (0000-00-00 ~ 0000-00-00)
@@ -249,12 +202,14 @@ Y
 ...생략
 ```
 
-여행 조회 - 잘못 입력 시
+**여행 조회** - 잘못 입력 시
 ```
 잘못된 여행 번호입니다. 다시 입력해주세요
 ```
 
-여정 조회
+-----
+
+**여정 조회**
 
 ```
 1: 여행 이름1 (0000-00-00 ~ 0000-00-00)
@@ -275,72 +230,100 @@ Y
 체크아웃: 0000-00-00 00:00
 ```
 
-여정 조회 - 잘못 입력 시
+**여정 조회** - 잘못 입력 시
 ```
 잘못된 여행 번호입니다. 다시 입력해주세요
 잘못된 여정 번호입니다. 다시 입력해주세요
 ```
 
-### 파일 구조
+## 저장 구조
 
-#### json
-**trips.json**
-```json
-[
-  {
-    "id": 1,
-    "name": "이름",
-    "startAt": "0000-00-00",
-    "endAt": "0000-00-00"
-  },
-  {
-    "id": 2,
-    "name": "이름2",
-    "startAt": "0000-00-00",
-    "endAt": "0000-00-00"
-  }
-]
+### 폴더 및 파일 구성
+
+```
+travel/
+├── csv/
+│   ├── trip/
+│   │   ├── trip_1.csv
+│   │   ├── trip_2.csv
+│   │   ├── trip_3.csv
+│   └── trips.csv
+├── json/
+│   ├── trip/
+│   │   ├── trip_1.json
+│   │   ├── trip_2.json
+│   │   ├── trip_3.json
+│   └── trips.json
+└── sequence.json
 ```
 
-**trip_{id}.json**
-```json
-[
-  {
-    "id": 1,
-    "departure": "출발지",
-    "destination": "도착지",
-    "departureAt": "0000-00-00 00:00",
-    "arriveAt": "0000-00-00 00:00",
-    "accommodation": "숙박업소",
-    "checkInAt": null,
-    "checkOutAt": null
-  },
-  {
-    "id": 2,
-    "departure": "출발지",
-    "destination": "도착지",
-    "departureAt": "0000-00-00 00:00",
-    "arriveAt": "0000-00-00 00:00",
-    "accommodation": "숙박업소",
-    "checkInAt": null,
-    "checkOutAt": null
-  }
-]
-```
-
-#### csv
+### csv
 
 **trips.csv**
 ```csv
 id,name,startAt,endAt
-1,이름,0000-00-00,0000-00-00
-2,이름,0000-00-00,0000-00-00
+1,여행1,2023-01-01,2023-01-02
+2,여행2,2023-02-01,2013-02-02
+3,여행3,2023-03-01,2013-03-02
 ```
 
 **trip_0.csv**
 ```csv
 id,departure,destination,departureAt,arriveAt,accommodation,checkInAt,checkOutAt
-1,출발지,도착지,0000-00-00 00:00,0000-00-00 00:00,,,
-2,,,,,숙박업소,0000-00-00 00:00,0000-00-00 00:00
+1,출발지,도착지,2013-01-01T11:11,2013-01-02T11:11,,,
+2,출발지,도착지,,,숙박지,2013-01-02T11:11,2013-01-02T11:11
+3,출발지,도착지,2013-01-01T11:11,2013-01-02T11:11,숙박지,2013-01-02T11:11,2013-01-02T11:11
 ```
 
+### json
+**trips.json**
+```json
+[ {
+  "id" : 1,
+  "name" : "여행1",
+  "startAt" : "2023-01-01",
+  "endAt" : "2023-01-02"
+}, {
+  "id" : 2,
+  "name" : "여행2",
+  "startAt" : "2023-02-01",
+  "endAt" : "2023-02-02"
+}, {
+  "id" : 3,
+  "name" : "여행3",
+  "startAt" : "2023-03-01",
+  "endAt" : "2023-03-02"
+} ]
+```
+
+**trip_{id}.json**
+```json
+[ {
+  "id" : 1,
+  "departure" : "출발지",
+  "destination" : "도착지",
+  "departureAt" : "2013-01-01T11:11",
+  "arriveAt" : "2013-01-02T11:11",
+  "accommodation" : "",
+  "checkInAt" : "",
+  "checkOutAt" : ""
+}, {
+  "id" : 2,
+  "departure" : "출발지",
+  "destination" : "도착지",
+  "departureAt" : "",
+  "arriveAt" : "",
+  "accommodation" : "숙박지",
+  "checkInAt" : "2013-01-02T11:11",
+  "checkOutAt" : "2013-01-02T11:11"
+}, {
+  "id" : 1,
+  "departure" : "출발지",
+  "destination" : "도착지",
+  "departureAt" : "2013-01-01T11:11",
+  "arriveAt" : "2013-01-02T11:11",
+  "accommodation" : "숙박지",
+  "checkInAt" : "2013-01-02T11:11",
+  "checkOutAt" : "2013-01-02T11:11"
+} ]
+```

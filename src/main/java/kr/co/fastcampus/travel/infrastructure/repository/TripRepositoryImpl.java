@@ -13,6 +13,7 @@ public class TripRepositoryImpl implements TripRepository {
 
     private static final String SEQUENCE_FIELD_NAME = "trip_id";
 
+    private final ItineraryRepository itineraryRepository;
     private final TravelJsonFileManager travelJsonFileManager;
     private final TravelCsvFileManager travelCsvFileManager;
 
@@ -27,7 +28,7 @@ public class TripRepositoryImpl implements TripRepository {
     @Override
     public Optional<Trip> findById(FileType fileType, Long id) {
         Optional<Trip> findTrip = findTripById(fileType, id);
-        findTrip.ifPresent(trip -> travelCsvFileManager.findByTrip(trip)
+        findTrip.ifPresent(trip -> itineraryRepository.findByTrip(fileType, trip)
                 .forEach(trip::addItinerary)
         );
         return findTrip;

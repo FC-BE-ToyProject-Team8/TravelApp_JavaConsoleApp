@@ -59,6 +59,7 @@ public class AppConfig {
     public static TripRepository tripRepository() {
         if (TRIP_REPOSITORY == null) {
             TRIP_REPOSITORY = new TripRepositoryImpl(
+                    itineraryRepository(),
                     travelJsonFileManager(),
                     travelCsvFileManager());
         }

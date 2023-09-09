@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.LocalDateTime;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +45,9 @@ public class TravelJsonFileManager extends FileIoManager {
     }
 
     public Optional<Trip> findByTripId(Long id) {
-        return findAllTrip().stream().filter(trip -> trip.getId().equals(id)).findFirst();
+        return findAllTrip().stream()
+                .filter(trip -> trip.getId().equals(id))
+                .findFirst();
     }
 
     public List<Itinerary> findByTrip(Trip trip) {
@@ -58,16 +59,10 @@ public class TravelJsonFileManager extends FileIoManager {
 
     public Optional<Itinerary> findByItineraryId(Long id) {
         List<Trip> trips = findAllTrip();
-        for (Trip trip : trips) {
-            List<Itinerary> itineraries = findByTrip(trip);
-            Optional<Itinerary> findItinerary = itineraries.stream()
-                    .filter(itinerary -> itinerary.getId().equals(id)).findFirst();
-
-            if (findItinerary.isPresent()) {
-                return findItinerary;
-            }
-        }
-        return Optional.empty();
+        return trips.stream()
+                .flatMap(trip -> findByTrip(trip).stream())
+                .filter(itinerary -> itinerary.getId().equals(id))
+                .findFirst();
     }
 
     public void saveTripFile(Trip trip) {
@@ -149,11 +144,18 @@ public class TravelJsonFileManager extends FileIoManager {
         return Itinerary.builder().id(jsonItinerary.get("id").asLong())
                 .departure(jsonItinerary.get("departure").asText())
                 .destination(jsonItinerary.get("destination").asText())
-                .departureAt(LocalDateTime.parse(jsonItinerary.get("departureAt").asText()))
-                .arriveAt(LocalDateTime.parse(jsonItinerary.get("arriveAt").asText()))
+                .departureAt(parseLocalDateTime(jsonItinerary.get("departureAt").asText()))
+                .arriveAt(parseLocalDateTime(jsonItinerary.get("arriveAt").asText()))
                 .accommodation(jsonItinerary.get("accommodation").asText())
-                .checkInAt(LocalDateTime.parse(jsonItinerary.get("checkInAt").asText()))
-                .checkOutAt(LocalDateTime.parse(jsonItinerary.get("checkOutAt").asText())).build();
+                .checkInAt(parseLocalDateTime(jsonItinerary.get("checkInAt").asText()))
+                .checkOutAt(parseLocalDateTime(jsonItinerary.get("checkOutAt").asText())).build();
+    }
+
+    private static LocalDateTime parseLocalDateTime(String strLocalDateTime) {
+        if (strLocalDateTime.isEmpty() || strLocalDateTime.equals("null")) {
+            return null;
+        }
+        return LocalDateTime.parse(strLocalDateTime);
     }
 
     private List<Itinerary> parseItineraries(Trip trip, ArrayNode jsonItineraries) {

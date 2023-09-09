@@ -45,6 +45,7 @@ public class InputView {
             int fileNum = inputNumber("잘못된 번호입니다. 다시 입력해주세요");
             return FileType.fromNumber(fileNum);
         } catch (IllegalArgumentException e) {
+            System.out.println("잘못된 번호입니다. 다시 입력해주세요");
             return inputFileType();
         }
     }
@@ -109,6 +110,7 @@ public class InputView {
                 if (isValid.test(num)) {
                     return num;
                 }
+                throw new IllegalArgumentException();
             } catch (IllegalArgumentException e) {
                 System.out.println(errorMessage);
             }
