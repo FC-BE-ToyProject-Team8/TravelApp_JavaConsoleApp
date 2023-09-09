@@ -55,8 +55,7 @@ public class TravelController {
 
     public void saveTrip(TripSaveRequest saveRequest) {
         Trip savedTrip = tripService.saveTrip(saveRequest);
-
-        saveItineraries(savedTrip.getId(), saveRequest.itinerarySaveRequests());
+        itineraryService.saveItineraries(savedTrip.getId(), saveRequest.itinerarySaveRequests());
     }
 
     public List<ItineraryInfoResponse> getItineraryList(FileType fileType, Long tripId) {

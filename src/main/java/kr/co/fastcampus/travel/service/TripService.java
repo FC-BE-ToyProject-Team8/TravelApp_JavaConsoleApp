@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
 import kr.co.fastcampus.travel.domain.FileType;
-import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.infrastructure.repository.TripRepositoryImpl;
 import kr.co.fastcampus.travel.infrastructure.repository.file.TravelCsvFileManager;
@@ -14,19 +13,16 @@ import kr.co.fastcampus.travel.infrastructure.repository.file.TravelJsonFileMana
 public class TripService {
 
     public final TripRepositoryImpl tripRepository;
-    private final ItineraryService itineraryService;
 
     public TripService() {
         this.tripRepository = new TripRepositoryImpl(
             new TravelJsonFileManager(new ObjectMapper()),
             new TravelCsvFileManager()
         );
-        this.itineraryService = new ItineraryService();
     }
 
-    public TripService(TripRepositoryImpl tripRepository, ItineraryService itineraryService) {
+    public TripService(TripRepositoryImpl tripRepository) {
         this.tripRepository = tripRepository;
-        this.itineraryService = itineraryService;
     }
 
     public List<Trip> findAllTrips(FileType fileType) {
@@ -45,14 +41,6 @@ public class TripService {
             .endAt(saveRequest.endAt())
             .build();
 
-        Trip savedTrip = tripRepository.save(trip);
-
-        List<Itinerary> itineraries = itineraryService.saveItineraries(
-            savedTrip.getId(),
-            saveRequest.itinerarySaveRequests()
-        );
-        itineraries.forEach(trip::addItinerary);
-
-        return trip;
+        return tripRepository.save(trip);
     }
 }
