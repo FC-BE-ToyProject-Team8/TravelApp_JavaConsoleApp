@@ -395,7 +395,7 @@ id,departure,destination,departureAt,arriveAt,accommodation,checkInAt,checkOutAt
 |               | JSON파일과 CSV파일에서 각각 여행과 여정정보를 조회하는 기능이 구현되었는가|
 |               | **>>> 조회시 사용자로 하여금 FileType을 고르게 하여  JSON파일과 CSV파일에서 각각 여행과 여정정보를 조회할 수 있게 하였습니다.**|
 | 서비스 완성도       | MVC구조로 서비스가 잘 표현이 되어서 구동이 되었는가.|
-|               | **>>> MVC구조를 지키며 도메인 주도 설계(DDD)를 하였습니다.**|
+|               | **>>> Model=Domain, View=View, Controller=Controller, Service로 MVC 구조로 설계했습니다.**|
 |               | 출발지, 도착지, 출발시간, 도착시간을 조회하였을 때 조회 결과가 잘 출력이 되었는가.|
 |               | **>>> 여정 조회를 하였을 때 한 여행에 상응하는 여정들 정보(출발지, 도착지, 출발시간, 도착시간)를 잘 출력하게 하였습니다.**|
 |               | 체크인, 체크아웃 시간을 조회하였을 때 결과가 잘 출력이 되었는가.|
