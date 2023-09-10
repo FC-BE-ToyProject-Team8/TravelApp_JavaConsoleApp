@@ -46,6 +46,7 @@ public class ConsoleView {
     }
 
     private void logTrips() {
+        System.out.println("여행 기록을 시작합니다.\n");
         int order = 1;
         String willContinueStr = "y";
         while ("y".equalsIgnoreCase(willContinueStr)) {
@@ -62,8 +63,6 @@ public class ConsoleView {
     }
 
     private void logTrip() {
-        System.out.println("여행 기록을 시작합니다.\n");
-
         System.out.println("여행 이름:");
         final String name = inputView.inputNotEmptyString(
             str -> !str.contains(","),
