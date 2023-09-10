@@ -12,6 +12,7 @@ public record TripSaveRequest(
     LocalDate endAt,
     List<ItinerarySaveRequest> itinerarySaveRequests
 ) {
+
     public Trip toDomain() {
         return Trip.builder()
             .name(name)

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum FileType {
+
     CSV(1), JSON(2);
 
     private final int number;

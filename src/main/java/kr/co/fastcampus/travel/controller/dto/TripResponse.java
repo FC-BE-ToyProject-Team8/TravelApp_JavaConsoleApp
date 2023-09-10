@@ -6,9 +6,13 @@ import java.util.List;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 
-
-public record TripResponse(Long id, String name, LocalDate startAt, LocalDate endAt,
-                           List<ItineraryResponse> itineraries) {
+public record TripResponse(
+    Long id,
+    String name,
+    LocalDate startAt,
+    LocalDate endAt,
+    List<ItineraryResponse> itineraries
+) {
 
     public TripResponse(Trip trip, List<Itinerary> itineraries) {
         this(
@@ -20,7 +24,6 @@ public record TripResponse(Long id, String name, LocalDate startAt, LocalDate en
         );
     }
 
-    // Itinerary 리스트를 ItineraryResponse 리스트로 변환하는 메서드
     private static List<ItineraryResponse> convertItinerariesToItineraryResponses(
         List<Itinerary> itineraries
     ) {

@@ -26,7 +26,7 @@ public class ConsoleView {
 
     public ConsoleView() {
         travelController = AppConfig.travelController();
-        inputView = new InputView();
+        inputView = AppConfig.inputView();
     }
 
     public void process() {
@@ -96,7 +96,6 @@ public class ConsoleView {
         System.out.println("여정 기록이 완료되었습니다.\n");
     }
 
-    //logItineraries 와 logTrip메소드에서 중복 사용 되어 메소드로 빼 두었는데, 적절한 메소드 명이 필요합니다!
     private List<ItinerarySaveRequest> getItinerarySaveRequests() {
         List<ItinerarySaveRequest> itinerarySaveRequests = new ArrayList<>();
         int order = 1;
@@ -114,7 +113,6 @@ public class ConsoleView {
         }
         return itinerarySaveRequests;
     }
-
 
     private List<TripInfoResponse> getTripList(FileType fileType) {
         List<TripInfoResponse> tripInfoResponses;
@@ -137,9 +135,8 @@ public class ConsoleView {
             return null;
         }
         printShortTripInfo(tripInfoResponses);
-        return inputTripNumber(tripInfoResponses);
+        return inputView.inputTripNumber(tripInfoResponses);
     }
-
 
     private void showTrip() {
         System.out.println("여행 조회를 시작합니다.");
@@ -237,11 +234,11 @@ public class ConsoleView {
             FileType fileType = inputView.inputFileType();
             List<TripInfoResponse> trips = travelController.getTripList(fileType);
             printTripList(trips);
-            Long tripNum = inputTripNumber(trips);
+            Long tripNum = inputView.inputTripNumber(trips);
             List<ItineraryInfoResponse> itineraries = travelController.getItineraryList(fileType,
                 tripNum);
             printItineraryList(itineraries);
-            Long itineraryNum = inputItineraryNumber(itineraries);
+            Long itineraryNum = inputView.inputItineraryNumber(itineraries);
             Long itineraryIndex = itineraries.get((int) (itineraryNum - 1)).id();
             ItineraryResponse itineraryResponse = travelController.findItinerary(fileType,
                 itineraryIndex);
@@ -249,18 +246,6 @@ public class ConsoleView {
         } catch (TravelDoesNotExistException e) {
             System.out.println("등록된 여행이 없습니다. 여행을 먼저 등록해주세요.");
         }
-    }
-
-    private Long inputItineraryNumber(List<ItineraryInfoResponse> itineraries) {
-        System.out.println("조회할 여정의 번호를 입력해주세요.");
-        return (long) inputView.inputNumber("잘못된 여정 번호입니다. 다시 입력해주세요",
-            num -> num >= 1 && num <= itineraries.size());
-    }
-
-    private Long inputTripNumber(List<TripInfoResponse> trips) {
-        System.out.println("해당 여행의 번호를 입력해주세요.");
-        return (long) inputView.inputNumber("잘못된 여행 번호입니다. 다시 입력해주세요",
-            num -> num >= 1 && num <= trips.size());
     }
 
     private void printItineraryList(List<ItineraryInfoResponse> itineraries) {

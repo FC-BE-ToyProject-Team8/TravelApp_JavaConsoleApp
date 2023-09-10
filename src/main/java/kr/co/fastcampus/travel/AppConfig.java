@@ -11,6 +11,7 @@ import kr.co.fastcampus.travel.infrastructure.repository.file.TravelCsvFileManag
 import kr.co.fastcampus.travel.infrastructure.repository.file.TravelJsonFileManager;
 import kr.co.fastcampus.travel.service.ItineraryService;
 import kr.co.fastcampus.travel.service.TripService;
+import kr.co.fastcampus.travel.view.InputView;
 
 public class AppConfig {
 
@@ -22,8 +23,16 @@ public class AppConfig {
     private static TravelJsonFileManager TRAVEL_JSON_FILE_MANAGER;
     private static ObjectMapper OBJECT_MAPPER;
     private static TravelCsvFileManager TRAVEL_CSV_FILE_MANAGER;
+    private static InputView INPUT_VIEW;
 
     private AppConfig() {
+    }
+
+    public static InputView inputView() {
+        if (INPUT_VIEW == null) {
+            INPUT_VIEW = new InputView();
+        }
+        return INPUT_VIEW;
     }
 
     public static TravelController travelController() {

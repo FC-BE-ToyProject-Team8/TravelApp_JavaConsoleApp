@@ -3,7 +3,6 @@ package kr.co.fastcampus.travel.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
 import kr.co.fastcampus.travel.controller.dto.ItineraryInfoResponse;
 import kr.co.fastcampus.travel.controller.dto.ItineraryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
@@ -24,15 +23,11 @@ public class TravelController {
     private final ItineraryService itineraryService;
 
     public List<TripInfoResponse> getTripList(FileType fileType) {
-
         List<Trip> trips = tripService.findAllTrips(fileType);
-        if (trips.isEmpty()) {
-            throw new TravelDoesNotExistException();
-        }
 
         List<TripInfoResponse> tripInfoResponses = new ArrayList<>();
-        for (int i = 0; i < trips.size(); i++) {
-            TripInfoResponse tripInfoResponse = new TripInfoResponse(trips.get(i));
+        for (Trip trip : trips) {
+            TripInfoResponse tripInfoResponse = new TripInfoResponse(trip);
             tripInfoResponses.add(tripInfoResponse);
         }
 
@@ -40,12 +35,8 @@ public class TravelController {
     }
 
     public TripResponse findTrip(FileType fileType, Long id) {
-
         Trip trip = tripService.findTrip(fileType, id);
         List<Itinerary> itineraries = trip.getItineraries();
-        if (trip == null) {
-            throw new TravelDoesNotExistException();
-        }
 
         return new TripResponse(trip, itineraries);
     }
@@ -64,9 +55,6 @@ public class TravelController {
 
     public ItineraryResponse findItinerary(FileType fileType, Long id) {
         Itinerary response = itineraryService.findItinerary(fileType, id);
-        if (response == null) {
-            throw new TravelDoesNotExistException();
-        }
         return new ItineraryResponse(response);
     }
 

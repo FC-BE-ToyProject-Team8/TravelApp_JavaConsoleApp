@@ -6,14 +6,15 @@ import kr.co.fastcampus.travel.domain.Itinerary;
 import lombok.Builder;
 
 @Builder
-public record ItineraryResponse(Long id,
-                                String departure,
-                                String destination,
-                                LocalDateTime departureAt,
-                                LocalDateTime arriveAt,
-                                String accommodation,
-                                LocalDateTime checkInAt,
-                                LocalDateTime checkOutAt
+public record ItineraryResponse(
+    Long id,
+    String departure,
+    String destination,
+    LocalDateTime departureAt,
+    LocalDateTime arriveAt,
+    String accommodation,
+    LocalDateTime checkInAt,
+    LocalDateTime checkOutAt
 ) {
 
     public ItineraryResponse(Itinerary itinerary) {

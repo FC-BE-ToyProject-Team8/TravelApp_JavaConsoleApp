@@ -8,16 +8,32 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import kr.co.fastcampus.travel.controller.dto.ItineraryInfoResponse;
+import kr.co.fastcampus.travel.controller.dto.TripInfoResponse;
 import kr.co.fastcampus.travel.view.enums.FileType;
 import kr.co.fastcampus.travel.view.enums.Menu;
 
 public class InputView {
+
     private final BufferedReader br;
 
     public InputView() {
         this.br = new BufferedReader(new InputStreamReader(System.in));
+    }
+
+    public Long inputItineraryNumber(List<ItineraryInfoResponse> itineraries) {
+        System.out.println("조회할 여정의 번호를 입력해주세요.");
+        return (long) inputNumber("잘못된 여정 번호입니다. 다시 입력해주세요",
+            num -> num >= 1 && num <= itineraries.size());
+    }
+
+    public Long inputTripNumber(List<TripInfoResponse> trips) {
+        System.out.println("해당 여행의 번호를 입력해주세요.");
+        return (long) inputNumber("잘못된 여행 번호입니다. 다시 입력해주세요",
+            num -> num >= 1 && num <= trips.size());
     }
 
     public LocalDateTime inputDateTime() {
@@ -135,7 +151,7 @@ public class InputView {
         }
     }
 
-    public int parseInt(String strNum) {
+    private int parseInt(String strNum) {
         try {
             return Integer.parseInt(strNum);
         } catch (NumberFormatException e) {
@@ -143,7 +159,7 @@ public class InputView {
         }
     }
 
-    public String readLine() {
+    private String readLine() {
         try {
             return br.readLine();
         } catch (IOException e) {

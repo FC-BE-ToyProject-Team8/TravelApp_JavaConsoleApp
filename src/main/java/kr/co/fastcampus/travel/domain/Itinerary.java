@@ -15,7 +15,6 @@ public class Itinerary {
     private Long id;
     private Route route;
     private Lodge lodge;
-
     private Trip trip;
 
     @Builder
