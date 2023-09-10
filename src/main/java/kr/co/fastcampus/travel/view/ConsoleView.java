@@ -52,7 +52,7 @@ public class ConsoleView {
             System.out.printf("[%d번째 여행]\n", order);
             logTrip();
 
-            System.out.println("\n여행 기록을 계속하시겠습니까? (y/n)");
+            System.out.println("\n여행 기록을 계속하시겠습니까? (Y/N)");
             willContinueStr = inputView.inputNotEmptyString();
 
             System.out.println();
@@ -100,9 +100,6 @@ public class ConsoleView {
     private List<ItinerarySaveRequest> getItinerarySaveRequests() {
         List<ItinerarySaveRequest> itinerarySaveRequests = new ArrayList<>();
         int order = 1;
-
-        System.out.println("\n여행에 대한 여정 기록을 시작합니다.\n");
-
         String willContinueStr = "y";
         while ("y".equalsIgnoreCase(willContinueStr)) {
             ItinerarySaveRequest itinerarySaveRequest = logOneItinerary(order);
@@ -145,7 +142,7 @@ public class ConsoleView {
 
 
     private void showTrip() {
-        System.out.print("조회할 파일 형식을 선택해주세요. (1. CSV / 2. JSON)");
+        System.out.println("조회할 파일 형식을 선택해주세요. (1. CSV / 2. JSON)");
         FileType fileType = inputView.inputFileType();
         Long travelId = getTripId(fileType);
         if (travelId == null) {
@@ -234,7 +231,8 @@ public class ConsoleView {
     private void showItinerary() {
         try {
             System.out.println("여정 조회를 시작합니다.");
-            System.out.print("조회할 파일 형식을 선택해주세요. (1. CSV / 2. JSON)");
+            System.out.println("여정을 조회하기 위해서 먼저 해당 여행을 조회하겠습니다.");
+            System.out.println("조회할 파일 형식을 선택해주세요. (1. CSV / 2. JSON)");
             FileType fileType = inputView.inputFileType();
             List<TripInfoResponse> trips = travelController.getTripList(fileType);
             printTripList(trips);
@@ -267,7 +265,7 @@ public class ConsoleView {
     private void printItineraryList(List<ItineraryInfoResponse> itineraries) {
         System.out.println("여정 목록");
         for (int i = 0; i < itineraries.size(); i++) {
-            System.out.printf("%d: %s ~ %s%n", i + 1,
+            System.out.printf("%d: %s -> %s%n", i + 1,
                 itineraries.get(i).departure(), itineraries.get(i).destination());
         }
     }
