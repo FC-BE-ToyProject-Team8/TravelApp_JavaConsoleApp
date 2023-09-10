@@ -88,6 +88,7 @@ public class ConsoleView {
     }
 
     private void logItineraries() {
+        System.out.println("\n여정을 추가 기록할 여행을 먼저 선택해야 합니다.\n");
         Long tripId = getTripId();
         System.out.println("\n여행에 대한 여정 기록을 시작합니다.\n");
 
@@ -142,6 +143,7 @@ public class ConsoleView {
 
 
     private void showTrip() {
+        System.out.println("여행 조회를 시작합니다.");
         System.out.println("조회할 파일 형식을 선택해주세요. (1. CSV / 2. JSON)");
         FileType fileType = inputView.inputFileType();
         Long travelId = getTripId(fileType);
@@ -257,7 +259,7 @@ public class ConsoleView {
     }
 
     private Long inputTripNumber(List<TripInfoResponse> trips) {
-        System.out.println("조회할 여행의 번호를 입력해주세요.");
+        System.out.println("해당 여행의 번호를 입력해주세요.");
         return (long) inputView.inputNumber("잘못된 여행 번호입니다. 다시 입력해주세요",
             num -> num >= 1 && num <= trips.size());
     }
