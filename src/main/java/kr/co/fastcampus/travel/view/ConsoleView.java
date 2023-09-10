@@ -48,14 +48,15 @@ public class ConsoleView {
     private void logTrips() {
         System.out.println("여행 기록을 시작합니다.\n");
         int order = 1;
-        String willContinueStr = "y";
-        while ("y".equalsIgnoreCase(willContinueStr)) {
+        String willContinueTripStr = "y";
+        while ("y".equalsIgnoreCase(willContinueTripStr)) {
             System.out.printf("[%d번째 여행]\n", order);
             logTrip();
 
             System.out.println("\n여행 기록을 계속하시겠습니까? (Y/N)");
-            willContinueStr = inputView.inputNotEmptyString();
-
+            willContinueTripStr = inputView.inputNotEmptyString(
+                    input -> input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n"),
+                    "Y(y) 또는 N(n) 중 하나를 입력해주세요.");
             System.out.println();
             order++;
         }
