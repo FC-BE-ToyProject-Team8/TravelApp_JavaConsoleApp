@@ -58,6 +58,7 @@ public class ConsoleView {
             System.out.println();
             order++;
         }
+        System.out.println("여행 및 여정 기록이 완료되었습니다.\n");
     }
 
     private void logTrip() {
@@ -84,7 +85,6 @@ public class ConsoleView {
             .build();
 
         travelController.saveTrip(tripSaveRequest);
-        System.out.println("여행 및 여정 기록이 완료되었습니다.");
     }
 
     private void logItineraries() {
@@ -93,7 +93,7 @@ public class ConsoleView {
 
         List<ItinerarySaveRequest> itinerarySaveRequests = getItinerarySaveRequests();
         travelController.saveItineraries(tripId, itinerarySaveRequests);
-        System.out.println("여행 및 여정 기록이 완료되었습니다.");
+        System.out.println("여정 기록이 완료되었습니다.\n");
     }
 
     //logItineraries 와 logTrip메소드에서 중복 사용 되어 메소드로 빼 두었는데, 적절한 메소드 명이 필요합니다!
