@@ -51,11 +51,14 @@ public class InputView {
     }
 
     public Menu inputMenu() {
-        System.out.println("[메뉴]");
+        System.out.println("-------------------------------------------------------");
+        System.out.println("         # 여행 여정을 기록과 관리하는 SNS 서비스 #");
+        System.out.println("                      * 메뉴 *");
         System.out.println(Arrays.stream(Menu.values())
-            .map(menu -> String.format("%d: %s", menu.getNumber(), menu.getName()))
-            .collect(Collectors.joining(", ")));
-
+            .map(menu -> String.format("%s(%d)", menu.getName(), menu.getNumber()))
+            .collect(Collectors.joining(" | ")));
+        System.out.println("\n        @패스트캠퍼스X야놀자 : 백엔드 개발 부트 캠프");
+        System.out.println("-------------------------------------------------------");
         System.out.println("\n메뉴 번호를 입력해주세요");
 
         while (true) {
