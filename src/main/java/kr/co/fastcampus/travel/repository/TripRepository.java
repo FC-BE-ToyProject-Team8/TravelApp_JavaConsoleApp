@@ -1,4 +1,4 @@
-package kr.co.fastcampus.travel.infrastructure.repository;
+package kr.co.fastcampus.travel.repository;
 
 import java.util.List;
 import java.util.Optional;

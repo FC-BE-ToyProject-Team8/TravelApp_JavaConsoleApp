@@ -5,7 +5,7 @@ import java.util.Optional;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
 import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
 import kr.co.fastcampus.travel.domain.Trip;
-import kr.co.fastcampus.travel.infrastructure.repository.TripRepository;
+import kr.co.fastcampus.travel.repository.TripRepository;
 import kr.co.fastcampus.travel.view.enums.FileType;
 import lombok.RequiredArgsConstructor;
 
