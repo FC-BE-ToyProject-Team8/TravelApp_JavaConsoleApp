@@ -2,20 +2,22 @@ package kr.co.fastcampus.travel.controller.dto;
 
 import java.time.LocalDate;
 import kr.co.fastcampus.travel.domain.Trip;
+import lombok.Builder;
 
+@Builder
 public record TripInfoResponse(
-    Long id,
-    String name,
-    LocalDate startAt,
-    LocalDate endAt
+        Long id,
+        String name,
+        LocalDate startAt,
+        LocalDate endAt
 ) {
 
-    public TripInfoResponse(Trip trip) {
-        this(
-            trip.getId(),
-            trip.getName(),
-            trip.getStartAt(),
-            trip.getEndAt()
-        );
+    public static TripInfoResponse of(Trip trip) {
+        return TripInfoResponse.builder()
+                .id(trip.getId())
+                .name(trip.getName())
+                .startAt(trip.getStartAt())
+                .endAt(trip.getEndAt())
+                .build();
     }
 }

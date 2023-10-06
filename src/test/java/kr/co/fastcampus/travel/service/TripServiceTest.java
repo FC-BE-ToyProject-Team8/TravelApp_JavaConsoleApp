@@ -36,11 +36,12 @@ class TripServiceTest {
     @DisplayName("여행 저장")
     void saveTrip() {
         // given
-        TripSaveRequest request = TripSaveRequest.builder()
-                .name(TRIP_NAME)
-                .startAt(TODAY)
-                .endAt(TODAY.plusDays(3))
-                .build();
+        TripSaveRequest request = new TripSaveRequest(
+                TRIP_NAME,
+                TODAY,
+                TODAY.plusDays(3),
+                List.of()
+        );
 
         // when
         Trip result = tripService.saveTrip(request);

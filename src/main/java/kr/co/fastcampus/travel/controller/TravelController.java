@@ -1,6 +1,5 @@
 package kr.co.fastcampus.travel.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import kr.co.fastcampus.travel.controller.dto.ItineraryInfoResponse;
@@ -24,41 +23,34 @@ public class TravelController {
 
     public List<TripInfoResponse> getTripList(FileType fileType) {
         List<Trip> trips = tripService.findAllTrips(fileType);
-
-        List<TripInfoResponse> tripInfoResponses = new ArrayList<>();
-        for (Trip trip : trips) {
-            TripInfoResponse tripInfoResponse = new TripInfoResponse(trip);
-            tripInfoResponses.add(tripInfoResponse);
-        }
-
-        return tripInfoResponses;
+        return trips.stream()
+                .map(TripInfoResponse::of)
+                .collect(Collectors.toList());
     }
 
     public TripResponse findTrip(FileType fileType, Long id) {
         Trip trip = tripService.findTrip(fileType, id);
-        List<Itinerary> itineraries = trip.getItineraries();
-
-        return new TripResponse(trip, itineraries);
+        return TripResponse.of(trip);
     }
 
-    public void saveTrip(TripSaveRequest saveRequest) {
-        Trip savedTrip = tripService.saveTrip(saveRequest);
-        itineraryService.saveItineraries(savedTrip.getId(), saveRequest.itinerarySaveRequests());
+    public void saveTrip(TripSaveRequest request) {
+        Trip savedTrip = tripService.saveTrip(request);
+        itineraryService.saveItineraries(savedTrip.getId(), request.itinerarySaveRequests());
     }
 
     public List<ItineraryInfoResponse> getItineraryList(FileType fileType, Long tripId) {
-        List<Itinerary> response = itineraryService.findItineraries(fileType, tripId);
-        return response.stream()
-                .map(ItineraryInfoResponse::new)
+        List<Itinerary> itineraries = itineraryService.findItineraries(fileType, tripId);
+        return itineraries.stream()
+                .map(ItineraryInfoResponse::of)
                 .collect(Collectors.toList());
     }
 
     public ItineraryResponse findItinerary(FileType fileType, Long id) {
-        Itinerary response = itineraryService.findItinerary(fileType, id);
-        return new ItineraryResponse(response);
+        Itinerary itinerary = itineraryService.findItinerary(fileType, id);
+        return ItineraryResponse.of(itinerary);
     }
 
-    public void saveItineraries(Long tripId, List<ItinerarySaveRequest> saveRequests) {
-        itineraryService.saveItineraries(tripId, saveRequests);
+    public void saveItineraries(Long tripId, List<ItinerarySaveRequest> request) {
+        itineraryService.saveItineraries(tripId, request);
     }
 }

@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TripService {
 
-    public final TripRepository tripRepository;
+    private final TripRepository tripRepository;
 
     public List<Trip> findAllTrips(FileType fileType) {
         List<Trip> trips = tripRepository.findAll(fileType);

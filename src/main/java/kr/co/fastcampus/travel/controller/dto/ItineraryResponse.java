@@ -7,26 +7,26 @@ import lombok.Builder;
 
 @Builder
 public record ItineraryResponse(
-    Long id,
-    String departure,
-    String destination,
-    LocalDateTime departureAt,
-    LocalDateTime arriveAt,
-    String accommodation,
-    LocalDateTime checkInAt,
-    LocalDateTime checkOutAt
+        Long id,
+        String departure,
+        String destination,
+        LocalDateTime departureAt,
+        LocalDateTime arriveAt,
+        String accommodation,
+        LocalDateTime checkInAt,
+        LocalDateTime checkOutAt
 ) {
 
-    public ItineraryResponse(Itinerary itinerary) {
-        this(
-            itinerary.getId(),
-            itinerary.getRoute().getDeparture(),
-            itinerary.getRoute().getDestination(),
-            itinerary.getRoute().getDepartureAt(),
-            itinerary.getRoute().getArriveAt(),
-            itinerary.getLodge().getAccommodation(),
-            itinerary.getLodge().getCheckInAt(),
-            itinerary.getLodge().getCheckOutAt()
-        );
+    public static ItineraryResponse of(Itinerary itinerary) {
+        return ItineraryResponse.builder()
+                .id(itinerary.getId())
+                .departure(itinerary.getRoute().getDeparture())
+                .destination(itinerary.getRoute().getDestination())
+                .departureAt(itinerary.getRoute().getDepartureAt())
+                .arriveAt(itinerary.getRoute().getArriveAt())
+                .accommodation(itinerary.getLodge().getAccommodation())
+                .checkInAt(itinerary.getLodge().getCheckInAt())
+                .checkOutAt(itinerary.getLodge().getCheckOutAt())
+                .build();
     }
 }

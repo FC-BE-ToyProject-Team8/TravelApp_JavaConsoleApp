@@ -77,12 +77,12 @@ public class ConsoleView {
         final LocalDate endAt = inputView.inputDate();
 
         List<ItinerarySaveRequest> itinerarySaveRequests = getItinerarySaveRequests();
-        TripSaveRequest tripSaveRequest = TripSaveRequest.builder()
-            .name(name)
-            .startAt(startAt)
-            .endAt(endAt)
-            .itinerarySaveRequests(itinerarySaveRequests)
-            .build();
+        TripSaveRequest tripSaveRequest = new TripSaveRequest(
+                name,
+                startAt,
+                endAt,
+                itinerarySaveRequests
+        );
 
         travelController.saveTrip(tripSaveRequest);
     }
