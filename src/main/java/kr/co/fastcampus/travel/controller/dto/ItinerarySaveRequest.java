@@ -2,7 +2,6 @@ package kr.co.fastcampus.travel.controller.dto;
 
 import java.time.LocalDateTime;
 import kr.co.fastcampus.travel.domain.Itinerary;
-import kr.co.fastcampus.travel.domain.Trip;
 import lombok.Builder;
 
 @Builder
@@ -16,9 +15,8 @@ public record ItinerarySaveRequest(
         LocalDateTime checkOutAt
 ) {
 
-    public Itinerary toDomain(Trip trip) {
+    public Itinerary toDomain() {
         return Itinerary.builder()
-                .trip(trip)
                 .departure(departure)
                 .destination(destination)
                 .departureAt(departureAt)

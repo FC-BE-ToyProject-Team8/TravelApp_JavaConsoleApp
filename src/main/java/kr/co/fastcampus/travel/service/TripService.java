@@ -1,9 +1,7 @@
 package kr.co.fastcampus.travel.service;
 
 import java.util.List;
-import java.util.Optional;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
-import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.repository.TripRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +21,13 @@ public class TripService {
     }
 
     public Trip findTrip(Long id) {
-        Optional<Trip> trip = tripRepository.findById(id);
-        return trip.orElseThrow(TravelDoesNotExistException::new);
+        return tripRepository.findById(id)
+                .orElseThrow(TravelDoesNotExistException::new);
     }
 
-    public Trip saveTrip(TripSaveRequest saveRequest) {
-        Trip trip = saveRequest.toDomain();
+    public Trip saveTrip(Trip trip) {
         trip = tripRepository.save(trip);
-        itineraryService.saveItineraries(trip, saveRequest.itinerarySaveRequests());
+        itineraryService.saveItineraries(trip, trip.getItineraries());
         return trip;
     }
 }

@@ -33,7 +33,7 @@ public class TravelController {
     }
 
     public void saveTrip(TripSaveRequest request) {
-        tripService.saveTrip(request);
+        tripService.saveTrip(request.toDomain());
     }
 
     public List<ItineraryInfoResponse> getItineraryList(Long tripId) {
@@ -49,8 +49,11 @@ public class TravelController {
         return ItineraryResponse.of(itinerary);
     }
 
-    public void saveItineraries(Long tripId, List<ItinerarySaveRequest> request) {
+    public void saveItineraries(Long tripId, List<ItinerarySaveRequest> requests) {
         Trip trip = tripService.findTrip(tripId);
-        itineraryService.saveItineraries(trip, request);
+        List<Itinerary> itineraries = requests.stream()
+                .map(ItinerarySaveRequest::toDomain)
+                .collect(Collectors.toList());
+        itineraryService.saveItineraries(trip, itineraries);
     }
 }

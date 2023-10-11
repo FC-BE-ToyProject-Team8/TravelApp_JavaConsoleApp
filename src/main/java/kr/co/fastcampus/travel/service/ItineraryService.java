@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
-import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.repository.ItineraryRepository;
@@ -26,11 +25,11 @@ public class ItineraryService {
 
     public List<Itinerary> saveItineraries(
             Trip trip,
-            List<ItinerarySaveRequest> itinerarySaveRequests
+            List<Itinerary> itineraries
     ) {
-        return itinerarySaveRequests.stream()
-                .map(request -> {
-                    Itinerary itinerary = request.toDomain(trip);
+        return itineraries.stream()
+                .map(itinerary -> {
+                    itinerary.setTrip(trip);
                     return itineraryRepository.save(itinerary);
                 })
                 .collect(Collectors.toList());

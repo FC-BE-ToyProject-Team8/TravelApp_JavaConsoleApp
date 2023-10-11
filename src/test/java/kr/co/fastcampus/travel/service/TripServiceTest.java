@@ -1,7 +1,5 @@
 package kr.co.fastcampus.travel.service;
 
-import static kr.co.fastcampus.travel.common.TripUtils.TODAY;
-import static kr.co.fastcampus.travel.common.TripUtils.TRIP_NAME;
 import static kr.co.fastcampus.travel.common.TripUtils.assertEqualsTrip;
 import static kr.co.fastcampus.travel.common.TripUtils.createTrip;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -10,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.List;
 import java.util.stream.IntStream;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
-import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.mock.FakeItineraryRepository;
 import kr.co.fastcampus.travel.mock.FakeTripRepository;
@@ -35,15 +32,10 @@ class TripServiceTest {
     @DisplayName("여행 저장")
     void saveTrip() {
         // given
-        TripSaveRequest request = new TripSaveRequest(
-                TRIP_NAME,
-                TODAY,
-                TODAY.plusDays(3),
-                List.of()
-        );
+        Trip trip = createTrip(0);
 
         // when
-        Trip result = tripService.saveTrip(request);
+        Trip result = tripService.saveTrip(trip);
 
         // then
         assertEquals(0L, result.getId());

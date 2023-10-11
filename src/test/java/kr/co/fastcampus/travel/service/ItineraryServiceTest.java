@@ -8,9 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.IntStream;
-import kr.co.fastcampus.travel.common.ItineraryUtils;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
-import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.mock.FakeItineraryRepository;
@@ -47,12 +45,12 @@ class ItineraryServiceTest {
     @DisplayName("여정 저장")
     void saveItinerary() {
         // given
-        List<ItinerarySaveRequest> request = IntStream.range(0, 3)
-                .mapToObj(ItineraryUtils::createItinerarySaveRequest)
+        List<Itinerary> itineraries = IntStream.range(0, 3)
+                .mapToObj(i -> createItinerary(i, trip))
                 .toList();
 
         // when
-        List<Itinerary> result = itineraryService.saveItineraries(trip, request);
+        List<Itinerary> result = itineraryService.saveItineraries(trip, itineraries);
 
         // then
         assertEquals(3, result.size());
