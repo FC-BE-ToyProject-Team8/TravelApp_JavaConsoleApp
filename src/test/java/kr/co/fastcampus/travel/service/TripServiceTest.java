@@ -1,11 +1,13 @@
 package kr.co.fastcampus.travel.service;
 
+import static kr.co.fastcampus.travel.common.TripUtils.TODAY;
+import static kr.co.fastcampus.travel.common.TripUtils.TRIP_NAME;
+import static kr.co.fastcampus.travel.common.TripUtils.assertEqualsTrip;
+import static kr.co.fastcampus.travel.common.TripUtils.createTrip;
 import static kr.co.fastcampus.travel.view.enums.FileType.CSV;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.IntStream;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
@@ -19,9 +21,6 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("여행 서비스 테스트")
 class TripServiceTest {
-
-    public static final String TRIP_NAME = "여행";
-    public static final LocalDate TODAY = LocalDate.now();
 
     private TripRepository tripRepository;
     private TripService tripService;
@@ -90,25 +89,8 @@ class TripServiceTest {
         assertEqualsTrip(0, result);
     }
 
-    private void assertEqualsTrip(int index, Trip result) {
-        assertAll(
-                () -> assertEquals(index, result.getId()),
-                () -> assertEquals(TRIP_NAME + index, result.getName()),
-                () -> assertEquals(TODAY.plusDays(index), result.getStartAt()),
-                () -> assertEquals(TODAY.plusDays(index + 3), result.getEndAt())
-        );
-    }
-
     private void saveTrip(int index) {
         Trip trip = createTrip(index);
         tripRepository.save(trip);
-    }
-
-    private Trip createTrip(int index) {
-        return Trip.builder()
-                .name(TRIP_NAME + index)
-                .startAt(TODAY.plusDays(index))
-                .endAt(TODAY.plusDays(index + 3))
-                .build();
     }
 }
