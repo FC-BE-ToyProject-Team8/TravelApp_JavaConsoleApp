@@ -44,14 +44,14 @@ public class AppConfig {
 
     public static TripService tripService() {
         if (TRIP_SERVICE == null) {
-            TRIP_SERVICE = new TripService(tripRepository());
+            TRIP_SERVICE = new TripService(itineraryService(), tripRepository());
         }
         return TRIP_SERVICE;
     }
 
     public static ItineraryService itineraryService() {
         if (ITINERARY_SERVICE == null) {
-            ITINERARY_SERVICE = new ItineraryService(tripService(), itineraryRepository());
+            ITINERARY_SERVICE = new ItineraryService(itineraryRepository());
         }
         return ITINERARY_SERVICE;
     }

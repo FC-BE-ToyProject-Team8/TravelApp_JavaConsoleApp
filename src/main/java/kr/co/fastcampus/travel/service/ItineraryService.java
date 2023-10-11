@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ItineraryService {
 
-    private final TripService tripService;
     private final ItineraryRepository itineraryRepository;
 
     public Itinerary findItinerary(FileType fileType, Long id) {
@@ -22,16 +21,14 @@ public class ItineraryService {
         return response.orElseThrow(TravelDoesNotExistException::new);
     }
 
-    public List<Itinerary> findItineraries(FileType fileType, Long tripId) {
-        Trip trip = tripService.findTrip(fileType, tripId);
+    public List<Itinerary> findItineraries(FileType fileType, Trip trip) {
         return itineraryRepository.findByTrip(fileType, trip);
     }
 
     public List<Itinerary> saveItineraries(
-            Long tripId,
+            Trip trip,
             List<ItinerarySaveRequest> itinerarySaveRequests
     ) {
-        Trip trip = tripService.findTrip(FileType.CSV, tripId);
         return itinerarySaveRequests.stream()
                 .map(request -> {
                     Itinerary itinerary = request.toDomain(trip);

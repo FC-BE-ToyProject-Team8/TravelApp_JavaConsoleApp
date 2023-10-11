@@ -34,9 +34,8 @@ class ItineraryServiceTest {
     @BeforeEach
     void setup() {
         FakeTripRepository tripRepository = new FakeTripRepository();
-        TripService tripService = new TripService(tripRepository);
         itineraryRepository = new FakeItineraryRepository();
-        itineraryService = new ItineraryService(tripService, itineraryRepository);
+        itineraryService = new ItineraryService(itineraryRepository);
 
         trip = tripRepository.save(Trip.builder()
                 .name("여행")
@@ -54,7 +53,7 @@ class ItineraryServiceTest {
                 .toList();
 
         // when
-        List<Itinerary> result = itineraryService.saveItineraries(trip.getId(), request);
+        List<Itinerary> result = itineraryService.saveItineraries(trip, request);
 
         // then
         assertEquals(3, result.size());
@@ -95,7 +94,7 @@ class ItineraryServiceTest {
                 .forEach(this::saveItinerary);
 
         // when
-        List<Itinerary> result = itineraryService.findItineraries(CSV, trip.getId());
+        List<Itinerary> result = itineraryService.findItineraries(CSV, trip);
 
         // then
         assertEquals(size, result.size());

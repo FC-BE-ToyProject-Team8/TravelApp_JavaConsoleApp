@@ -48,12 +48,9 @@ class TravelControllerTest {
     void setup() {
         tripRepository = new FakeTripRepository();
         itineraryRepository = new FakeItineraryRepository();
-        
-        TripService tripService = new TripService(tripRepository);
-        travelController = new TravelController(
-                tripService, 
-                new ItineraryService(tripService, itineraryRepository)
-        );
+        ItineraryService itineraryService = new ItineraryService(itineraryRepository);
+        TripService tripService = new TripService(itineraryService, tripRepository);
+        travelController = new TravelController(tripService, itineraryService);
 
         trip = tripRepository.save(createTrip(0));
     }

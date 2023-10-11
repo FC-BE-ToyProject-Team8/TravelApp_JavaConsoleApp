@@ -13,6 +13,7 @@ import java.util.stream.IntStream;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
 import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
 import kr.co.fastcampus.travel.domain.Trip;
+import kr.co.fastcampus.travel.mock.FakeItineraryRepository;
 import kr.co.fastcampus.travel.mock.FakeTripRepository;
 import kr.co.fastcampus.travel.repository.TripRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +29,7 @@ class TripServiceTest {
     @BeforeEach
     void setup() {
         tripRepository = new FakeTripRepository();
-        tripService = new TripService(tripRepository);
+        tripService = new TripService(new ItineraryService(new FakeItineraryRepository()), tripRepository);
     }
 
     @Test

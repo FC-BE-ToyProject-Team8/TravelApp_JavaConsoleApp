@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TripService {
 
+    private final ItineraryService itineraryService;
     private final TripRepository tripRepository;
 
     public List<Trip> findAllTrips(FileType fileType) {
@@ -29,6 +30,8 @@ public class TripService {
 
     public Trip saveTrip(TripSaveRequest saveRequest) {
         Trip trip = saveRequest.toDomain();
-        return tripRepository.save(trip);
+        trip = tripRepository.save(trip);
+        itineraryService.saveItineraries(trip, saveRequest.itinerarySaveRequests());
+        return trip;
     }
 }

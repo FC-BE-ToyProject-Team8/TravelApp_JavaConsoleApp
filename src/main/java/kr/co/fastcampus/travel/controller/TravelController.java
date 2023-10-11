@@ -34,12 +34,12 @@ public class TravelController {
     }
 
     public void saveTrip(TripSaveRequest request) {
-        Trip savedTrip = tripService.saveTrip(request);
-        itineraryService.saveItineraries(savedTrip.getId(), request.itinerarySaveRequests());
+        tripService.saveTrip(request);
     }
 
     public List<ItineraryInfoResponse> getItineraryList(FileType fileType, Long tripId) {
-        List<Itinerary> itineraries = itineraryService.findItineraries(fileType, tripId);
+        Trip trip = tripService.findTrip(fileType, tripId);
+        List<Itinerary> itineraries = itineraryService.findItineraries(fileType, trip);
         return itineraries.stream()
                 .map(ItineraryInfoResponse::of)
                 .collect(Collectors.toList());
@@ -51,6 +51,7 @@ public class TravelController {
     }
 
     public void saveItineraries(Long tripId, List<ItinerarySaveRequest> request) {
-        itineraryService.saveItineraries(tripId, request);
+        Trip trip = tripService.findTrip(FileType.CSV, tripId);
+        itineraryService.saveItineraries(trip, request);
     }
 }
