@@ -8,7 +8,6 @@ import static kr.co.fastcampus.travel.common.ItineraryUtils.createItinerary;
 import static kr.co.fastcampus.travel.common.TripUtils.TODAY;
 import static kr.co.fastcampus.travel.common.TripUtils.TRIP_NAME;
 import static kr.co.fastcampus.travel.common.TripUtils.createTrip;
-import static kr.co.fastcampus.travel.view.enums.FileType.CSV;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -72,10 +71,10 @@ class TravelControllerTest {
         travelController.saveTrip(request);
 
         // then
-        Trip findTrip = tripRepository.findById(CSV, 1L)
+        Trip findTrip = tripRepository.findById(1L)
                 .orElse(null);
         assertNotNull(findTrip);
-        List<Itinerary> findItineraries = itineraryRepository.findByTrip(CSV, findTrip);
+        List<Itinerary> findItineraries = itineraryRepository.findByTrip(findTrip);
         assertEquals(3, findItineraries.size());
     }
 
@@ -87,7 +86,7 @@ class TravelControllerTest {
                 .forEach(this::saveTrip);
 
         // when
-        List<TripInfoResponse> result = travelController.getTripList(CSV);
+        List<TripInfoResponse> result = travelController.getTripList();
 
         // then
         assertEquals(4, result.size());
@@ -96,9 +95,8 @@ class TravelControllerTest {
     @Test
     @DisplayName("여행 단건 조회")
     void findTrip() {
-        // given
         // when
-        TripResponse result = travelController.findTrip(CSV, trip.getId());
+        TripResponse result = travelController.findTrip(trip.getId());
 
         // then
         assertAll(
@@ -121,7 +119,7 @@ class TravelControllerTest {
         travelController.saveItineraries(trip.getId(), request);
 
         // then
-        List<Itinerary> findItineraries = itineraryRepository.findByTrip(CSV, trip);
+        List<Itinerary> findItineraries = itineraryRepository.findByTrip(trip);
         assertEquals(3, findItineraries.size());
     }
 
@@ -133,7 +131,7 @@ class TravelControllerTest {
                 .forEach(this::saveItinerary);
 
         // when
-        List<ItineraryInfoResponse> result = travelController.getItineraryList(CSV, trip.getId());
+        List<ItineraryInfoResponse> result = travelController.getItineraryList(trip.getId());
 
         // then
         assertEquals(3, result.size());
@@ -146,7 +144,7 @@ class TravelControllerTest {
         saveItinerary(0);
 
         // when
-        ItineraryResponse result = travelController.findItinerary(CSV, 0L);
+        ItineraryResponse result = travelController.findItinerary(0L);
 
         // then
         assertAll(

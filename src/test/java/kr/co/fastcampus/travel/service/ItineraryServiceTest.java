@@ -2,7 +2,6 @@ package kr.co.fastcampus.travel.service;
 
 import static kr.co.fastcampus.travel.common.ItineraryUtils.assertEqualsItinerary;
 import static kr.co.fastcampus.travel.common.ItineraryUtils.createItinerary;
-import static kr.co.fastcampus.travel.view.enums.FileType.CSV;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -68,7 +67,7 @@ class ItineraryServiceTest {
         // then
         assertThrows(
                 TravelDoesNotExistException.class,
-                () -> itineraryService.findItinerary(CSV, 0L)
+                () -> itineraryService.findItinerary(0L)
         );
     }
 
@@ -79,7 +78,7 @@ class ItineraryServiceTest {
         saveItinerary(0);
 
         // when
-        Itinerary result = itineraryService.findItinerary(CSV, 0L);
+        Itinerary result = itineraryService.findItinerary(0L);
 
         // then
         assertEqualsItinerary(0, result);
@@ -94,7 +93,7 @@ class ItineraryServiceTest {
                 .forEach(this::saveItinerary);
 
         // when
-        List<Itinerary> result = itineraryService.findItineraries(CSV, trip);
+        List<Itinerary> result = itineraryService.findItineraries(trip);
 
         // then
         assertEquals(size, result.size());

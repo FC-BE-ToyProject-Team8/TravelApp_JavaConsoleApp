@@ -6,7 +6,6 @@ import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.repository.file.TravelCsvFileManager;
 import kr.co.fastcampus.travel.repository.file.TravelJsonFileManager;
-import kr.co.fastcampus.travel.view.enums.FileType;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -18,18 +17,12 @@ public class ItineraryRepositoryImpl implements ItineraryRepository {
     private final TravelCsvFileManager travelCsvFileManager;
 
     @Override
-    public List<Itinerary> findByTrip(FileType fileType, Trip trip) {
-        if (fileType == FileType.CSV) {
-            return travelCsvFileManager.findByTrip(trip);
-        }
+    public List<Itinerary> findByTrip(Trip trip) {
         return travelJsonFileManager.findByTrip(trip);
     }
 
     @Override
-    public Optional<Itinerary> findById(FileType fileType, Long id) {
-        if (fileType == FileType.CSV) {
-            return travelCsvFileManager.findByItineraryId(id);
-        }
+    public Optional<Itinerary> findById(Long id) {
         return travelJsonFileManager.findByItineraryId(id);
     }
 

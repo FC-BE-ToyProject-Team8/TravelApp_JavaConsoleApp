@@ -4,7 +4,6 @@ import static kr.co.fastcampus.travel.common.TripUtils.TODAY;
 import static kr.co.fastcampus.travel.common.TripUtils.TRIP_NAME;
 import static kr.co.fastcampus.travel.common.TripUtils.assertEqualsTrip;
 import static kr.co.fastcampus.travel.common.TripUtils.createTrip;
-import static kr.co.fastcampus.travel.view.enums.FileType.CSV;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -58,7 +57,7 @@ class TripServiceTest {
                 .forEach(this::saveTrip);
 
         // when
-        List<Trip> result = tripService.findAllTrips(CSV);
+        List<Trip> result = tripService.findAllTrips();
 
         // then
         assertEquals(3, result.size());
@@ -73,7 +72,7 @@ class TripServiceTest {
         // then
         assertThrows(
                 TravelDoesNotExistException.class,
-                () -> tripService.findTrip(CSV, 0L)
+                () -> tripService.findTrip(0L)
         );
     }
 
@@ -84,7 +83,7 @@ class TripServiceTest {
         saveTrip(0);
 
         // when
-        Trip result = tripService.findTrip(CSV, 0L);
+        Trip result = tripService.findTrip(0L);
 
         // then
         assertEqualsTrip(0, result);

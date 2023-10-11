@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.repository.TripRepository;
-import kr.co.fastcampus.travel.view.enums.FileType;
 
 public class FakeTripRepository implements TripRepository {
 
@@ -15,14 +14,14 @@ public class FakeTripRepository implements TripRepository {
     private final Map<Long, Trip> store = new HashMap<>();
 
     @Override
-    public List<Trip> findAll(FileType fileType) {
+    public List<Trip> findAll() {
         return store.keySet().stream()
                 .map(store::get)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Trip> findById(FileType fileType, Long id) {
+    public Optional<Trip> findById(Long id) {
         return Optional.ofNullable(store.get(id));
     }
 

@@ -13,7 +13,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import kr.co.fastcampus.travel.controller.dto.ItineraryInfoResponse;
 import kr.co.fastcampus.travel.controller.dto.TripInfoResponse;
-import kr.co.fastcampus.travel.view.enums.FileType;
 import kr.co.fastcampus.travel.view.enums.Menu;
 
 public class InputView {
@@ -54,16 +53,6 @@ public class InputView {
             "0000-00-00 날짜 형식에 맞지 않습니다. 다시 입력해주세요"
         );
         return LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-    }
-
-    public FileType inputFileType() {
-        try {
-            int fileNum = inputNumber("잘못된 번호입니다. 다시 입력해주세요");
-            return FileType.fromNumber(fileNum);
-        } catch (IllegalArgumentException e) {
-            System.out.println("잘못된 번호입니다. 다시 입력해주세요");
-            return inputFileType();
-        }
     }
 
     public Menu inputMenu() {

@@ -5,7 +5,6 @@ import java.util.Optional;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.repository.file.TravelCsvFileManager;
 import kr.co.fastcampus.travel.repository.file.TravelJsonFileManager;
-import kr.co.fastcampus.travel.view.enums.FileType;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -18,26 +17,20 @@ public class TripRepositoryImpl implements TripRepository {
     private final TravelCsvFileManager travelCsvFileManager;
 
     @Override
-    public List<Trip> findAll(FileType fileType) {
-        if (fileType == FileType.CSV) {
-            return travelCsvFileManager.findAllTrip();
-        }
+    public List<Trip> findAll() {
         return travelJsonFileManager.findAllTrip();
     }
 
     @Override
-    public Optional<Trip> findById(FileType fileType, Long id) {
-        Optional<Trip> findTrip = findTripById(fileType, id);
-        findTrip.ifPresent(trip -> itineraryRepository.findByTrip(fileType, trip)
+    public Optional<Trip> findById(Long id) {
+        Optional<Trip> findTrip = findTripById(id);
+        findTrip.ifPresent(trip -> itineraryRepository.findByTrip(trip)
                 .forEach(trip::addItinerary)
         );
         return findTrip;
     }
 
-    private Optional<Trip> findTripById(FileType fileType, Long id) {
-        if (fileType == FileType.CSV) {
-            return travelCsvFileManager.findByTripId(id);
-        }
+    private Optional<Trip> findTripById(Long id) {
         return travelJsonFileManager.findByTripId(id);
     }
 

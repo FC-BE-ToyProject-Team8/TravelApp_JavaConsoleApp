@@ -12,7 +12,6 @@ import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.service.ItineraryService;
 import kr.co.fastcampus.travel.service.TripService;
-import kr.co.fastcampus.travel.view.enums.FileType;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -21,15 +20,15 @@ public class TravelController {
     private final TripService tripService;
     private final ItineraryService itineraryService;
 
-    public List<TripInfoResponse> getTripList(FileType fileType) {
-        List<Trip> trips = tripService.findAllTrips(fileType);
+    public List<TripInfoResponse> getTripList() {
+        List<Trip> trips = tripService.findAllTrips();
         return trips.stream()
                 .map(TripInfoResponse::of)
                 .collect(Collectors.toList());
     }
 
-    public TripResponse findTrip(FileType fileType, Long id) {
-        Trip trip = tripService.findTrip(fileType, id);
+    public TripResponse findTrip(Long id) {
+        Trip trip = tripService.findTrip(id);
         return TripResponse.of(trip);
     }
 
@@ -37,21 +36,21 @@ public class TravelController {
         tripService.saveTrip(request);
     }
 
-    public List<ItineraryInfoResponse> getItineraryList(FileType fileType, Long tripId) {
-        Trip trip = tripService.findTrip(fileType, tripId);
-        List<Itinerary> itineraries = itineraryService.findItineraries(fileType, trip);
+    public List<ItineraryInfoResponse> getItineraryList(Long tripId) {
+        Trip trip = tripService.findTrip(tripId);
+        List<Itinerary> itineraries = itineraryService.findItineraries(trip);
         return itineraries.stream()
                 .map(ItineraryInfoResponse::of)
                 .collect(Collectors.toList());
     }
 
-    public ItineraryResponse findItinerary(FileType fileType, Long id) {
-        Itinerary itinerary = itineraryService.findItinerary(fileType, id);
+    public ItineraryResponse findItinerary(Long id) {
+        Itinerary itinerary = itineraryService.findItinerary(id);
         return ItineraryResponse.of(itinerary);
     }
 
     public void saveItineraries(Long tripId, List<ItinerarySaveRequest> request) {
-        Trip trip = tripService.findTrip(FileType.CSV, tripId);
+        Trip trip = tripService.findTrip(tripId);
         itineraryService.saveItineraries(trip, request);
     }
 }
