@@ -1,34 +1,30 @@
 package kr.co.fastcampus.travel.service;
 
 import java.util.List;
-import java.util.Optional;
-import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
-import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
+import kr.co.fastcampus.travel.common.exception.EntityNotFoundException;
 import kr.co.fastcampus.travel.domain.Trip;
-import kr.co.fastcampus.travel.infrastructure.repository.TripRepository;
-import kr.co.fastcampus.travel.view.enums.FileType;
+import kr.co.fastcampus.travel.repository.TripRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class TripService {
 
-    public final TripRepository tripRepository;
+    private final ItineraryService itineraryService;
+    private final TripRepository tripRepository;
 
-    public List<Trip> findAllTrips(FileType fileType) {
-        List<Trip> trips = tripRepository.findAll(fileType);
-        if (trips.isEmpty()) {
-            throw new TravelDoesNotExistException();
-        }
-        return trips;
+    public List<Trip> findAllTrips() {
+        return tripRepository.findAll();
     }
 
-    public Trip findTrip(FileType fileType, Long id) {
-        Optional<Trip> trip = tripRepository.findById(fileType, id);
-        return trip.orElseThrow(TravelDoesNotExistException::new);
+    public Trip findTrip(Long id) {
+        return tripRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("잘못된 여행 번호입니다."));
     }
 
-    public Trip saveTrip(TripSaveRequest saveRequest) {
-        Trip trip = saveRequest.toDomain();
-        return tripRepository.save(trip);
+    public Trip saveTrip(Trip trip) {
+        trip = tripRepository.save(trip);
+        // todo: cascade, orphanRemoval 옵션 설정 시, 아래 코드 삭제
+        itineraryService.saveItineraries(trip, trip.getItineraries());
+        return trip;
     }
 }

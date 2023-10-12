@@ -1,9 +1,10 @@
 package kr.co.fastcampus.travel.controller;
 
-import java.util.ArrayList;
+import static kr.co.fastcampus.travel.controller.TravelDtoConverter.*;
+
 import java.util.List;
-import java.util.stream.Collectors;
-import kr.co.fastcampus.travel.controller.dto.ItineraryInfoResponse;
+import kr.co.fastcampus.travel.common.response.CommonResponse;
+import kr.co.fastcampus.travel.controller.dto.ItinerarySummaryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItineraryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
 import kr.co.fastcampus.travel.controller.dto.TripInfoResponse;
@@ -13,7 +14,6 @@ import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.service.ItineraryService;
 import kr.co.fastcampus.travel.service.TripService;
-import kr.co.fastcampus.travel.view.enums.FileType;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -22,43 +22,36 @@ public class TravelController {
     private final TripService tripService;
     private final ItineraryService itineraryService;
 
-    public List<TripInfoResponse> getTripList(FileType fileType) {
-        List<Trip> trips = tripService.findAllTrips(fileType);
-
-        List<TripInfoResponse> tripInfoResponses = new ArrayList<>();
-        for (Trip trip : trips) {
-            TripInfoResponse tripInfoResponse = new TripInfoResponse(trip);
-            tripInfoResponses.add(tripInfoResponse);
-        }
-
-        return tripInfoResponses;
+    public CommonResponse<List<TripInfoResponse>> getTripList() {
+        List<Trip> trips = tripService.findAllTrips();
+        return CommonResponse.success(toTripInfoResponseList(trips));
     }
 
-    public TripResponse findTrip(FileType fileType, Long id) {
-        Trip trip = tripService.findTrip(fileType, id);
-        List<Itinerary> itineraries = trip.getItineraries();
-
-        return new TripResponse(trip, itineraries);
+    public CommonResponse<TripResponse> findTrip(Long id) {
+        Trip trip = tripService.findTrip(id);
+        return CommonResponse.success(toTripResponse(trip));
     }
 
-    public void saveTrip(TripSaveRequest saveRequest) {
-        Trip savedTrip = tripService.saveTrip(saveRequest);
-        itineraryService.saveItineraries(savedTrip.getId(), saveRequest.itinerarySaveRequests());
+    public CommonResponse<String> saveTrip(TripSaveRequest request) {
+        tripService.saveTrip(toTrip(request));
+        return CommonResponse.success("저장에 성공하였습니다.");
     }
 
-    public List<ItineraryInfoResponse> getItineraryList(FileType fileType, Long tripId) {
-        List<Itinerary> response = itineraryService.findItineraries(fileType, tripId);
-        return response.stream()
-                .map(ItineraryInfoResponse::new)
-                .collect(Collectors.toList());
+    public CommonResponse<List<ItinerarySummaryResponse>> getItineraryList(Long tripId) {
+        Trip trip = tripService.findTrip(tripId);
+        List<Itinerary> itineraries = itineraryService.findItineraries(trip);
+        return CommonResponse.success(toItinerarySummaryResponseList(itineraries));
     }
 
-    public ItineraryResponse findItinerary(FileType fileType, Long id) {
-        Itinerary response = itineraryService.findItinerary(fileType, id);
-        return new ItineraryResponse(response);
+    public CommonResponse<ItineraryResponse> findItinerary(Long id) {
+        Itinerary itinerary = itineraryService.findItinerary(id);
+        return CommonResponse.success(toItineraryResponse(itinerary));
     }
 
-    public void saveItineraries(Long tripId, List<ItinerarySaveRequest> saveRequests) {
-        itineraryService.saveItineraries(tripId, saveRequests);
+    public CommonResponse<String> saveItineraries(Long tripId, List<ItinerarySaveRequest> requests) {
+        Trip trip = tripService.findTrip(tripId);
+        List<Itinerary> itineraries = toItineraryList(requests);
+        itineraryService.saveItineraries(trip, itineraries);
+        return CommonResponse.success("저장에 성공하였습니다.");
     }
 }

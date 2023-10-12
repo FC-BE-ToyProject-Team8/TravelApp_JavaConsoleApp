@@ -1,54 +1,42 @@
 package kr.co.fastcampus.travel.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
-import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
+import kr.co.fastcampus.travel.common.exception.EntityNotFoundException;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
-import kr.co.fastcampus.travel.infrastructure.repository.ItineraryRepository;
-import kr.co.fastcampus.travel.view.enums.FileType;
+import kr.co.fastcampus.travel.repository.ItineraryRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class ItineraryService {
 
-    private final TripService tripService;
     private final ItineraryRepository itineraryRepository;
 
-    public Itinerary findItinerary(FileType fileType, Long id) {
-        Optional<Itinerary> response = itineraryRepository.findById(fileType, id);
-        return response.orElseThrow(TravelDoesNotExistException::new);
+    public Itinerary findItinerary(Long id) {
+        return itineraryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("잘못된 여정 번호입니다."));
     }
 
-    public List<Itinerary> findItineraries(FileType fileType, Long tripId) {
-        Trip trip = tripService.findTrip(fileType, tripId);
-        return itineraryRepository.findByTrip(fileType, trip);
+    public List<Itinerary> findItineraries(Trip trip) {
+        return itineraryRepository.findByTrip(trip);
     }
 
-    public List<Itinerary> saveItineraries(Long tripId,
-            List<ItinerarySaveRequest> itinerarySaveRequests) {
-        Trip trip = tripService.findTrip(FileType.CSV, tripId);
-        List<Itinerary> itineraries = new ArrayList<>();
-        for (ItinerarySaveRequest itinerarySaveRequest : itinerarySaveRequests) {
-            itineraries.add(
-                    itineraryRepository.save(convertDtoToItinerary(trip, itinerarySaveRequest))
-            );
+    public List<Itinerary> saveItineraries(
+            Trip trip,
+            List<Itinerary> itineraries
+    ) {
+        for (int i = 0; i < itineraries.size(); i++) {
+            Itinerary itinerary = itineraries.get(i);
+            itinerary.setTrip(trip);
+            itineraryRepository.save(itinerary);
         }
         return itineraries;
-    }
-
-    private Itinerary convertDtoToItinerary(Trip trip, ItinerarySaveRequest itinerarySaveRequest) {
-        return Itinerary.builder()
-                .trip(trip)
-                .departure(itinerarySaveRequest.departure())
-                .destination(itinerarySaveRequest.destination())
-                .departureAt(itinerarySaveRequest.departureAt())
-                .arriveAt(itinerarySaveRequest.arriveAt())
-                .accommodation(itinerarySaveRequest.accommodation())
-                .checkInAt(itinerarySaveRequest.checkInAt())
-                .checkOutAt(itinerarySaveRequest.checkOutAt())
-                .build();
+        // todo: JPA 옵션을 사용하면 위에 코드 삭제, 아래 코드 주석 해제
+//        return itineraries.stream()
+//                .map(itinerary -> {
+//                    itinerary.setTrip(trip);
+//                    return itineraryRepository.save(itinerary);
+//                })
+//                .collect(Collectors.toList());
     }
 }

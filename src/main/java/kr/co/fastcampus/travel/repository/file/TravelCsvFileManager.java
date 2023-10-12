@@ -1,4 +1,4 @@
-package kr.co.fastcampus.travel.infrastructure.repository.file;
+package kr.co.fastcampus.travel.repository.file;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

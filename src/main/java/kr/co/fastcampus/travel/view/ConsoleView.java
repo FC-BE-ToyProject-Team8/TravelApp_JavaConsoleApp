@@ -6,15 +6,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import kr.co.fastcampus.travel.AppConfig;
-import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
+import kr.co.fastcampus.travel.common.exception.BaseException;
 import kr.co.fastcampus.travel.controller.TravelController;
-import kr.co.fastcampus.travel.controller.dto.ItineraryInfoResponse;
+import kr.co.fastcampus.travel.controller.dto.ItinerarySummaryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItineraryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
 import kr.co.fastcampus.travel.controller.dto.TripInfoResponse;
 import kr.co.fastcampus.travel.controller.dto.TripResponse;
 import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
-import kr.co.fastcampus.travel.view.enums.FileType;
 import kr.co.fastcampus.travel.view.enums.Menu;
 
 public class ConsoleView {
@@ -66,8 +65,8 @@ public class ConsoleView {
     private void logTrip() {
         System.out.println("여행 이름:");
         final String name = inputView.inputNotEmptyString(
-            str -> !str.contains(","),
-            "컴마(,)는 입력할 수 없습니다."
+                str -> !str.contains(","),
+                "컴마(,)는 입력할 수 없습니다."
         );
 
         System.out.print("시작 ");
@@ -77,12 +76,12 @@ public class ConsoleView {
         final LocalDate endAt = inputView.inputDate();
 
         List<ItinerarySaveRequest> itinerarySaveRequests = getItinerarySaveRequests();
-        TripSaveRequest tripSaveRequest = TripSaveRequest.builder()
-            .name(name)
-            .startAt(startAt)
-            .endAt(endAt)
-            .itinerarySaveRequests(itinerarySaveRequests)
-            .build();
+        TripSaveRequest tripSaveRequest = new TripSaveRequest(
+                name,
+                startAt,
+                endAt,
+                itinerarySaveRequests
+        );
 
         travelController.saveTrip(tripSaveRequest);
     }
@@ -107,31 +106,27 @@ public class ConsoleView {
 
             System.out.println("\n여정 기록을 계속하시겠습니까? (Y/N)");
             willContinueStr = inputView.inputNotEmptyString(
-                input -> input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n"),
-                "Y(y) 또는 N(n) 중 하나를 입력해주세요.");
+                    input -> input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n"),
+                    "Y(y) 또는 N(n) 중 하나를 입력해주세요.");
             System.out.println();
             order++;
         }
         return itinerarySaveRequests;
     }
 
-    private List<TripInfoResponse> getTripList(FileType fileType) {
+    private List<TripInfoResponse> getTripList() {
         List<TripInfoResponse> tripInfoResponses;
         try {
-            tripInfoResponses = travelController.getTripList(fileType);
-        } catch (TravelDoesNotExistException e) {
-            System.out.println("\n등록된 여행이 없습니다. 여행을 먼저 등록해주세요.");
-            return null;
+            tripInfoResponses = travelController.getTripList().getData();
+        } catch (BaseException e) {
+            System.out.println(e.getMessage());
+            return List.of();
         }
         return tripInfoResponses;
     }
 
     private Long getTripId() {
-        return getTripId(FileType.CSV);
-    }
-
-    private Long getTripId(FileType fileType) {
-        List<TripInfoResponse> tripInfoResponses = getTripList(fileType);
+        List<TripInfoResponse> tripInfoResponses = getTripList();
         if (tripInfoResponses == null) {
             return null;
         }
@@ -141,31 +136,29 @@ public class ConsoleView {
 
     private void showTrip() {
         System.out.println("여행 조회를 시작합니다.");
-        System.out.println("조회할 파일 형식을 선택해주세요. (1. CSV / 2. JSON)");
-        FileType fileType = inputView.inputFileType();
-        Long travelId = getTripId(fileType);
+        Long travelId = getTripId();
         if (travelId == null) {
             return;
         }
-        TripResponse tripResponse = travelController.findTrip(fileType, travelId);
+        TripResponse tripResponse = travelController.findTrip(travelId).getData();
         printDetailTripInfo(tripResponse);
     }
 
     private void printShortTripInfo(List<TripInfoResponse> tripInfoResponses) {
         for (TripInfoResponse tripInfoResponse : tripInfoResponses) {
             System.out.printf("%d: %s (%s ~ %s)%n",
-                tripInfoResponse.id(),
-                tripInfoResponse.name(),
-                tripInfoResponse.startAt(),
-                tripInfoResponse.endAt());
+                    tripInfoResponse.id(),
+                    tripInfoResponse.name(),
+                    tripInfoResponse.startAt(),
+                    tripInfoResponse.endAt());
         }
     }
 
     private void printDetailTripInfo(TripResponse tripResponse) {
         System.out.printf("\"%s\"%n기간: %s ~ %s%n%n",
-            tripResponse.name(),
-            tripResponse.startAt(),
-            tripResponse.endAt());
+                tripResponse.name(),
+                tripResponse.startAt(),
+                tripResponse.endAt());
         int cnt = 1;
         List<ItineraryResponse> itineraryResponses = tripResponse.itineraries();
         for (ItineraryResponse itineraryResponse : itineraryResponses) {
@@ -180,14 +173,14 @@ public class ConsoleView {
 
         System.out.println("출발지:");
         String departure = inputView.inputNotEmptyString(
-            str -> !str.contains(","),
-            "컴마(,)는 입력할 수 없습니다."
+                str -> !str.contains(","),
+                "컴마(,)는 입력할 수 없습니다."
         );
 
         System.out.println("도착지: ");
         String destination = inputView.inputNotEmptyString(
-            str -> !str.contains(","),
-            "컴마(,)는 입력할 수 없습니다."
+                str -> !str.contains(","),
+                "컴마(,)는 입력할 수 없습니다."
         );
 
         ItinerarySaveRequest itinerarySaveRequest = null;
@@ -200,8 +193,8 @@ public class ConsoleView {
 
             System.out.println("숙박지 (Enter로 생략 가능):");
             String accommodation = inputView.inputString(
-                str -> !str.contains(","),
-                "컴마(,)는 입력할 수 없습니다."
+                    str -> !str.contains(","),
+                    "컴마(,)는 입력할 수 없습니다."
             );
 
             System.out.print("체크인 ");
@@ -212,14 +205,14 @@ public class ConsoleView {
 
             try {
                 itinerarySaveRequest = ItinerarySaveRequest.builder()
-                    .departure(departure)
-                    .destination(destination)
-                    .departureAt(departureAt)
-                    .arriveAt(arriveAt)
-                    .accommodation(accommodation)
-                    .checkInAt(checkInAt)
-                    .checkOutAt(checkOutAt)
-                    .build();
+                        .departure(departure)
+                        .destination(destination)
+                        .departureAt(departureAt)
+                        .arriveAt(arriveAt)
+                        .accommodation(accommodation)
+                        .checkInAt(checkInAt)
+                        .checkOutAt(checkOutAt)
+                        .build();
             } catch (IllegalArgumentException e) {
                 System.out.println("'출발과 도착' 또는 '체크인과 체크아웃' 중 하나의 시간은 꼭 입력하셔야 합니다.");
             }
@@ -231,29 +224,27 @@ public class ConsoleView {
         try {
             System.out.println("여정 조회를 시작합니다.");
             System.out.println("여정을 조회하기 위해서 먼저 해당 여행을 조회하겠습니다.");
-            System.out.println("조회할 파일 형식을 선택해주세요. (1. CSV / 2. JSON)");
-            FileType fileType = inputView.inputFileType();
-            List<TripInfoResponse> trips = travelController.getTripList(fileType);
+            List<TripInfoResponse> trips = travelController.getTripList().getData();
             printTripList(trips);
             Long tripNum = inputView.inputTripNumber(trips);
-            List<ItineraryInfoResponse> itineraries = travelController.getItineraryList(fileType,
-                tripNum);
+            List<ItinerarySummaryResponse> itineraries = travelController.getItineraryList(
+                    tripNum).getData();
             printItineraryList(itineraries);
             Long itineraryNum = inputView.inputItineraryNumber(itineraries);
             Long itineraryIndex = itineraries.get((int) (itineraryNum - 1)).id();
-            ItineraryResponse itineraryResponse = travelController.findItinerary(fileType,
-                itineraryIndex);
+            ItineraryResponse itineraryResponse = travelController.findItinerary(
+                    itineraryIndex).getData();
             printItineraryDetail(itineraryResponse);
-        } catch (TravelDoesNotExistException e) {
-            System.out.println("등록된 여행이 없습니다. 여행을 먼저 등록해주세요.");
+        } catch (BaseException e) {
+            System.out.println(e.getMessage());
         }
     }
 
-    private void printItineraryList(List<ItineraryInfoResponse> itineraries) {
+    private void printItineraryList(List<ItinerarySummaryResponse> itineraries) {
         System.out.println("여정 목록");
         for (int i = 0; i < itineraries.size(); i++) {
             System.out.printf("%d: %s -> %s%n", i + 1,
-                itineraries.get(i).departure(), itineraries.get(i).destination());
+                    itineraries.get(i).departure(), itineraries.get(i).destination());
         }
     }
 
@@ -261,7 +252,7 @@ public class ConsoleView {
         System.out.println("여행 목록");
         for (TripInfoResponse tripInfo : trips) {
             System.out.printf("%d: %s (%s ~ %s)%n",
-                tripInfo.id(), tripInfo.name(), tripInfo.startAt(), tripInfo.endAt());
+                    tripInfo.id(), tripInfo.name(), tripInfo.startAt(), tripInfo.endAt());
         }
     }
 
@@ -274,8 +265,9 @@ public class ConsoleView {
         appendDateField(sb, "출발일", itineraryResponse.departureAt(), formatterDate);
         appendDateField(sb, "도착일", itineraryResponse.arriveAt(), formatterDate);
         appendField(sb,
-            "숙박 시설",
-            itineraryResponse.accommodation().isEmpty() ? "X" : itineraryResponse.accommodation()
+                "숙박 시설",
+                itineraryResponse.accommodation().isEmpty() ? "X"
+                        : itineraryResponse.accommodation()
         );
         appendDateField(sb, "체크인", itineraryResponse.checkInAt(), formatterTime);
         appendDateField(sb, "체크아웃", itineraryResponse.checkOutAt(), formatterTime);
@@ -293,10 +285,10 @@ public class ConsoleView {
     }
 
     private void appendDateField(
-        StringBuilder sb,
-        String label,
-        LocalDateTime value,
-        DateTimeFormatter formatter
+            StringBuilder sb,
+            String label,
+            LocalDateTime value,
+            DateTimeFormatter formatter
     ) {
         sb.append(label).append(" : ");
         if (value != null) {

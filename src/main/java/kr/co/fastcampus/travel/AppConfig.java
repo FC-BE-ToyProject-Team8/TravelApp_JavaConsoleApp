@@ -3,12 +3,12 @@ package kr.co.fastcampus.travel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import kr.co.fastcampus.travel.controller.TravelController;
-import kr.co.fastcampus.travel.infrastructure.repository.ItineraryRepository;
-import kr.co.fastcampus.travel.infrastructure.repository.ItineraryRepositoryImpl;
-import kr.co.fastcampus.travel.infrastructure.repository.TripRepository;
-import kr.co.fastcampus.travel.infrastructure.repository.TripRepositoryImpl;
-import kr.co.fastcampus.travel.infrastructure.repository.file.TravelCsvFileManager;
-import kr.co.fastcampus.travel.infrastructure.repository.file.TravelJsonFileManager;
+import kr.co.fastcampus.travel.repository.ItineraryRepository;
+import kr.co.fastcampus.travel.repository.ItineraryRepositoryImpl;
+import kr.co.fastcampus.travel.repository.TripRepository;
+import kr.co.fastcampus.travel.repository.TripRepositoryImpl;
+import kr.co.fastcampus.travel.repository.file.TravelCsvFileManager;
+import kr.co.fastcampus.travel.repository.file.TravelJsonFileManager;
 import kr.co.fastcampus.travel.service.ItineraryService;
 import kr.co.fastcampus.travel.service.TripService;
 import kr.co.fastcampus.travel.view.InputView;
@@ -44,14 +44,14 @@ public class AppConfig {
 
     public static TripService tripService() {
         if (TRIP_SERVICE == null) {
-            TRIP_SERVICE = new TripService(tripRepository());
+            TRIP_SERVICE = new TripService(itineraryService(), tripRepository());
         }
         return TRIP_SERVICE;
     }
 
     public static ItineraryService itineraryService() {
         if (ITINERARY_SERVICE == null) {
-            ITINERARY_SERVICE = new ItineraryService(tripService(), itineraryRepository());
+            ITINERARY_SERVICE = new ItineraryService(itineraryRepository());
         }
         return ITINERARY_SERVICE;
     }

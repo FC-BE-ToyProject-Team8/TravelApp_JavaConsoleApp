@@ -1,4 +1,4 @@
-package kr.co.fastcampus.travel.infrastructure.repository.file;
+package kr.co.fastcampus.travel.repository.file;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

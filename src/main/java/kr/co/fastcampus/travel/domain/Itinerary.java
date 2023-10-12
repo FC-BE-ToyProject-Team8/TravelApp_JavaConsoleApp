@@ -40,6 +40,10 @@ public class Itinerary {
     }
 
     public void setTrip(Trip trip) {
+        if (this.trip != null) {
+            this.trip.getItineraries().remove(this);
+        }
         this.trip = trip;
+        trip.addItinerary(this);
     }
 }
