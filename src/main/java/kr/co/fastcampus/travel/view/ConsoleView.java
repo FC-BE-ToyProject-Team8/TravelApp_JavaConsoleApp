@@ -117,7 +117,7 @@ public class ConsoleView {
     private List<TripInfoResponse> getTripList() {
         List<TripInfoResponse> tripInfoResponses;
         try {
-            tripInfoResponses = travelController.getTripList();
+            tripInfoResponses = travelController.getTripList().getData();
         } catch (BaseException e) {
             System.out.println(e.getMessage());
             return List.of();
@@ -140,7 +140,7 @@ public class ConsoleView {
         if (travelId == null) {
             return;
         }
-        TripResponse tripResponse = travelController.findTrip(travelId);
+        TripResponse tripResponse = travelController.findTrip(travelId).getData();
         printDetailTripInfo(tripResponse);
     }
 
@@ -224,16 +224,16 @@ public class ConsoleView {
         try {
             System.out.println("여정 조회를 시작합니다.");
             System.out.println("여정을 조회하기 위해서 먼저 해당 여행을 조회하겠습니다.");
-            List<TripInfoResponse> trips = travelController.getTripList();
+            List<TripInfoResponse> trips = travelController.getTripList().getData();
             printTripList(trips);
             Long tripNum = inputView.inputTripNumber(trips);
             List<ItinerarySummaryResponse> itineraries = travelController.getItineraryList(
-                    tripNum);
+                    tripNum).getData();
             printItineraryList(itineraries);
             Long itineraryNum = inputView.inputItineraryNumber(itineraries);
             Long itineraryIndex = itineraries.get((int) (itineraryNum - 1)).id();
             ItineraryResponse itineraryResponse = travelController.findItinerary(
-                    itineraryIndex);
+                    itineraryIndex).getData();
             printItineraryDetail(itineraryResponse);
         } catch (BaseException e) {
             System.out.println(e.getMessage());

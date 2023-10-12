@@ -3,6 +3,7 @@ package kr.co.fastcampus.travel.controller;
 import static kr.co.fastcampus.travel.controller.TravelDtoConverter.*;
 
 import java.util.List;
+import kr.co.fastcampus.travel.common.response.CommonResponse;
 import kr.co.fastcampus.travel.controller.dto.ItinerarySummaryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItineraryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
@@ -21,34 +22,36 @@ public class TravelController {
     private final TripService tripService;
     private final ItineraryService itineraryService;
 
-    public List<TripInfoResponse> getTripList() {
+    public CommonResponse<List<TripInfoResponse>> getTripList() {
         List<Trip> trips = tripService.findAllTrips();
-        return toTripInfoResponseList(trips);
+        return CommonResponse.success(toTripInfoResponseList(trips));
     }
 
-    public TripResponse findTrip(Long id) {
+    public CommonResponse<TripResponse> findTrip(Long id) {
         Trip trip = tripService.findTrip(id);
-        return toTripResponse(trip);
+        return CommonResponse.success(toTripResponse(trip));
     }
 
-    public void saveTrip(TripSaveRequest request) {
+    public CommonResponse<String> saveTrip(TripSaveRequest request) {
         tripService.saveTrip(toTrip(request));
+        return CommonResponse.success("저장에 성공하였습니다.");
     }
 
-    public List<ItinerarySummaryResponse> getItineraryList(Long tripId) {
+    public CommonResponse<List<ItinerarySummaryResponse>> getItineraryList(Long tripId) {
         Trip trip = tripService.findTrip(tripId);
         List<Itinerary> itineraries = itineraryService.findItineraries(trip);
-        return toItinerarySummaryResponseList(itineraries);
+        return CommonResponse.success(toItinerarySummaryResponseList(itineraries));
     }
 
-    public ItineraryResponse findItinerary(Long id) {
+    public CommonResponse<ItineraryResponse> findItinerary(Long id) {
         Itinerary itinerary = itineraryService.findItinerary(id);
-        return toItineraryResponse(itinerary);
+        return CommonResponse.success(toItineraryResponse(itinerary));
     }
 
-    public void saveItineraries(Long tripId, List<ItinerarySaveRequest> requests) {
+    public CommonResponse<String> saveItineraries(Long tripId, List<ItinerarySaveRequest> requests) {
         Trip trip = tripService.findTrip(tripId);
         List<Itinerary> itineraries = toItineraryList(requests);
         itineraryService.saveItineraries(trip, itineraries);
+        return CommonResponse.success("저장에 성공하였습니다.");
     }
 }

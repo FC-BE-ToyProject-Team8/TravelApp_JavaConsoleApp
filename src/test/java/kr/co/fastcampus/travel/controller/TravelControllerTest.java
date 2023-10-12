@@ -8,6 +8,7 @@ import static kr.co.fastcampus.travel.common.ItineraryUtils.createItinerary;
 import static kr.co.fastcampus.travel.common.TripUtils.TODAY;
 import static kr.co.fastcampus.travel.common.TripUtils.TRIP_NAME;
 import static kr.co.fastcampus.travel.common.TripUtils.createTrip;
+import static kr.co.fastcampus.travel.common.response.ResultCode.SUCCESS;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import kr.co.fastcampus.travel.common.ItineraryUtils;
+import kr.co.fastcampus.travel.common.response.CommonResponse;
 import kr.co.fastcampus.travel.controller.dto.ItinerarySummaryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItineraryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
@@ -68,9 +70,10 @@ class TravelControllerTest {
         );
 
         // when
-        travelController.saveTrip(request);
+        CommonResponse<String> result = travelController.saveTrip(request);
 
         // then
+        assertEquals(SUCCESS, result.getStatus());
         Trip findTrip = tripRepository.findById(1L)
                 .orElse(null);
         assertNotNull(findTrip);
@@ -86,7 +89,7 @@ class TravelControllerTest {
                 .forEach(this::saveTrip);
 
         // when
-        List<TripInfoResponse> result = travelController.getTripList();
+        List<TripInfoResponse> result = travelController.getTripList().getData();
 
         // then
         assertEquals(4, result.size());
@@ -96,7 +99,7 @@ class TravelControllerTest {
     @DisplayName("여행 단건 조회")
     void findTrip() {
         // when
-        TripResponse result = travelController.findTrip(trip.getId());
+        TripResponse result = travelController.findTrip(trip.getId()).getData();
 
         // then
         assertAll(
@@ -116,9 +119,10 @@ class TravelControllerTest {
                 .collect(Collectors.toList());
 
         // when
-        travelController.saveItineraries(trip.getId(), request);
+        CommonResponse<String> result = travelController.saveItineraries(trip.getId(), request);
 
         // then
+        assertEquals(SUCCESS, result.getStatus());
         List<Itinerary> findItineraries = itineraryRepository.findByTrip(trip);
         assertEquals(3, findItineraries.size());
     }
@@ -131,7 +135,7 @@ class TravelControllerTest {
                 .forEach(this::saveItinerary);
 
         // when
-        List<ItinerarySummaryResponse> result = travelController.getItineraryList(trip.getId());
+        List<ItinerarySummaryResponse> result = travelController.getItineraryList(trip.getId()).getData();
 
         // then
         assertEquals(3, result.size());
@@ -144,7 +148,7 @@ class TravelControllerTest {
         saveItinerary(0);
 
         // when
-        ItineraryResponse result = travelController.findItinerary(0L);
+        ItineraryResponse result = travelController.findItinerary(0L).getData();
 
         // then
         assertAll(
