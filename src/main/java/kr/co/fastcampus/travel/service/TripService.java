@@ -1,7 +1,7 @@
 package kr.co.fastcampus.travel.service;
 
 import java.util.List;
-import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
+import kr.co.fastcampus.travel.common.exception.EntityNotFoundException;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.repository.TripRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,16 +13,12 @@ public class TripService {
     private final TripRepository tripRepository;
 
     public List<Trip> findAllTrips() {
-        List<Trip> trips = tripRepository.findAll();
-        if (trips.isEmpty()) {
-            throw new TravelDoesNotExistException();
-        }
-        return trips;
+        return tripRepository.findAll();
     }
 
     public Trip findTrip(Long id) {
         return tripRepository.findById(id)
-                .orElseThrow(TravelDoesNotExistException::new);
+                .orElseThrow(() -> new EntityNotFoundException("잘못된 여행 번호입니다."));
     }
 
     public Trip saveTrip(Trip trip) {

@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.IntStream;
-import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
+import kr.co.fastcampus.travel.common.exception.EntityNotFoundException;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.mock.FakeItineraryRepository;
@@ -64,7 +64,7 @@ class ItineraryServiceTest {
         // when
         // then
         assertThrows(
-                TravelDoesNotExistException.class,
+                EntityNotFoundException.class,
                 () -> itineraryService.findItinerary(0L)
         );
     }

@@ -1,8 +1,7 @@
 package kr.co.fastcampus.travel.service;
 
 import java.util.List;
-import java.util.Optional;
-import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
+import kr.co.fastcampus.travel.common.exception.EntityNotFoundException;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
 import kr.co.fastcampus.travel.repository.ItineraryRepository;
@@ -14,8 +13,8 @@ public class ItineraryService {
     private final ItineraryRepository itineraryRepository;
 
     public Itinerary findItinerary(Long id) {
-        Optional<Itinerary> response = itineraryRepository.findById(id);
-        return response.orElseThrow(TravelDoesNotExistException::new);
+        return itineraryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("잘못된 여정 번호입니다."));
     }
 
     public List<Itinerary> findItineraries(Trip trip) {

@@ -1,4 +1,4 @@
-package kr.co.fastcampus.travel.common.exception;
+package kr.co.fastcampus.travel.common.response;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,8 +7,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ErrorCode {
 
-    TRAVEL_DOES_NOT_EXIST("존재하지 않는 여행입니다."),
-    UNKNOWN_ERROR("알 수 없는 에러입니다.");
+    COMMON_SYSTEM_ERROR("일시적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요."),
+    COMMON_ENTITY_NOT_FOUND("존재하지 않는 엔티티입니다."),
+    ;
 
     private final String errorMsg;
 

@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import kr.co.fastcampus.travel.AppConfig;
-import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
+import kr.co.fastcampus.travel.common.exception.BaseException;
 import kr.co.fastcampus.travel.controller.TravelController;
 import kr.co.fastcampus.travel.controller.dto.ItineraryInfoResponse;
 import kr.co.fastcampus.travel.controller.dto.ItineraryResponse;
@@ -118,9 +118,9 @@ public class ConsoleView {
         List<TripInfoResponse> tripInfoResponses;
         try {
             tripInfoResponses = travelController.getTripList();
-        } catch (TravelDoesNotExistException e) {
-            System.out.println("\n등록된 여행이 없습니다. 여행을 먼저 등록해주세요.");
-            return null;
+        } catch (BaseException e) {
+            System.out.println(e.getMessage());
+            return List.of();
         }
         return tripInfoResponses;
     }
@@ -235,8 +235,8 @@ public class ConsoleView {
             ItineraryResponse itineraryResponse = travelController.findItinerary(
                     itineraryIndex);
             printItineraryDetail(itineraryResponse);
-        } catch (TravelDoesNotExistException e) {
-            System.out.println("등록된 여행이 없습니다. 여행을 먼저 등록해주세요.");
+        } catch (BaseException e) {
+            System.out.println(e.getMessage());
         }
     }
 
