@@ -2,7 +2,6 @@ package kr.co.fastcampus.travel.controller.dto;
 
 import java.time.LocalDateTime;
 import kr.co.fastcampus.travel.common.exception.InvalidParamException;
-import kr.co.fastcampus.travel.domain.Itinerary;
 import lombok.Builder;
 
 @Builder
@@ -24,17 +23,5 @@ public record ItinerarySaveRequest(
         if (checkInAt != null && checkOutAt != null && checkOutAt.isBefore(checkInAt)) {
             throw new InvalidParamException("체크아웃 시간이 체크인 시간보다 빠를 수 없습니다.");
         }
-    }
-
-    public Itinerary toDomain() {
-        return Itinerary.builder()
-                .departure(departure)
-                .destination(destination)
-                .departureAt(departureAt)
-                .arriveAt(arriveAt)
-                .accommodation(accommodation)
-                .checkInAt(checkInAt)
-                .checkOutAt(checkOutAt)
-                .build();
     }
 }

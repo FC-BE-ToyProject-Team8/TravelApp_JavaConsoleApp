@@ -1,7 +1,8 @@
 package kr.co.fastcampus.travel.controller;
 
+import static kr.co.fastcampus.travel.controller.TravelDtoConverter.*;
+
 import java.util.List;
-import java.util.stream.Collectors;
 import kr.co.fastcampus.travel.controller.dto.ItineraryInfoResponse;
 import kr.co.fastcampus.travel.controller.dto.ItineraryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
@@ -22,38 +23,32 @@ public class TravelController {
 
     public List<TripInfoResponse> getTripList() {
         List<Trip> trips = tripService.findAllTrips();
-        return trips.stream()
-                .map(TripInfoResponse::of)
-                .collect(Collectors.toList());
+        return toTripInfoResponseList(trips);
     }
 
     public TripResponse findTrip(Long id) {
         Trip trip = tripService.findTrip(id);
-        return TripResponse.of(trip);
+        return toTripResponse(trip);
     }
 
     public void saveTrip(TripSaveRequest request) {
-        tripService.saveTrip(request.toDomain());
+        tripService.saveTrip(toTrip(request));
     }
 
     public List<ItineraryInfoResponse> getItineraryList(Long tripId) {
         Trip trip = tripService.findTrip(tripId);
         List<Itinerary> itineraries = itineraryService.findItineraries(trip);
-        return itineraries.stream()
-                .map(ItineraryInfoResponse::of)
-                .collect(Collectors.toList());
+        return toItineraryInfoResponseList(itineraries);
     }
 
     public ItineraryResponse findItinerary(Long id) {
         Itinerary itinerary = itineraryService.findItinerary(id);
-        return ItineraryResponse.of(itinerary);
+        return toItineraryResponse(itinerary);
     }
 
     public void saveItineraries(Long tripId, List<ItinerarySaveRequest> requests) {
         Trip trip = tripService.findTrip(tripId);
-        List<Itinerary> itineraries = requests.stream()
-                .map(ItinerarySaveRequest::toDomain)
-                .collect(Collectors.toList());
+        List<Itinerary> itineraries = toItineraryList(requests);
         itineraryService.saveItineraries(trip, itineraries);
     }
 }
