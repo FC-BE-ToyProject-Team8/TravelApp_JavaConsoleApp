@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import kr.co.fastcampus.travel.common.ItineraryUtils;
-import kr.co.fastcampus.travel.controller.dto.ItineraryInfoResponse;
+import kr.co.fastcampus.travel.controller.dto.ItinerarySummaryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItineraryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
 import kr.co.fastcampus.travel.controller.dto.TripInfoResponse;
@@ -131,7 +131,7 @@ class TravelControllerTest {
                 .forEach(this::saveItinerary);
 
         // when
-        List<ItineraryInfoResponse> result = travelController.getItineraryList(trip.getId());
+        List<ItinerarySummaryResponse> result = travelController.getItineraryList(trip.getId());
 
         // then
         assertEquals(3, result.size());

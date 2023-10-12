@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import kr.co.fastcampus.travel.controller.dto.ItineraryInfoResponse;
+import kr.co.fastcampus.travel.controller.dto.ItinerarySummaryResponse;
 import kr.co.fastcampus.travel.controller.dto.TripInfoResponse;
 import kr.co.fastcampus.travel.view.enums.Menu;
 
@@ -23,7 +23,7 @@ public class InputView {
         this.br = new BufferedReader(new InputStreamReader(System.in));
     }
 
-    public Long inputItineraryNumber(List<ItineraryInfoResponse> itineraries) {
+    public Long inputItineraryNumber(List<ItinerarySummaryResponse> itineraries) {
         System.out.println("조회할 여정의 번호를 입력해주세요.");
         return (long) inputNumber("잘못된 여정 번호입니다. 다시 입력해주세요",
             num -> num >= 1 && num <= itineraries.size());

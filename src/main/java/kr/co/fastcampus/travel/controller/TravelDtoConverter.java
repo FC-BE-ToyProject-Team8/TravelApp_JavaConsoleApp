@@ -2,7 +2,7 @@ package kr.co.fastcampus.travel.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import kr.co.fastcampus.travel.controller.dto.ItineraryInfoResponse;
+import kr.co.fastcampus.travel.controller.dto.ItinerarySummaryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItineraryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
 import kr.co.fastcampus.travel.controller.dto.TripInfoResponse;
@@ -64,14 +64,14 @@ public class TravelDtoConverter {
         });
     }
 
-    public static List<ItineraryInfoResponse> toItineraryInfoResponseList(List<Itinerary> itineraries) {
+    public static List<ItinerarySummaryResponse> toItinerarySummaryResponseList(List<Itinerary> itineraries) {
         return itineraries.stream()
                 .map(TravelDtoConverter::toItineraryInfoResponse)
                 .collect(Collectors.toList());
     }
 
-    private static ItineraryInfoResponse toItineraryInfoResponse(Itinerary itinerary) {
-        return ItineraryInfoResponse.builder()
+    private static ItinerarySummaryResponse toItineraryInfoResponse(Itinerary itinerary) {
+        return ItinerarySummaryResponse.builder()
                 .id(itinerary.getId())
                 .destination(itinerary.getRoute().getDestination())
                 .departure(itinerary.getRoute().getDeparture())

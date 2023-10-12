@@ -3,7 +3,7 @@ package kr.co.fastcampus.travel.controller;
 import static kr.co.fastcampus.travel.controller.TravelDtoConverter.*;
 
 import java.util.List;
-import kr.co.fastcampus.travel.controller.dto.ItineraryInfoResponse;
+import kr.co.fastcampus.travel.controller.dto.ItinerarySummaryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItineraryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
 import kr.co.fastcampus.travel.controller.dto.TripInfoResponse;
@@ -35,10 +35,10 @@ public class TravelController {
         tripService.saveTrip(toTrip(request));
     }
 
-    public List<ItineraryInfoResponse> getItineraryList(Long tripId) {
+    public List<ItinerarySummaryResponse> getItineraryList(Long tripId) {
         Trip trip = tripService.findTrip(tripId);
         List<Itinerary> itineraries = itineraryService.findItineraries(trip);
-        return toItineraryInfoResponseList(itineraries);
+        return toItinerarySummaryResponseList(itineraries);
     }
 
     public ItineraryResponse findItinerary(Long id) {

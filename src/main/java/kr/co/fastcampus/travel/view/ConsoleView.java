@@ -8,7 +8,7 @@ import java.util.List;
 import kr.co.fastcampus.travel.AppConfig;
 import kr.co.fastcampus.travel.common.exception.BaseException;
 import kr.co.fastcampus.travel.controller.TravelController;
-import kr.co.fastcampus.travel.controller.dto.ItineraryInfoResponse;
+import kr.co.fastcampus.travel.controller.dto.ItinerarySummaryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItineraryResponse;
 import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
 import kr.co.fastcampus.travel.controller.dto.TripInfoResponse;
@@ -227,7 +227,7 @@ public class ConsoleView {
             List<TripInfoResponse> trips = travelController.getTripList();
             printTripList(trips);
             Long tripNum = inputView.inputTripNumber(trips);
-            List<ItineraryInfoResponse> itineraries = travelController.getItineraryList(
+            List<ItinerarySummaryResponse> itineraries = travelController.getItineraryList(
                     tripNum);
             printItineraryList(itineraries);
             Long itineraryNum = inputView.inputItineraryNumber(itineraries);
@@ -240,7 +240,7 @@ public class ConsoleView {
         }
     }
 
-    private void printItineraryList(List<ItineraryInfoResponse> itineraries) {
+    private void printItineraryList(List<ItinerarySummaryResponse> itineraries) {
         System.out.println("여정 목록");
         for (int i = 0; i < itineraries.size(); i++) {
             System.out.printf("%d: %s -> %s%n", i + 1,
