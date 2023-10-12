@@ -2,7 +2,6 @@ package kr.co.fastcampus.travel.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
 import kr.co.fastcampus.travel.domain.Itinerary;
 import kr.co.fastcampus.travel.domain.Trip;
@@ -27,11 +26,18 @@ public class ItineraryService {
             Trip trip,
             List<Itinerary> itineraries
     ) {
-        return itineraries.stream()
-                .map(itinerary -> {
-                    itinerary.setTrip(trip);
-                    return itineraryRepository.save(itinerary);
-                })
-                .collect(Collectors.toList());
+        for (int i = 0; i < itineraries.size(); i++) {
+            Itinerary itinerary = itineraries.get(i);
+            itinerary.setTrip(trip);
+            itineraryRepository.save(itinerary);
+        }
+        return itineraries;
+        // todo: JPA 옵션을 사용하면 위에 코드 삭제, 아래 코드 주석 해제
+//        return itineraries.stream()
+//                .map(itinerary -> {
+//                    itinerary.setTrip(trip);
+//                    return itineraryRepository.save(itinerary);
+//                })
+//                .collect(Collectors.toList());
     }
 }

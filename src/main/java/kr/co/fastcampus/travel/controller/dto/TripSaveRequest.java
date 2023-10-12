@@ -25,7 +25,7 @@ public record TripSaveRequest(
     private void addItineraries(Trip trip) {
         itinerarySaveRequests.forEach(itinerarySaveRequest -> {
             Itinerary itinerary = itinerarySaveRequest.toDomain();
-            trip.addItinerary(itinerary);
+            itinerary.setTrip(trip);
         });
     }
 }

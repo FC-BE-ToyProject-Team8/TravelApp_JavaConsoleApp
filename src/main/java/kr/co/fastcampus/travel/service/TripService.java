@@ -27,6 +27,7 @@ public class TripService {
 
     public Trip saveTrip(Trip trip) {
         trip = tripRepository.save(trip);
+        // todo: cascade, orphanRemoval 옵션 설정 시, 아래 코드 삭제
         itineraryService.saveItineraries(trip, trip.getItineraries());
         return trip;
     }
