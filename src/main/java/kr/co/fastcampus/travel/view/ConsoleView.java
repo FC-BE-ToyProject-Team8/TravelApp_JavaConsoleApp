@@ -5,15 +5,16 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import kr.co.fastcampus.travel.AppConfig;
+import kr.co.fastcampus.travel.config.AppConfig;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
-import kr.co.fastcampus.travel.controller.TravelController;
-import kr.co.fastcampus.travel.controller.dto.ItineraryInfoResponse;
-import kr.co.fastcampus.travel.controller.dto.ItineraryResponse;
-import kr.co.fastcampus.travel.controller.dto.ItinerarySaveRequest;
-import kr.co.fastcampus.travel.controller.dto.TripInfoResponse;
-import kr.co.fastcampus.travel.controller.dto.TripResponse;
-import kr.co.fastcampus.travel.controller.dto.TripSaveRequest;
+import kr.co.fastcampus.travel.domain.itinerary.controller.ItineraryController;
+import kr.co.fastcampus.travel.domain.trip.controller.TripController;
+import kr.co.fastcampus.travel.domain.trip.controller.dto.ItineraryInfoResponse;
+import kr.co.fastcampus.travel.domain.trip.controller.dto.ItineraryResponse;
+import kr.co.fastcampus.travel.domain.trip.controller.dto.ItinerarySaveRequest;
+import kr.co.fastcampus.travel.domain.trip.controller.dto.TripInfoResponse;
+import kr.co.fastcampus.travel.domain.trip.controller.dto.TripResponse;
+import kr.co.fastcampus.travel.domain.trip.controller.dto.TripSaveRequest;
 import kr.co.fastcampus.travel.view.enums.FileType;
 import kr.co.fastcampus.travel.view.enums.Menu;
 
@@ -21,12 +22,14 @@ public class ConsoleView {
 
     private boolean isExited = false;
 
-    private final TravelController travelController;
+    private final TripController tripController;
+    private final ItineraryController itineraryController;
     private final InputView inputView;
 
     public ConsoleView() {
-        travelController = AppConfig.travelController();
+        tripController = AppConfig.tripController();
         inputView = AppConfig.inputView();
+        itineraryController = AppConfig.itineraryController();
     }
 
     public void process() {
@@ -84,7 +87,7 @@ public class ConsoleView {
             .itinerarySaveRequests(itinerarySaveRequests)
             .build();
 
-        travelController.saveTrip(tripSaveRequest);
+        tripController.saveTrip(tripSaveRequest);
     }
 
     private void logItineraries() {
@@ -93,7 +96,7 @@ public class ConsoleView {
         System.out.println("\n여행에 대한 여정 기록을 시작합니다.\n");
 
         List<ItinerarySaveRequest> itinerarySaveRequests = getItinerarySaveRequests();
-        travelController.saveItineraries(tripId, itinerarySaveRequests);
+        itineraryController.saveItineraries(tripId, itinerarySaveRequests);
         System.out.println("여정 기록이 완료되었습니다.\n");
     }
 
@@ -118,7 +121,7 @@ public class ConsoleView {
     private List<TripInfoResponse> getTripList(FileType fileType) {
         List<TripInfoResponse> tripInfoResponses;
         try {
-            tripInfoResponses = travelController.getTripList(fileType);
+            tripInfoResponses = tripController.getTripList(fileType);
         } catch (TravelDoesNotExistException e) {
             System.out.println("\n등록된 여행이 없습니다. 여행을 먼저 등록해주세요.");
             return null;
@@ -147,7 +150,7 @@ public class ConsoleView {
         if (travelId == null) {
             return;
         }
-        TripResponse tripResponse = travelController.findTrip(fileType, travelId);
+        TripResponse tripResponse = tripController.findTrip(fileType, travelId);
         printDetailTripInfo(tripResponse);
     }
 
@@ -233,15 +236,15 @@ public class ConsoleView {
             System.out.println("여정을 조회하기 위해서 먼저 해당 여행을 조회하겠습니다.");
             System.out.println("조회할 파일 형식을 선택해주세요. (1. CSV / 2. JSON)");
             FileType fileType = inputView.inputFileType();
-            List<TripInfoResponse> trips = travelController.getTripList(fileType);
+            List<TripInfoResponse> trips = tripController.getTripList(fileType);
             printTripList(trips);
             Long tripNum = inputView.inputTripNumber(trips);
-            List<ItineraryInfoResponse> itineraries = travelController.getItineraryList(fileType,
+            List<ItineraryInfoResponse> itineraries = itineraryController.getItineraryList(fileType,
                 tripNum);
             printItineraryList(itineraries);
             Long itineraryNum = inputView.inputItineraryNumber(itineraries);
             Long itineraryIndex = itineraries.get((int) (itineraryNum - 1)).id();
-            ItineraryResponse itineraryResponse = travelController.findItinerary(fileType,
+            ItineraryResponse itineraryResponse = itineraryController.findItinerary(fileType,
                 itineraryIndex);
             printItineraryDetail(itineraryResponse);
         } catch (TravelDoesNotExistException e) {

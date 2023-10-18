@@ -11,8 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import kr.co.fastcampus.travel.controller.dto.ItineraryInfoResponse;
-import kr.co.fastcampus.travel.controller.dto.TripInfoResponse;
+import kr.co.fastcampus.travel.domain.trip.controller.dto.ItineraryInfoResponse;
+import kr.co.fastcampus.travel.domain.trip.controller.dto.TripInfoResponse;
 import kr.co.fastcampus.travel.view.enums.FileType;
 import kr.co.fastcampus.travel.view.enums.Menu;
 

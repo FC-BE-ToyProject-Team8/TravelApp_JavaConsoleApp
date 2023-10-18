@@ -1,0 +1,18 @@
+package kr.co.fastcampus.travel.domain.trip.controller.dto;
+
+import kr.co.fastcampus.travel.domain.itinerary.entity.Itinerary;
+
+public record ItineraryInfoResponse(
+    Long id,
+    String departure,
+    String destination
+) {
+
+    public ItineraryInfoResponse(Itinerary itinerary) {
+        this(
+            itinerary.getId(),
+            itinerary.getRoute().getDeparture(),
+            itinerary.getRoute().getDestination()
+        );
+    }
+}
