@@ -1,2 +1,0 @@
-id,departure,destination,departureAt,arriveAt,accommodation,checkInAt,checkOutAt
-1,출발,도착,2010-01-01T01:01,2010-01-01T02:02,숙박지,null,null

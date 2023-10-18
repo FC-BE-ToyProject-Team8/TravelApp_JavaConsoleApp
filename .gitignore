@@ -229,4 +229,6 @@ gradle-app.setting
 ### custom
 .idea/
 
+./travel
+
 # End of https://www.toptal.com/developers/gitignore/api/intellij,macos,windows,gradle,java
