@@ -15,7 +15,6 @@ import kr.co.fastcampus.travel.domain.trip.controller.dto.ItinerarySaveRequest;
 import kr.co.fastcampus.travel.domain.trip.controller.dto.TripInfoResponse;
 import kr.co.fastcampus.travel.domain.trip.controller.dto.TripResponse;
 import kr.co.fastcampus.travel.domain.trip.controller.dto.TripSaveRequest;
-import kr.co.fastcampus.travel.view.enums.FileType;
 import kr.co.fastcampus.travel.view.enums.Menu;
 
 public class ConsoleView {
@@ -118,10 +117,10 @@ public class ConsoleView {
         return itinerarySaveRequests;
     }
 
-    private List<TripInfoResponse> getTripList(FileType fileType) {
+    private List<TripInfoResponse> getTripList() {
         List<TripInfoResponse> tripInfoResponses;
         try {
-            tripInfoResponses = tripController.getTripList(fileType);
+            tripInfoResponses = tripController.getTripList();
         } catch (TravelDoesNotExistException e) {
             System.out.println("\n등록된 여행이 없습니다. 여행을 먼저 등록해주세요.");
             return null;
@@ -130,11 +129,7 @@ public class ConsoleView {
     }
 
     private Long getTripId() {
-        return getTripId(FileType.CSV);
-    }
-
-    private Long getTripId(FileType fileType) {
-        List<TripInfoResponse> tripInfoResponses = getTripList(fileType);
+        List<TripInfoResponse> tripInfoResponses = getTripList();
         if (tripInfoResponses == null) {
             return null;
         }
@@ -144,13 +139,11 @@ public class ConsoleView {
 
     private void showTrip() {
         System.out.println("여행 조회를 시작합니다.");
-        System.out.println("조회할 파일 형식을 선택해주세요. (1. CSV / 2. JSON)");
-        FileType fileType = inputView.inputFileType();
-        Long travelId = getTripId(fileType);
+        Long travelId = getTripId();
         if (travelId == null) {
             return;
         }
-        TripResponse tripResponse = tripController.findTrip(fileType, travelId);
+        TripResponse tripResponse = tripController.findTrip(travelId);
         printDetailTripInfo(tripResponse);
     }
 
@@ -234,18 +227,14 @@ public class ConsoleView {
         try {
             System.out.println("여정 조회를 시작합니다.");
             System.out.println("여정을 조회하기 위해서 먼저 해당 여행을 조회하겠습니다.");
-            System.out.println("조회할 파일 형식을 선택해주세요. (1. CSV / 2. JSON)");
-            FileType fileType = inputView.inputFileType();
-            List<TripInfoResponse> trips = tripController.getTripList(fileType);
+            List<TripInfoResponse> trips = tripController.getTripList();
             printTripList(trips);
             Long tripNum = inputView.inputTripNumber(trips);
-            List<ItineraryInfoResponse> itineraries = itineraryController.getItineraryList(fileType,
-                tripNum);
+            List<ItineraryInfoResponse> itineraries = itineraryController.getItineraryList(tripNum);
             printItineraryList(itineraries);
             Long itineraryNum = inputView.inputItineraryNumber(itineraries);
             Long itineraryIndex = itineraries.get((int) (itineraryNum - 1)).id();
-            ItineraryResponse itineraryResponse = itineraryController.findItinerary(fileType,
-                itineraryIndex);
+            ItineraryResponse itineraryResponse = itineraryController.findItinerary(itineraryIndex);
             printItineraryDetail(itineraryResponse);
         } catch (TravelDoesNotExistException e) {
             System.out.println("등록된 여행이 없습니다. 여행을 먼저 등록해주세요.");

@@ -9,7 +9,6 @@ import kr.co.fastcampus.travel.domain.itinerary.entity.Itinerary;
 import kr.co.fastcampus.travel.domain.trip.entity.Trip;
 import kr.co.fastcampus.travel.domain.itinerary.repository.ItineraryRepository;
 import kr.co.fastcampus.travel.domain.trip.service.TripService;
-import kr.co.fastcampus.travel.view.enums.FileType;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -18,19 +17,19 @@ public class ItineraryService {
     private final TripService tripService;
     private final ItineraryRepository itineraryRepository;
 
-    public Itinerary findItinerary(FileType fileType, Long id) {
-        Optional<Itinerary> response = itineraryRepository.findById(fileType, id);
+    public Itinerary findItinerary(Long id) {
+        Optional<Itinerary> response = itineraryRepository.findById(id);
         return response.orElseThrow(TravelDoesNotExistException::new);
     }
 
-    public List<Itinerary> findItineraries(FileType fileType, Long tripId) {
-        Trip trip = tripService.findTrip(fileType, tripId);
-        return itineraryRepository.findByTrip(fileType, trip);
+    public List<Itinerary> findItineraries(Long tripId) {
+        Trip trip = tripService.findTrip(tripId);
+        return itineraryRepository.findByTrip(trip);
     }
 
     public List<Itinerary> saveItineraries(Long tripId,
             List<ItinerarySaveRequest> itinerarySaveRequests) {
-        Trip trip = tripService.findTrip(FileType.CSV, tripId);
+        Trip trip = tripService.findTrip(tripId);
         List<Itinerary> itineraries = new ArrayList<>();
         for (ItinerarySaveRequest itinerarySaveRequest : itinerarySaveRequests) {
             itineraries.add(

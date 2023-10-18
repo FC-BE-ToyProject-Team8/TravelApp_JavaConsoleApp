@@ -5,7 +5,6 @@ import kr.co.fastcampus.travel.domain.itinerary.service.ItineraryService;
 import kr.co.fastcampus.travel.domain.trip.controller.dto.ItineraryInfoResponse;
 import kr.co.fastcampus.travel.domain.trip.controller.dto.ItineraryResponse;
 import kr.co.fastcampus.travel.domain.trip.controller.dto.ItinerarySaveRequest;
-import kr.co.fastcampus.travel.view.enums.FileType;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -16,15 +15,15 @@ public class ItineraryController {
 
     private final ItineraryService itineraryService;
 
-    public List<ItineraryInfoResponse> getItineraryList(FileType fileType, Long tripId) {
-        List<Itinerary> response = itineraryService.findItineraries(fileType, tripId);
+    public List<ItineraryInfoResponse> getItineraryList(Long tripId) {
+        List<Itinerary> response = itineraryService.findItineraries(tripId);
         return response.stream()
                 .map(ItineraryInfoResponse::new)
                 .collect(Collectors.toList());
     }
 
-    public ItineraryResponse findItinerary(FileType fileType, Long id) {
-        Itinerary response = itineraryService.findItinerary(fileType, id);
+    public ItineraryResponse findItinerary(Long id) {
+        Itinerary response = itineraryService.findItinerary(id);
         return new ItineraryResponse(response);
     }
 

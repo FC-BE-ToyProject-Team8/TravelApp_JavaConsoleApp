@@ -8,7 +8,6 @@ import kr.co.fastcampus.travel.domain.itinerary.repository.ItineraryRepository;
 import kr.co.fastcampus.travel.domain.itinerary.repository.ItineraryRepositoryImpl;
 import kr.co.fastcampus.travel.domain.trip.repository.TripRepository;
 import kr.co.fastcampus.travel.domain.trip.repository.TripRepositoryImpl;
-import kr.co.fastcampus.travel.domain.file.TravelCsvFileManager;
 import kr.co.fastcampus.travel.domain.file.TravelJsonFileManager;
 import kr.co.fastcampus.travel.domain.itinerary.service.ItineraryService;
 import kr.co.fastcampus.travel.domain.trip.service.TripService;
@@ -24,7 +23,6 @@ public class AppConfig {
     private static ItineraryRepository ITINERARY_REPOSITORY;
     private static TravelJsonFileManager TRAVEL_JSON_FILE_MANAGER;
     private static ObjectMapper OBJECT_MAPPER;
-    private static TravelCsvFileManager TRAVEL_CSV_FILE_MANAGER;
     private static InputView INPUT_VIEW;
 
     private AppConfig() {
@@ -68,8 +66,7 @@ public class AppConfig {
     public static ItineraryRepository itineraryRepository() {
         if (ITINERARY_REPOSITORY == null) {
             ITINERARY_REPOSITORY = new ItineraryRepositoryImpl(
-                    travelJsonFileManager(),
-                    travelCsvFileManager());
+                    travelJsonFileManager());
         }
         return ITINERARY_REPOSITORY;
     }
@@ -78,17 +75,9 @@ public class AppConfig {
         if (TRIP_REPOSITORY == null) {
             TRIP_REPOSITORY = new TripRepositoryImpl(
                     itineraryRepository(),
-                    travelJsonFileManager(),
-                    travelCsvFileManager());
+                    travelJsonFileManager());
         }
         return TRIP_REPOSITORY;
-    }
-
-    public static TravelCsvFileManager travelCsvFileManager() {
-        if (TRAVEL_CSV_FILE_MANAGER == null) {
-            TRAVEL_CSV_FILE_MANAGER = new TravelCsvFileManager();
-        }
-        return TRAVEL_CSV_FILE_MANAGER;
     }
 
     public static TravelJsonFileManager travelJsonFileManager() {

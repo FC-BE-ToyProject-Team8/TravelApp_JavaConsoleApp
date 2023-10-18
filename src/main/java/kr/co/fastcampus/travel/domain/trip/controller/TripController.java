@@ -2,10 +2,7 @@ package kr.co.fastcampus.travel.domain.trip.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import kr.co.fastcampus.travel.domain.trip.controller.dto.ItineraryInfoResponse;
-import kr.co.fastcampus.travel.domain.trip.controller.dto.ItineraryResponse;
-import kr.co.fastcampus.travel.domain.trip.controller.dto.ItinerarySaveRequest;
+
 import kr.co.fastcampus.travel.domain.trip.controller.dto.TripInfoResponse;
 import kr.co.fastcampus.travel.domain.trip.controller.dto.TripResponse;
 import kr.co.fastcampus.travel.domain.trip.controller.dto.TripSaveRequest;
@@ -13,7 +10,6 @@ import kr.co.fastcampus.travel.domain.itinerary.entity.Itinerary;
 import kr.co.fastcampus.travel.domain.trip.entity.Trip;
 import kr.co.fastcampus.travel.domain.itinerary.service.ItineraryService;
 import kr.co.fastcampus.travel.domain.trip.service.TripService;
-import kr.co.fastcampus.travel.view.enums.FileType;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -22,8 +18,8 @@ public class TripController {
     private final TripService tripService;
     private final ItineraryService itineraryService;
 
-    public List<TripInfoResponse> getTripList(FileType fileType) {
-        List<Trip> trips = tripService.findAllTrips(fileType);
+    public List<TripInfoResponse> getTripList() {
+        List<Trip> trips = tripService.findAllTrips();
 
         List<TripInfoResponse> tripInfoResponses = new ArrayList<>();
         for (Trip trip : trips) {
@@ -34,8 +30,8 @@ public class TripController {
         return tripInfoResponses;
     }
 
-    public TripResponse findTrip(FileType fileType, Long id) {
-        Trip trip = tripService.findTrip(fileType, id);
+    public TripResponse findTrip(Long id) {
+        Trip trip = tripService.findTrip(id);
         List<Itinerary> itineraries = trip.getItineraries();
 
         return new TripResponse(trip, itineraries);

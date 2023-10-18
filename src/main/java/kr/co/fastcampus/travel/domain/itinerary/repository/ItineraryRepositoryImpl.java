@@ -5,9 +5,7 @@ import java.util.Optional;
 
 import kr.co.fastcampus.travel.domain.itinerary.entity.Itinerary;
 import kr.co.fastcampus.travel.domain.trip.entity.Trip;
-import kr.co.fastcampus.travel.domain.file.TravelCsvFileManager;
 import kr.co.fastcampus.travel.domain.file.TravelJsonFileManager;
-import kr.co.fastcampus.travel.view.enums.FileType;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -16,21 +14,14 @@ public class ItineraryRepositoryImpl implements ItineraryRepository {
     private static final String SEQUENCE_FIELD_NAME = "itinerary_id";
 
     private final TravelJsonFileManager travelJsonFileManager;
-    private final TravelCsvFileManager travelCsvFileManager;
 
     @Override
-    public List<Itinerary> findByTrip(FileType fileType, Trip trip) {
-        if (fileType == FileType.CSV) {
-            return travelCsvFileManager.findByTrip(trip);
-        }
+    public List<Itinerary> findByTrip(Trip trip) {
         return travelJsonFileManager.findByTrip(trip);
     }
 
     @Override
-    public Optional<Itinerary> findById(FileType fileType, Long id) {
-        if (fileType == FileType.CSV) {
-            return travelCsvFileManager.findByItineraryId(id);
-        }
+    public Optional<Itinerary> findById(Long id) {
         return travelJsonFileManager.findByItineraryId(id);
     }
 
@@ -38,7 +29,6 @@ public class ItineraryRepositoryImpl implements ItineraryRepository {
     public Itinerary save(Itinerary itinerary) {
         itinerary.setId(travelJsonFileManager.getSequence(SEQUENCE_FIELD_NAME));
         travelJsonFileManager.saveItineraryFile(itinerary);
-        travelCsvFileManager.saveItineraryFile(itinerary);
         return itinerary;
     }
 }
