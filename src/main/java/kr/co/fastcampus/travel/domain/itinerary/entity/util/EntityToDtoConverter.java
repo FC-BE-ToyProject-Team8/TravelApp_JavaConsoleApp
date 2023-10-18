@@ -4,6 +4,10 @@ import kr.co.fastcampus.travel.domain.itinerary.dto.response.ItineraryInfoRespon
 import kr.co.fastcampus.travel.domain.itinerary.dto.response.ItineraryResponse;
 import kr.co.fastcampus.travel.domain.itinerary.entity.Itinerary;
 
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
 public class EntityToDtoConverter {
 
     public static ItineraryResponse toItineraryResponse(Itinerary itinerary) {
@@ -17,6 +21,12 @@ public class EntityToDtoConverter {
                 itinerary.getLodge().getCheckInAt(),
                 itinerary.getLodge().getCheckOutAt()
         );
+    }
+
+    public static List<ItineraryInfoResponse> toItineraryInfoResponses(List<Itinerary> itinerary) {
+        return itinerary.stream()
+                .map(EntityToDtoConverter::toItineraryInfoResponse)
+                .toList();
     }
 
     public static ItineraryInfoResponse toItineraryInfoResponse(Itinerary itinerary) {
