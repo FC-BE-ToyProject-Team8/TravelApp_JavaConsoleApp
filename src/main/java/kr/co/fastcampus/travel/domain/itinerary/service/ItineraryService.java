@@ -29,25 +29,8 @@ public class ItineraryService {
     public List<Itinerary> saveItineraries(Long tripId,
             List<ItinerarySaveRequest> itinerarySaveRequests) {
         Trip trip = tripLowService.findTrip(tripId);
-        List<Itinerary> itineraries = new ArrayList<>();
-        for (ItinerarySaveRequest itinerarySaveRequest : itinerarySaveRequests) {
-            itineraries.add(
-                itineraryLowService.save(convertDtoToItinerary(trip, itinerarySaveRequest))
-            );
-        }
-        return itineraries;
-    }
 
-    private Itinerary convertDtoToItinerary(Trip trip, ItinerarySaveRequest itinerarySaveRequest) {
-        return Itinerary.builder()
-                .trip(trip)
-                .departure(itinerarySaveRequest.departure())
-                .destination(itinerarySaveRequest.destination())
-                .departureAt(itinerarySaveRequest.departureAt())
-                .arriveAt(itinerarySaveRequest.arriveAt())
-                .accommodation(itinerarySaveRequest.accommodation())
-                .checkInAt(itinerarySaveRequest.checkInAt())
-                .checkOutAt(itinerarySaveRequest.checkOutAt())
-                .build();
+        List<Itinerary> itineraries = itineraryLowService.saveAllByRequests(trip, itinerarySaveRequests);
+        return itineraries;
     }
 }
