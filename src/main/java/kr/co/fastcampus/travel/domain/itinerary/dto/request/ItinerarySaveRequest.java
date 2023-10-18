@@ -14,6 +14,7 @@ public record ItinerarySaveRequest(
     LocalDateTime checkOutAt
 ) {
 
+    // TODO: @Valid로 추후 변경
     public ItinerarySaveRequest {
         if ((departureAt == null && arriveAt == null)
             && (checkInAt == null && checkOutAt == null)) {
