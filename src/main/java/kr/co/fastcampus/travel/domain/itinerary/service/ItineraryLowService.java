@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static kr.co.fastcampus.travel.domain.itinerary.dto.util.DtoToEntityConverter.toEntity;
+
 @RequiredArgsConstructor
 public class ItineraryLowService {
 
@@ -30,18 +32,8 @@ public class ItineraryLowService {
     public List<Itinerary> saveAllByRequests(Trip trip, List<ItinerarySaveRequest> itinerarySaveRequests) {
         List<Itinerary> itineraries = new ArrayList<>();
         for (ItinerarySaveRequest request : itinerarySaveRequests) {
-            Itinerary itinerary = Itinerary.builder()
-                    .trip(trip)
-                    .departure(request.departure())
-                    .destination(request.destination())
-                    .departureAt(request.departureAt())
-                    .arriveAt(request.arriveAt())
-                    .accommodation(request.departure())
-                    .checkInAt(request.checkInAt())
-                    .checkOutAt(request.checkOutAt())
-                    .build();
-            Itinerary savedItinerary = save(itinerary);
-            itineraries.add(savedItinerary);
+            Itinerary itinerary = toEntity(trip, request);
+            itineraries.add(save(itinerary));
         }
         return itineraries;
     }
