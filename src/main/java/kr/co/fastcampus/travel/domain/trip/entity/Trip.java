@@ -5,15 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kr.co.fastcampus.travel.domain.itinerary.entity.Itinerary;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(exclude = "itineraries")
+@EqualsAndHashCode
 public class Trip {
 
     private Long id;
@@ -21,7 +18,7 @@ public class Trip {
     private LocalDate startAt;
     private LocalDate endAt;
 
-    private final List<Itinerary> itineraries = new ArrayList<>();
+    private List<Itinerary> itineraries = new ArrayList<>();
 
     @Builder
     private Trip(
@@ -45,6 +42,6 @@ public class Trip {
     }
 
     public void setItineraries(List<Itinerary> itineraries) {
-        this.setItineraries(itineraries);
+        this.itineraries = itineraries;
     }
 }
