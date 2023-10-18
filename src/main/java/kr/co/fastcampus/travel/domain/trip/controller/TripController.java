@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 public class TripController {
 
     private final TripService tripService;
-    private final ItineraryService itineraryService;
 
     public List<TripInfoResponse> getTripList() {
         List<Trip> trips = tripService.findAllTrips();
@@ -31,14 +30,12 @@ public class TripController {
     }
 
     public TripResponse findTrip(Long id) {
-        Trip trip = tripService.findTrip(id);
-        List<Itinerary> itineraries = trip.getItineraries();
+        Trip trip = tripService.getTrip(id);
 
-        return new TripResponse(trip, itineraries);
+        return new TripResponse(trip);
     }
 
     public void saveTrip(TripSaveRequest saveRequest) {
-        Trip savedTrip = tripService.saveTrip(saveRequest);
-        itineraryService.saveItineraries(savedTrip.getId(), saveRequest.itinerarySaveRequests());
+        tripService.saveTrip(saveRequest);
     }
 }

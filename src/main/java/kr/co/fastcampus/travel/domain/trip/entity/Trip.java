@@ -43,4 +43,8 @@ public class Trip {
     public void addItinerary(Itinerary itinerary) {
         itineraries.add(itinerary);
     }
+
+    public void setItineraries(List<Itinerary> itineraries) {
+        this.setItineraries(itineraries);
+    }
 }

@@ -7,33 +7,32 @@ import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
 import kr.co.fastcampus.travel.domain.trip.controller.dto.ItinerarySaveRequest;
 import kr.co.fastcampus.travel.domain.itinerary.entity.Itinerary;
 import kr.co.fastcampus.travel.domain.trip.entity.Trip;
-import kr.co.fastcampus.travel.domain.itinerary.repository.ItineraryRepository;
-import kr.co.fastcampus.travel.domain.trip.service.TripService;
+import kr.co.fastcampus.travel.domain.trip.service.TripLowService;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class ItineraryService {
 
-    private final TripService tripService;
-    private final ItineraryRepository itineraryRepository;
+    private final ItineraryLowService itineraryLowService;
+    private final TripLowService tripLowService;
 
     public Itinerary findItinerary(Long id) {
-        Optional<Itinerary> response = itineraryRepository.findById(id);
+        Optional<Itinerary> response = itineraryLowService.findById(id);
         return response.orElseThrow(TravelDoesNotExistException::new);
     }
 
     public List<Itinerary> findItineraries(Long tripId) {
-        Trip trip = tripService.findTrip(tripId);
-        return itineraryRepository.findByTrip(trip);
+        Trip trip = tripLowService.findTrip(tripId);
+        return itineraryLowService.findByTrip(trip);
     }
 
     public List<Itinerary> saveItineraries(Long tripId,
             List<ItinerarySaveRequest> itinerarySaveRequests) {
-        Trip trip = tripService.findTrip(tripId);
+        Trip trip = tripLowService.findTrip(tripId);
         List<Itinerary> itineraries = new ArrayList<>();
         for (ItinerarySaveRequest itinerarySaveRequest : itinerarySaveRequests) {
             itineraries.add(
-                    itineraryRepository.save(convertDtoToItinerary(trip, itinerarySaveRequest))
+                itineraryLowService.save(convertDtoToItinerary(trip, itinerarySaveRequest))
             );
         }
         return itineraries;

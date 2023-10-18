@@ -3,6 +3,7 @@ package kr.co.fastcampus.travel.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import kr.co.fastcampus.travel.domain.itinerary.controller.ItineraryController;
+import kr.co.fastcampus.travel.domain.itinerary.service.ItineraryLowService;
 import kr.co.fastcampus.travel.domain.trip.controller.TripController;
 import kr.co.fastcampus.travel.domain.itinerary.repository.ItineraryRepository;
 import kr.co.fastcampus.travel.domain.itinerary.repository.ItineraryRepositoryImpl;
@@ -10,6 +11,7 @@ import kr.co.fastcampus.travel.domain.trip.repository.TripRepository;
 import kr.co.fastcampus.travel.domain.trip.repository.TripRepositoryImpl;
 import kr.co.fastcampus.travel.domain.file.TravelJsonFileManager;
 import kr.co.fastcampus.travel.domain.itinerary.service.ItineraryService;
+import kr.co.fastcampus.travel.domain.trip.service.TripLowService;
 import kr.co.fastcampus.travel.domain.trip.service.TripService;
 import kr.co.fastcampus.travel.view.InputView;
 
@@ -17,8 +19,10 @@ public class AppConfig {
 
     private static TripController TRAVEL_CONTROLLER;
     private static TripService TRIP_SERVICE;
+    private static TripLowService TRIP_LOW_SERVICE;
     private static ItineraryController ITINERARY_CONTROLLER;
     private static ItineraryService ITINERARY_SERVICE;
+    private static ItineraryLowService ITINERARY_LOW_SERVICE;
     private static TripRepository TRIP_REPOSITORY;
     private static ItineraryRepository ITINERARY_REPOSITORY;
     private static TravelJsonFileManager TRAVEL_JSON_FILE_MANAGER;
@@ -37,16 +41,23 @@ public class AppConfig {
 
     public static TripController tripController() {
         if (TRAVEL_CONTROLLER == null) {
-            TRAVEL_CONTROLLER = new TripController(tripService(), itineraryService());
+            TRAVEL_CONTROLLER = new TripController(tripService());
         }
         return TRAVEL_CONTROLLER;
     }
 
     public static TripService tripService() {
         if (TRIP_SERVICE == null) {
-            TRIP_SERVICE = new TripService(tripRepository());
+            TRIP_SERVICE = new TripService(tripLowerService(), itineraryLowerService());
         }
         return TRIP_SERVICE;
+    }
+
+    private static TripLowService tripLowerService() {
+        if (TRIP_LOW_SERVICE == null) {
+            TRIP_LOW_SERVICE = new TripLowService(tripRepository());
+        }
+        return TRIP_LOW_SERVICE;
     }
 
     public static ItineraryController itineraryController() {
@@ -56,9 +67,16 @@ public class AppConfig {
         return ITINERARY_CONTROLLER;
     }
 
+    private static ItineraryLowService itineraryLowerService() {
+        if (ITINERARY_LOW_SERVICE == null) {
+            ITINERARY_LOW_SERVICE = new ItineraryLowService(itineraryRepository());
+        }
+        return ITINERARY_LOW_SERVICE;
+    }
+
     public static ItineraryService itineraryService() {
         if (ITINERARY_SERVICE == null) {
-            ITINERARY_SERVICE = new ItineraryService(tripService(), itineraryRepository());
+            ITINERARY_SERVICE = new ItineraryService(itineraryLowerService(), tripLowerService());
         }
         return ITINERARY_SERVICE;
     }

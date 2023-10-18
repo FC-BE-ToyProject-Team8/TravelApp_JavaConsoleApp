@@ -15,23 +15,13 @@ public record TripResponse(
     List<ItineraryResponse> itineraries
 ) {
 
-    public TripResponse(Trip trip, List<Itinerary> itineraries) {
+    public TripResponse(Trip trip) {
         this(
             trip.getId(),
             trip.getName(),
             trip.getStartAt(),
             trip.getEndAt(),
-            convertItinerariesToItineraryResponses(itineraries)
+            trip.getItineraries().stream().map(itinerary -> new ItineraryResponse(itinerary)).toList()
         );
-    }
-
-    private static List<ItineraryResponse> convertItinerariesToItineraryResponses(
-        List<Itinerary> itineraries
-    ) {
-        List<ItineraryResponse> itineraryResponses = new ArrayList<>();
-        for (Itinerary itinerary : itineraries) {
-            itineraryResponses.add(new ItineraryResponse(itinerary));
-        }
-        return itineraryResponses;
     }
 }
