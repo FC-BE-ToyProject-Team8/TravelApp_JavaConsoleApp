@@ -11,8 +11,7 @@ import kr.co.fastcampus.travel.domain.trip.entity.util.EntityToDtoConverter;
 import kr.co.fastcampus.travel.domain.trip.service.TripService;
 import lombok.RequiredArgsConstructor;
 
-import static kr.co.fastcampus.travel.domain.trip.entity.util.EntityToDtoConverter.toTripInfoResponse;
-import static kr.co.fastcampus.travel.domain.trip.entity.util.EntityToDtoConverter.toTripResponse;
+import static kr.co.fastcampus.travel.domain.trip.entity.util.EntityToDtoConverter.*;
 
 @RequiredArgsConstructor
 public class TripController {
@@ -21,19 +20,11 @@ public class TripController {
 
     public List<TripInfoResponse> getTripList() {
         List<Trip> trips = tripService.findAllTrips();
-
-        List<TripInfoResponse> tripInfoResponses = new ArrayList<>();
-        for (Trip trip : trips) {
-            TripInfoResponse tripInfoResponse = toTripInfoResponse(trip);
-            tripInfoResponses.add(tripInfoResponse);
-        }
-
-        return tripInfoResponses;
+        return toTripInfoResponses(trips);
     }
 
     public TripResponse findTrip(Long id) {
         Trip trip = tripService.getTrip(id);
-
         return toTripResponse(trip);
     }
 
