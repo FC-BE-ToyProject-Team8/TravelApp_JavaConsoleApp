@@ -9,12 +9,12 @@ import kr.co.fastcampus.travel.config.AppConfig;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
 import kr.co.fastcampus.travel.domain.itinerary.controller.ItineraryController;
 import kr.co.fastcampus.travel.domain.trip.controller.TripController;
-import kr.co.fastcampus.travel.domain.trip.controller.dto.ItineraryInfoResponse;
-import kr.co.fastcampus.travel.domain.trip.controller.dto.ItineraryResponse;
-import kr.co.fastcampus.travel.domain.trip.controller.dto.ItinerarySaveRequest;
-import kr.co.fastcampus.travel.domain.trip.controller.dto.TripInfoResponse;
-import kr.co.fastcampus.travel.domain.trip.controller.dto.TripResponse;
-import kr.co.fastcampus.travel.domain.trip.controller.dto.TripSaveRequest;
+import kr.co.fastcampus.travel.domain.itinerary.dto.response.ItineraryInfoResponse;
+import kr.co.fastcampus.travel.domain.itinerary.dto.response.ItineraryResponse;
+import kr.co.fastcampus.travel.domain.itinerary.dto.request.ItinerarySaveRequest;
+import kr.co.fastcampus.travel.domain.trip.dto.response.TripInfoResponse;
+import kr.co.fastcampus.travel.domain.trip.dto.response.TripResponse;
+import kr.co.fastcampus.travel.domain.trip.dto.request.TripSaveRequest;
 import kr.co.fastcampus.travel.view.enums.Menu;
 
 public class ConsoleView {

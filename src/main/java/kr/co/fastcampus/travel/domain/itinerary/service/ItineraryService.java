@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
-import kr.co.fastcampus.travel.domain.trip.controller.dto.ItinerarySaveRequest;
+import kr.co.fastcampus.travel.domain.itinerary.dto.request.ItinerarySaveRequest;
 import kr.co.fastcampus.travel.domain.itinerary.entity.Itinerary;
 import kr.co.fastcampus.travel.domain.trip.entity.Trip;
 import kr.co.fastcampus.travel.domain.trip.service.TripLowService;

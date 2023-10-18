@@ -2,7 +2,7 @@ package kr.co.fastcampus.travel.domain.itinerary.service;
 
 import kr.co.fastcampus.travel.domain.itinerary.entity.Itinerary;
 import kr.co.fastcampus.travel.domain.itinerary.repository.ItineraryRepository;
-import kr.co.fastcampus.travel.domain.trip.controller.dto.ItinerarySaveRequest;
+import kr.co.fastcampus.travel.domain.itinerary.dto.request.ItinerarySaveRequest;
 import kr.co.fastcampus.travel.domain.trip.entity.Trip;
 import lombok.RequiredArgsConstructor;
 

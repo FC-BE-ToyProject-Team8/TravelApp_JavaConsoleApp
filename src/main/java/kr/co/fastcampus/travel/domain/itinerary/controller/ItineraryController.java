@@ -2,9 +2,9 @@ package kr.co.fastcampus.travel.domain.itinerary.controller;
 
 import kr.co.fastcampus.travel.domain.itinerary.entity.Itinerary;
 import kr.co.fastcampus.travel.domain.itinerary.service.ItineraryService;
-import kr.co.fastcampus.travel.domain.trip.controller.dto.ItineraryInfoResponse;
-import kr.co.fastcampus.travel.domain.trip.controller.dto.ItineraryResponse;
-import kr.co.fastcampus.travel.domain.trip.controller.dto.ItinerarySaveRequest;
+import kr.co.fastcampus.travel.domain.itinerary.dto.response.ItineraryInfoResponse;
+import kr.co.fastcampus.travel.domain.itinerary.dto.response.ItineraryResponse;
+import kr.co.fastcampus.travel.domain.itinerary.dto.request.ItinerarySaveRequest;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

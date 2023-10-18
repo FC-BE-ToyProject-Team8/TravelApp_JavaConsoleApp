@@ -1,10 +1,9 @@
-package kr.co.fastcampus.travel.domain.trip.controller.dto;
+package kr.co.fastcampus.travel.domain.trip.dto.response;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
-import kr.co.fastcampus.travel.domain.itinerary.entity.Itinerary;
+import kr.co.fastcampus.travel.domain.itinerary.dto.response.ItineraryResponse;
 import kr.co.fastcampus.travel.domain.trip.entity.Trip;
 
 public record TripResponse(

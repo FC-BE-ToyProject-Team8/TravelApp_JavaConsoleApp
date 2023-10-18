@@ -3,12 +3,10 @@ package kr.co.fastcampus.travel.domain.trip.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import kr.co.fastcampus.travel.domain.trip.controller.dto.TripInfoResponse;
-import kr.co.fastcampus.travel.domain.trip.controller.dto.TripResponse;
-import kr.co.fastcampus.travel.domain.trip.controller.dto.TripSaveRequest;
-import kr.co.fastcampus.travel.domain.itinerary.entity.Itinerary;
+import kr.co.fastcampus.travel.domain.trip.dto.response.TripInfoResponse;
+import kr.co.fastcampus.travel.domain.trip.dto.response.TripResponse;
+import kr.co.fastcampus.travel.domain.trip.dto.request.TripSaveRequest;
 import kr.co.fastcampus.travel.domain.trip.entity.Trip;
-import kr.co.fastcampus.travel.domain.itinerary.service.ItineraryService;
 import kr.co.fastcampus.travel.domain.trip.service.TripService;
 import lombok.RequiredArgsConstructor;
 

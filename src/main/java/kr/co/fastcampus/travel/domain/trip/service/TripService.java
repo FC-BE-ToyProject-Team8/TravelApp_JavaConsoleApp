@@ -5,7 +5,7 @@ import java.util.List;
 import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
 import kr.co.fastcampus.travel.domain.itinerary.entity.Itinerary;
 import kr.co.fastcampus.travel.domain.itinerary.service.ItineraryLowService;
-import kr.co.fastcampus.travel.domain.trip.controller.dto.TripSaveRequest;
+import kr.co.fastcampus.travel.domain.trip.dto.request.TripSaveRequest;
 import kr.co.fastcampus.travel.domain.trip.entity.Trip;
 import lombok.RequiredArgsConstructor;
 

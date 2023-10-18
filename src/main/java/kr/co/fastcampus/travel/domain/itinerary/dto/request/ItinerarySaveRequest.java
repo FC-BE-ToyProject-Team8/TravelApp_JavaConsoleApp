@@ -1,4 +1,4 @@
-package kr.co.fastcampus.travel.domain.trip.controller.dto;
+package kr.co.fastcampus.travel.domain.itinerary.dto.request;
 
 import java.time.LocalDateTime;
 import lombok.Builder;

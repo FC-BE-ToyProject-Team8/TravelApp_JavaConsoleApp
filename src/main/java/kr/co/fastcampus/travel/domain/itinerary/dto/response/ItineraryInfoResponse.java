@@ -1,4 +1,4 @@
-package kr.co.fastcampus.travel.domain.trip.controller.dto;
+package kr.co.fastcampus.travel.domain.itinerary.dto.response;
 
 import kr.co.fastcampus.travel.domain.itinerary.entity.Itinerary;
 
