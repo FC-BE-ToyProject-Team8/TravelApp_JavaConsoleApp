@@ -15,11 +15,4 @@ public record TripSaveRequest(
     List<ItinerarySaveRequest> itinerarySaveRequests
 ) {
 
-    public Trip toDomain() {
-        return Trip.builder()
-            .name(name)
-            .startAt(startAt)
-            .endAt(endAt)
-            .build();
-    }
 }

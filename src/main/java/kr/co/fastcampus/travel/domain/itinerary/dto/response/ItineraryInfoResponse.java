@@ -1,6 +1,5 @@
 package kr.co.fastcampus.travel.domain.itinerary.dto.response;
 
-import kr.co.fastcampus.travel.domain.itinerary.entity.Itinerary;
 
 public record ItineraryInfoResponse(
     Long id,
@@ -8,11 +7,4 @@ public record ItineraryInfoResponse(
     String destination
 ) {
 
-    public ItineraryInfoResponse(Itinerary itinerary) {
-        this(
-            itinerary.getId(),
-            itinerary.getRoute().getDeparture(),
-            itinerary.getRoute().getDestination()
-        );
-    }
 }

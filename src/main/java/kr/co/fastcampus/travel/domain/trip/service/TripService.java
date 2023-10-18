@@ -6,8 +6,11 @@ import kr.co.fastcampus.travel.common.exception.TravelDoesNotExistException;
 import kr.co.fastcampus.travel.domain.itinerary.entity.Itinerary;
 import kr.co.fastcampus.travel.domain.itinerary.service.ItineraryLowService;
 import kr.co.fastcampus.travel.domain.trip.dto.request.TripSaveRequest;
+import kr.co.fastcampus.travel.domain.trip.dto.util.DtoToEntityConverter;
 import kr.co.fastcampus.travel.domain.trip.entity.Trip;
 import lombok.RequiredArgsConstructor;
+
+import static kr.co.fastcampus.travel.domain.trip.dto.util.DtoToEntityConverter.toEntity;
 
 @RequiredArgsConstructor
 public class TripService {
@@ -24,7 +27,7 @@ public class TripService {
     }
 
     public Trip saveTrip(TripSaveRequest saveRequest) {
-        Trip trip = saveRequest.toDomain();
+        Trip trip = toEntity(saveRequest);
 
         List<Itinerary> itineraries = itineraryLowService.saveAllByRequests(trip, saveRequest.itinerarySaveRequests());;
         trip.setItineraries(itineraries);

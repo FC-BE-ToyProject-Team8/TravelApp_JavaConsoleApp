@@ -18,16 +18,4 @@ public record ItineraryResponse(
     LocalDateTime checkOutAt
 ) {
 
-    public ItineraryResponse(Itinerary itinerary) {
-        this(
-            itinerary.getId(),
-            itinerary.getRoute().getDeparture(),
-            itinerary.getRoute().getDestination(),
-            itinerary.getRoute().getDepartureAt(),
-            itinerary.getRoute().getArriveAt(),
-            itinerary.getLodge().getAccommodation(),
-            itinerary.getLodge().getCheckInAt(),
-            itinerary.getLodge().getCheckOutAt()
-        );
-    }
 }

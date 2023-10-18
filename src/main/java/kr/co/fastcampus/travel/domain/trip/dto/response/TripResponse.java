@@ -14,13 +14,4 @@ public record TripResponse(
     List<ItineraryResponse> itineraries
 ) {
 
-    public TripResponse(Trip trip) {
-        this(
-            trip.getId(),
-            trip.getName(),
-            trip.getStartAt(),
-            trip.getEndAt(),
-            trip.getItineraries().stream().map(itinerary -> new ItineraryResponse(itinerary)).toList()
-        );
-    }
 }

@@ -11,12 +11,4 @@ public record TripInfoResponse(
     LocalDate endAt
 ) {
 
-    public TripInfoResponse(Trip trip) {
-        this(
-            trip.getId(),
-            trip.getName(),
-            trip.getStartAt(),
-            trip.getEndAt()
-        );
-    }
 }
